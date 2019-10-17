@@ -15,19 +15,19 @@ set_target_properties(lcg PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 set_target_properties(lcg_static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 # 设置动态库的版本号
 set_target_properties(lcg PROPERTIES VERSION 1.0 SOVERSION 1.0)
-
-# 以下部分为命令行程序的编译
-# 添加可执行文件 命令行
-add_executable(lcg_sample ${SAMPLE_SRC})
-# 为安装文件添加动态库的搜索地址
-set_target_properties(lcg_sample PROPERTIES INSTALL_RPATH "@loader_path/../lib")
-# 链接动态库
-target_link_libraries(lcg_sample lcg)
-
 # 库的安装命令
-install(TARGETS lcg_sample lcg lcg_static
-	RUNTIME DESTINATION bin
+install(TARGETS lcg lcg_static
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib)
 # 头文件安装命令
 install(FILES lib/lcg.h DESTINATION include)
+
+# 以下部分为例子程序的编译
+# 设置可执行文件的输出地址
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+# 添加可执行文件 命令行
+add_executable(lcg_sample ${SAMPLE_SRC})
+# 为安装文件添加动态库的搜索地址
+set_target_properties(lcg_sample PROPERTIES INSTALL_RPATH "/usr/local/lib")
+# 链接动态库
+target_link_libraries(lcg_sample PUBLIC lcg)
