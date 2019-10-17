@@ -47,10 +47,12 @@ struct lcg_para
 	 * ||g||/||b|| <= epsilon,
 	 * where ||.|| denotes the Euclidean (L2) norm. The default value is 1e-6.
 	*/
-	lcg_float epsilon; //迭代的终止条件值
+	lcg_float epsilon;
 };
 
-// Callback function pointer for calculating the vector of Ax
+/**
+ * Callback function pointer for calculating the product of Ax
+ */
 typedef void (*lcg_axfunc_ptr)(void* instance, lcg_float* input_array, lcg_float* output_array, int n_size);
 
 /**
