@@ -90,10 +90,25 @@ bool lcg_para_init(lcg_para* param, int itimes, lcg_float eps);
  * @param      B         Objective vector of the linear system.
  * @param[in]  n_size    Size of the solution vector and objective vector.
  * @param      param     Parameter setup for the conjugate gradient.
- * @param      instance  The user data sent for lbfgs() function by the client.
+ * @param      instance  The user data sent for lcg() function by the client.
  *
  * @return     status of the function
  */
 int lcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, int n_size, lcg_para* param, void* instance);
+
+/**
+ * @brief      The preconditioned conjugate gradient method
+ *
+ * @param[in]  Afp       Function pointer for calculating the product of Ax.
+ * @param      m         Initial solution vector.
+ * @param      B         Objective vector of the linear system.
+ * @param      P         Precondition vector
+ * @param[in]  n_size    Size of the solution vector and objective vector.
+ * @param      param     Parameter setup for the conjugate gradient.
+ * @param      instance  The user data sent for lpcg() function by the client.
+ *
+ * @return     status of the function
+ */
+int lpcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, lcg_float* P, int n_size, lcg_para* param, void* instance);
 
 #endif //_LCG_H

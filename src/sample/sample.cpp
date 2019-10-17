@@ -23,6 +23,7 @@ public:
 private:
 	lcg_float* m_;
 	lcg_float* b_;
+	lcg_float* p_;
 	lcg_float kernel_[3][3];
 };
 
@@ -43,12 +44,16 @@ TESTFUNC::TESTFUNC()
 	// 拟合目标值（含有一定的噪声）
 	b_ = lcg_malloc(3);
 	b_[0] = -2.3723; b_[1] = 5.8221; b_[2] = 5.2165;
+	// 测试预优矩阵
+	p_ = lcg_malloc(3);
+	p_[0] = p_[1] = p_[2] = 1.0;
 }
 
 TESTFUNC::~TESTFUNC()
 {
 	lcg_free(m_);
 	lcg_free(b_);
+	lcg_free(p_);
 }
 
 void TESTFUNC::Ax(lcg_float* a, lcg_float* b, int num)
@@ -69,6 +74,16 @@ void TESTFUNC::Routine()
 	// 调用函数求解
 	lcg(_Ax, m_, b_, 3, NULL, this);
 	// 输出解
+	for (int i = 0; i < 3; i++)
+	{
+		cout << m_[i] << endl;
+	}
+
+	// rest m_ and solve with lpcg
+	m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;
+	// use lpcg to solve the linear system
+	lpcg(_Ax, m_, b_, p_, 3, NULL, this);
+	// output solution
 	for (int i = 0; i < 3; i++)
 	{
 		cout << m_[i] << endl;
