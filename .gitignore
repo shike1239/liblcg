@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# folder preferences and build folder
+.DS_Store
+build/
