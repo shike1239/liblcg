@@ -53,6 +53,11 @@ int lcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, int n_size, lcg_para* pa
 	// set CG parameters
 	lcg_para para = (param != NULL) ? (*param) : defparam;
 
+	//check parameters
+	if (n_size <= 0) return -1;
+	if (para.max_iterations <= 0) return -1;
+	if (para.epsilon <= 0.0) return -1;
+
 	// locate memory
 	lcg_float *gk = NULL, *dk = NULL, *Adk = NULL;
 	gk = lcg_malloc(n_size);
@@ -72,7 +77,7 @@ int lcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, int n_size, lcg_para* pa
 	}
 
 	lcg_float dTAd, ak, betak, gk1_mod;
-	for (int time = 0; time < para.max_iterations; time++)
+	for (int time = 0; time <= para.max_iterations; time++)
 	{
 		if (gk_mod/B_mod <= para.epsilon)
 		{
@@ -121,6 +126,11 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, lcg_float* P, int n_siz
 	// set CG parameters
 	lcg_para para = (param != NULL) ? (*param) : defparam;
 
+	//check parameters
+	if (n_size <= 0) return -1;
+	if (para.max_iterations <= 0) return -1;
+	if (para.epsilon <= 0.0) return -1;
+
 	// locate memory
 	lcg_float *rk = NULL, *zk = NULL;
 	lcg_float *dk = NULL, *Adk = NULL;
@@ -148,7 +158,7 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, lcg_float* P, int n_siz
 	}
 
 	lcg_float dTAd, ak, betak, zTr1, rk_mod;
-	for (int time = 0; time < para.max_iterations; time++)
+	for (int time = 0; time <= para.max_iterations; time++)
 	{
 		// we use averaged absolute difference to evaluate the function
 		rk_mod = 0.0;

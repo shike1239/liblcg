@@ -1,7 +1,7 @@
 /*
- *	  C++ library of linear conjugate gradient.
+ *    C++ library of linear conjugate gradient.
  *
- * Copyright (c) 2019-2029 Yi Zhang
+ * Copyright (c) 2019-2029 Yi Zhang (zhangyiss@icloud.com)
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
