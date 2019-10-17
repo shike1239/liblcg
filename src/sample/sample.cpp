@@ -8,6 +8,7 @@ class TESTFUNC
 {
 public:
 	TESTFUNC();
+	~TESTFUNC();
 	void Routine();
 	/**
 	 *因为类的成员函数指针不能直接被调用，所以我们在这里定义一个静态的中转函数来辅助Ax函数的调用
@@ -44,6 +45,12 @@ TESTFUNC::TESTFUNC()
 	b_[0] = -2.3723; b_[1] = 5.8221; b_[2] = 5.2165;
 }
 
+TESTFUNC::~TESTFUNC()
+{
+	lcg_free(m_);
+	lcg_free(b_);
+}
+
 void TESTFUNC::Ax(lcg_float* a, lcg_float* b, int num)
 {
 	for (int i = 0; i < num; i++)
@@ -59,13 +66,13 @@ void TESTFUNC::Ax(lcg_float* a, lcg_float* b, int num)
 
 void TESTFUNC::Routine()
 {
+	// 调用函数求解
 	lcg(_Ax, m_, b_, 3, NULL, this);
+	// 输出解
 	for (int i = 0; i < 3; i++)
 	{
 		cout << m_[i] << endl;
 	}
-	lcg_free(m_);
-	lcg_free(b_);
 	return;
 }
 

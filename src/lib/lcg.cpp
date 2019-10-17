@@ -4,7 +4,8 @@
 using std::clog;
 using std::cerr;
 using std::endl;
-//设置默认参数值
+
+// default parameter for conjugate gradient
 static const lcg_para defparam = {100, 1e-6};
 
 lcg_float* lcg_malloc(int n)
@@ -39,8 +40,10 @@ bool lcg_para_init(lcg_para* param, int itimes, lcg_float eps)
 
 int lcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, int n_size, lcg_para* param, void* instance)
 {
+	// set CG parameters
 	lcg_para para = (param != NULL) ? (*param) : defparam;
 
+	// locate memory
 	lcg_float *gk = NULL, *dk = NULL, *Adk = NULL;
 	gk = lcg_malloc(n_size);
 	dk = lcg_malloc(n_size);
