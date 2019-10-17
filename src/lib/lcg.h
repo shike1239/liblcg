@@ -44,8 +44,8 @@ struct lcg_para
 	 * Epsilon for convergence test.
 	 * This parameter determines the accuracy with which the solution is to
 	 * be found. A minimization terminates when
-	 * ||g||/||b|| <= epsilon,
-	 * where ||.|| denotes the Euclidean (L2) norm. The default value is 1e-6.
+	 * ||g||/||b|| <= epsilon for conjugate gradient and mean(|rk|) <= epsilon for preconditioned conjugate gradient,
+	 * where ||.|| denotes the Euclidean (L2) norm and | | denotes the L1 norm. The default value of epsilon is 1e-6.
 	*/
 	lcg_float epsilon;
 };
