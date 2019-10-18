@@ -11,9 +11,9 @@ public:
 	~TESTFUNC();
 	void Routine();
 	/**
-	 *因为类的成员函数指针不能直接被调用，所以我们在这里定义一个静态的中转函数来辅助Ax函数的调用
-	 *这里我们利用reinterpret_cast将_Ax的指针转换到Ax上，需要注意的是成员函数的指针只能通过
-	 *实例对象进行调用，因此需要void* instance变量。
+	 * 因为类的成员函数指针不能直接被调用，所以我们在这里定义一个静态的中转函数来辅助Ax函数的调用
+	 * 这里我们利用reinterpret_cast将_Ax的指针转换到Ax上，需要注意的是成员函数的指针只能通过
+	 * 实例对象进行调用，因此需要void* instance变量。
 	*/
 	static void _Ax(void* instance, lcg_float* a, lcg_float* b, int num)
 	{
