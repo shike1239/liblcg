@@ -15,11 +15,11 @@ public:
 	 * 这里我们利用reinterpret_cast将_Ax的指针转换到Ax上，需要注意的是成员函数的指针只能通过
 	 * 实例对象进行调用，因此需要void* instance变量。
 	*/
-	static void _Ax(void* instance, lcg_float* a, lcg_float* b, int num)
+	static void _Ax(void* instance, const lcg_float* a, lcg_float* b, const int num)
 	{
 		return reinterpret_cast<TESTFUNC*>(instance)->Ax(a, b, num);
 	}
-	void Ax(lcg_float* a, lcg_float* b, int num); //定义共轭梯度中Ax的算法
+	void Ax(const lcg_float* a, lcg_float* b, const int num); //定义共轭梯度中Ax的算法
 private:
 	lcg_float* m_;
 	lcg_float* b_;
@@ -56,7 +56,7 @@ TESTFUNC::~TESTFUNC()
 	lcg_free(p_);
 }
 
-void TESTFUNC::Ax(lcg_float* a, lcg_float* b, int num)
+void TESTFUNC::Ax(const lcg_float* a, lcg_float* b, const int num)
 {
 	for (int i = 0; i < num; i++)
 	{

@@ -18,7 +18,7 @@ lcg_float lcg_fabs(lcg_float x)
 	return (x < 0.0) ? -1.0*x : x;
 }
 
-lcg_float* lcg_malloc(int n)
+lcg_float* lcg_malloc(const int n)
 {
 	lcg_float* x = new lcg_float [n];
 	return x;
@@ -26,8 +26,8 @@ lcg_float* lcg_malloc(int n)
 
 void lcg_free(lcg_float* x)
 {
-	if (x != NULL)
-		delete[] x;
+	if (x != NULL) delete[] x;
+	x = NULL;
 	return;
 }
 

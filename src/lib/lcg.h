@@ -53,7 +53,7 @@ struct lcg_para
 /**
  * Callback function pointer for calculating the product of Ax
  */
-typedef void (*lcg_axfunc_ptr)(void* instance, lcg_float* input_array, lcg_float* output_array, int n_size);
+typedef void (*lcg_axfunc_ptr)(void* instance, const lcg_float* input_array, lcg_float* output_array, const int n_size);
 
 /**
  * @brief      Locate memory for lcg_float pointer type
@@ -62,7 +62,7 @@ typedef void (*lcg_axfunc_ptr)(void* instance, lcg_float* input_array, lcg_float
  *
  * @return     pointer of the location
  */
-lcg_float* lcg_malloc(int n);
+lcg_float* lcg_malloc(const int n);
 
 /**
  * @brief      Destroy memory used by lcg_float pointer type
