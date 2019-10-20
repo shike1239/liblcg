@@ -64,10 +64,10 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, lcg_float* P, int n_siz
 ## 示例
 
 ```c++
-#include "../lib/lcg.h"   
+#include "../lib/lcg.h"
 #include "iostream"
 
-using std::cout;
+using std::clog;
 using std::endl;
 
 class TESTFUNC
@@ -77,15 +77,21 @@ public:
 	~TESTFUNC();
 	void Routine();
 	/**
-	 *因为类的成员函数指针不能直接被调用，所以我们在这里定义一个静态的中转函数来辅助Ax函数的调用
-	 *这里我们利用reinterpret_cast将_Ax的指针转换到Ax上，需要注意的是成员函数的指针只能通过
-	 *实例对象进行调用，因此需要void* instance变量。
+	 * 因为类的成员函数指针不能直接被调用，所以我们在这里定义一个静态的中转函数来辅助Ax函数的调用
+	 * 这里我们利用reinterpret_cast将_Ax的指针转换到Ax上，需要注意的是成员函数的指针只能通过
+	 * 实例对象进行调用，因此需要void* instance变量。
 	*/
-	static void _Ax(void* instance, lcg_float* a, lcg_float* b, int num)
+	static void _Ax(void* instance, const lcg_float* a, lcg_float* b, const int num)
 	{
 		return reinterpret_cast<TESTFUNC*>(instance)->Ax(a, b, num);
 	}
-	void Ax(lcg_float* a, lcg_float* b, int num); //定义共轭梯度中Ax的算法
+	void Ax(const lcg_float* a, lcg_float* b, const int num); //定义共轭梯度中Ax的算法
+
+	static int _Progress(void* instance, const lcg_float* m, const lcg_float converge, const lcg_para *param, const int n_size, const int k)
+	{
+		return reinterpret_cast<TESTFUNC*>(instance)->Progress(m, converge, param, n_size, k);
+	}
+	int Progress(const lcg_float* m, const lcg_float converge, const lcg_para *param, const int n_size, const int k);
 private:
 	lcg_float* m_;
 	lcg_float* b_;
@@ -110,7 +116,7 @@ TESTFUNC::TESTFUNC()
 	// 拟合目标值（含有一定的噪声）
 	b_ = lcg_malloc(3);
 	b_[0] = -2.3723; b_[1] = 5.8221; b_[2] = 5.2165;
-	// 测试预优矩阵
+	// 测试预优矩阵 这里只是测试流程 预优矩阵值全为1 并没有什么作用
 	p_ = lcg_malloc(3);
 	p_[0] = p_[1] = p_[2] = 1.0;
 }
@@ -122,7 +128,7 @@ TESTFUNC::~TESTFUNC()
 	lcg_free(p_);
 }
 
-void TESTFUNC::Ax(lcg_float* a, lcg_float* b, int num)
+void TESTFUNC::Ax(const lcg_float* a, lcg_float* b, const int num)
 {
 	for (int i = 0; i < num; i++)
 	{
@@ -135,10 +141,26 @@ void TESTFUNC::Ax(lcg_float* a, lcg_float* b, int num)
 	return;
 }
 
+int TESTFUNC::Progress(const lcg_float* m, const lcg_float converge, const lcg_para *param, const int n_size, const int k)
+{
+	if (converge <= param->epsilon)
+	{
+		clog << "Iteration-times: " << k << "\tconvergence: " << converge << endl;
+	}
+	else
+	{
+		clog << "Iteration-times: " << k << "\tconvergence: " << converge << endl;
+		clog << "\033[1A\033[K";
+	}
+	return 0;
+}
+
 void TESTFUNC::Routine()
 {
+	lcg_para self_para;
+	lcg_para_set(&self_para, 10, 1e-6, true);
 	// 调用函数求解
-	lcg(_Ax, m_, b_, 3, NULL, this);
+	lcg(_Ax, _Progress, m_, b_, 3, &self_para, this);
 	// 输出解
 	for (int i = 0; i < 3; i++)
 	{
@@ -148,7 +170,7 @@ void TESTFUNC::Routine()
 	// rest m_ and solve with lpcg
 	m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;
 	// use lpcg to solve the linear system
-	lpcg(_Ax, m_, b_, p_, 3, NULL, this);
+	lpcg(_Ax, _Progress, m_, b_, p_, 3, &self_para, this);
 	// output solution
 	for (int i = 0; i < 3; i++)
 	{
