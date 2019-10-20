@@ -1,6 +1,7 @@
 #include "../lib/lcg.h"
 #include "iostream"
 
+using std::cout;
 using std::clog;
 using std::endl;
 

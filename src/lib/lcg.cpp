@@ -74,12 +74,14 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, lcg_float* B, in
 				gk_abs += lcg_fabs(gk[i]);
 			}
 			gk_abs /= 1.0*n_size;
-			if (Pfp(instance, m, gk_abs, &para, n_size, time)) return LCG_STOP;
+			if (Pfp != NULL)
+				if (Pfp(instance, m, gk_abs, &para, n_size, time)) return LCG_STOP;
 			if (gk_abs <= para.epsilon) return LCG_CONVERGENCE;
 		}
 		else
 		{
-			if (Pfp(instance, m, gk_mod/B_mod, &para, n_size, time)) return LCG_STOP;
+			if (Pfp != NULL)
+				if (Pfp(instance, m, gk_mod/B_mod, &para, n_size, time)) return LCG_STOP;
 			if (gk_mod/B_mod <= para.epsilon) return LCG_CONVERGENCE;
 		}
 
@@ -162,12 +164,14 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, lcg_float* B, l
 				rk_mod += lcg_fabs(rk[i]);
 			}
 			rk_mod /= 1.0*n_size;
-			if (Pfp(instance, m, rk_mod, &para, n_size, time)) return LCG_STOP;
+			if (Pfp != NULL)
+				if (Pfp(instance, m, rk_mod, &para, n_size, time)) return LCG_STOP;
 			if (rk_mod <= para.epsilon) return LCG_CONVERGENCE;
 		}
 		else
 		{
-			if (Pfp(instance, m, zTr/B_mod, &para, n_size, time)) return LCG_STOP;
+			if (Pfp != NULL)
+				if (Pfp(instance, m, zTr/B_mod, &para, n_size, time)) return LCG_STOP;
 			if (zTr/B_mod <= para.epsilon) return LCG_CONVERGENCE;
 		}
 
