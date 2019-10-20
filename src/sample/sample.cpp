@@ -2,6 +2,7 @@
 #include "iostream"
 
 using std::cout;
+using std::clog;
 using std::endl;
 
 class TESTFUNC
@@ -20,6 +21,12 @@ public:
 		return reinterpret_cast<TESTFUNC*>(instance)->Ax(a, b, num);
 	}
 	void Ax(const lcg_float* a, lcg_float* b, const int num); //定义共轭梯度中Ax的算法
+
+	static int _Progress(void* instance, const lcg_float* m, const lcg_float converge, const lcg_para *param, const int n_size, const int k)
+	{
+		return reinterpret_cast<TESTFUNC*>(instance)->Progress(m, converge, param, n_size, k);
+	}
+	int Progress(const lcg_float* m, const lcg_float converge, const lcg_para *param, const int n_size, const int k);
 private:
 	lcg_float* m_;
 	lcg_float* b_;
@@ -69,10 +76,26 @@ void TESTFUNC::Ax(const lcg_float* a, lcg_float* b, const int num)
 	return;
 }
 
+int TESTFUNC::Progress(const lcg_float* m, const lcg_float converge, const lcg_para *param, const int n_size, const int k)
+{
+	if (converge <= param->epsilon)
+	{
+		clog << "Iteration-times: " << k << "\tconvergence: " << converge << endl;
+	}
+	else
+	{
+		clog << "Iteration-times: " << k << "\tconvergence: " << converge << endl;
+		clog << "\033[1A\033[K";
+	}
+	return 0;
+}
+
 void TESTFUNC::Routine()
 {
+	lcg_para self_para;
+	lcg_para_set(&self_para, 10, 1e-6, true);
 	// 调用函数求解
-	lcg(_Ax, m_, b_, 3, NULL, this);
+	lcg(_Ax, _Progress, m_, b_, 3, &self_para, this);
 	// 输出解
 	for (int i = 0; i < 3; i++)
 	{
@@ -82,7 +105,7 @@ void TESTFUNC::Routine()
 	// rest m_ and solve with lpcg
 	m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;
 	// use lpcg to solve the linear system
-	lpcg(_Ax, m_, b_, p_, 3, NULL, this);
+	lpcg(_Ax, _Progress, m_, b_, p_, 3, &self_para, this);
 	// output solution
 	for (int i = 0; i < 3; i++)
 	{

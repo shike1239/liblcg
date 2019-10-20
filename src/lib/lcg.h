@@ -29,6 +29,22 @@
 ///< A simple define of float type we use here. easy to change in the future
 typedef double lcg_float;
 
+enum lcg_return
+{
+	LCG_SUCCESS = 0,
+	LCG_CONVERGENCE = 0,
+	LCG_STOP,
+	LCG_ALREADY_OPTIMIZIED,
+	// A negative number means a error
+	LCG_UNKNOWN_ERROR = -1024,
+	// The variable size is negative
+	LCG_INVILAD_VARIABLE_SIZE,
+	// The maximal iteration times is negative.
+	LCG_INVILAD_MAX_ITERATIONS,
+	// The epsilon is negative.
+	LCG_INVILAD_EPSILON,
+};
+
 /**
  * @brief      Parameter type for adjusting the algorithm
  */
@@ -48,12 +64,37 @@ struct lcg_para
 	 * where ||.|| denotes the Euclidean (L2) norm and | | denotes the L1 norm. The default value of epsilon is 1e-6.
 	*/
 	lcg_float epsilon;
+
+	/**
+	 * Whether to use absolute mean differences (AMD) between |Ax - B| to evaluate the process. The default value is false that
+	 * means to use the gradient based evaluating method. The AMD based method will be used if this variable is set to true.
+	 */
+	bool abs_diff;
 };
 
 /**
- * Callback function pointer for calculating the product of Ax
+ * Callback interface for calculating the product of Ax
+ * 
+ * @param  instance    The user data sent for lcg() and lpcg() functions by the client.
+ * @param  x           Multiplier of the Ax product
+ * @param  Ax          Product of Ax
+ * @param  n_size      Size of x and column/row numbers of A
  */
-typedef void (*lcg_axfunc_ptr)(void* instance, const lcg_float* input_array, lcg_float* output_array, const int n_size);
+typedef void (*lcg_axfunc_ptr)(void* instance, const lcg_float* x, lcg_float* prod_Ax, const int n_size);
+
+
+/**
+ * Callback interface for monitoring the progress and terminate the iteration if necessary
+ * 
+ * @param    instance    The user data sent for lcg() and lpcg() functions by the client.
+ * @param    m           The current values of variables.
+ * @param    converge    The current value evaluating the iteration progress
+ * @param    n_size      The size of the variables
+ * @param    k           The iteration count.
+ * @retval   int         Zero to continue the optimization process. Returning a
+ *                       non-zero value will cancel the optimization process.
+ */
+typedef int (*lcg_progress_ptr)(void* instance, const lcg_float* m, const lcg_float converge, const lcg_para* param, const int n_size, const int k);
 
 /**
  * @brief      Locate memory for lcg_float pointer type
@@ -74,18 +115,19 @@ void lcg_free(lcg_float* x);
 /**
  * @brief      Set values for a lcg_para type
  *
- * @param      param   Pointer of the lcg_para type.
- * @param[in]  itimes  The maximal iteration times.
- * @param[in]  eps     The epsilon for accuracy.
+ * &param      param     Pointer of the lcg_para type.
+ * @param[in]  itimes    The maximal iteration times.
+ * @param[in]  eps       The epsilon for accuracy.
+ * @param[in]  diff_mod  Whether to use absolute differences to evaluate the progress.
  *
- * @return     status of the function
  */
-bool lcg_para_init(lcg_para* param, int itimes, lcg_float eps);
+void lcg_para_set(lcg_para *param, int itimes, lcg_float eps, bool diff_mod);
 
 /**
  * @brief      The conjugate gradient method
  *
- * @param[in]  Afp       Function pointer for calculating the product of Ax.
+ * @param[in]  Afp       Callback function for calculating the product of Ax.
+ * @param[in]  Pfp       Callback function for calculating the product of Ax.
  * @param      m         Initial solution vector.
  * @param      B         Objective vector of the linear system.
  * @param[in]  n_size    Size of the solution vector and objective vector.
@@ -94,12 +136,12 @@ bool lcg_para_init(lcg_para* param, int itimes, lcg_float eps);
  *
  * @return     status of the function
  */
-int lcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, int n_size, lcg_para* param, void* instance);
+int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, lcg_float* B, int n_size, lcg_para* param, void* instance);
 
 /**
  * @brief      The preconditioned conjugate gradient method
  *
- * @param[in]  Afp       Function pointer for calculating the product of Ax.
+ * @param[in]  Afp       Callback function pointer for calculating the product of Ax.
  * @param      m         Initial solution vector.
  * @param      B         Objective vector of the linear system.
  * @param      P         Precondition vector
@@ -109,6 +151,6 @@ int lcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, int n_size, lcg_para* pa
  *
  * @return     status of the function
  */
-int lpcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, lcg_float* P, int n_size, lcg_para* param, void* instance);
+int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, lcg_float* B, lcg_float* P, int n_size, lcg_para* param, void* instance);
 
 #endif //_LCG_H

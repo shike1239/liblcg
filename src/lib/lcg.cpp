@@ -6,7 +6,7 @@ using std::cerr;
 using std::endl;
 
 // default parameter for conjugate gradient
-static const lcg_para defparam = {100, 1e-6};
+static const lcg_para defparam = {100, 1e-6, false};
 
 /**
  * @brief      return absolute value of lcg_float
@@ -31,32 +31,23 @@ void lcg_free(lcg_float* x)
 	return;
 }
 
-bool lcg_para_init(lcg_para* param, int itimes, lcg_float eps)
+void lcg_para_set(lcg_para *param, int itimes, lcg_float eps, bool diff_mod)
 {
-	if (itimes > 0 && eps > 0)
-	{
-		param->max_iterations = itimes;
-		param->epsilon = eps;
-		return true;
-	}
-	else
-	{
-		cerr << "fail to set lcg parameter, reset to default." << endl;
-		param->max_iterations = defparam.max_iterations;
-		param->epsilon = defparam.epsilon;
-		return false;
-	}
+	param->max_iterations = itimes;
+	param->epsilon = eps;
+	param->abs_diff = diff_mod;
+	return;
 }
 
-int lcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, int n_size, lcg_para* param, void* instance)
+int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, lcg_float* B, int n_size, lcg_para* param, void* instance)
 {
 	// set CG parameters
 	lcg_para para = (param != NULL) ? (*param) : defparam;
 
 	//check parameters
-	if (n_size <= 0) return -1;
-	if (para.max_iterations <= 0) return -1;
-	if (para.epsilon <= 0.0) return -1;
+	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
+	if (para.max_iterations <= 0) return LCG_INVILAD_MAX_ITERATIONS;
+	if (para.epsilon <= 0.0) return LCG_INVILAD_EPSILON;
 
 	// locate memory
 	lcg_float *gk = NULL, *dk = NULL, *Adk = NULL;
@@ -76,18 +67,24 @@ int lcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, int n_size, lcg_para* pa
 		gk_mod += gk[i]*gk[i];
 	}
 
-	lcg_float dTAd, ak, betak, gk1_mod;
+	lcg_float dTAd, ak, betak, gk1_mod, gk_abs;
 	for (int time = 0; time <= para.max_iterations; time++)
 	{
-		if (gk_mod/B_mod <= para.epsilon)
+		if (para.abs_diff)
 		{
-			clog << "LCG-times: " << time << "\tconvergence: " << gk_mod/B_mod << endl;
-			break;
+			gk_abs = 0.0;
+			for (int i = 0; i < n_size; i++)
+			{
+				gk_abs += lcg_fabs(gk[i]);
+			}
+			gk_abs /= 1.0*n_size;
+			if (Pfp(instance, m, gk_abs, &para, n_size, time)) return LCG_STOP;
+			if (gk_abs <= para.epsilon) return LCG_CONVERGENCE;
 		}
 		else
 		{
-			clog << "LCG-times: " << time << "\tconvergence: " << gk_mod/B_mod << endl;
-			clog << "\033[1A\033[K";
+			if (Pfp(instance, m, gk_mod/B_mod, &para, n_size, time)) return LCG_STOP;
+			if (gk_mod/B_mod <= para.epsilon) return LCG_CONVERGENCE;
 		}
 
 		Afp(instance , dk, Adk, n_size);
@@ -118,18 +115,18 @@ int lcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, int n_size, lcg_para* pa
 	lcg_free(dk);
 	lcg_free(gk);
 	lcg_free(Adk);
-	return 0;
+	return LCG_SUCCESS;
 }
 
-int lpcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, lcg_float* P, int n_size, lcg_para* param, void* instance)
+int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, lcg_float* B, lcg_float* P, int n_size, lcg_para* param, void* instance)
 {
 	// set CG parameters
 	lcg_para para = (param != NULL) ? (*param) : defparam;
 
 	//check parameters
-	if (n_size <= 0) return -1;
-	if (para.max_iterations <= 0) return -1;
-	if (para.epsilon <= 0.0) return -1;
+	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
+	if (para.max_iterations <= 0) return LCG_INVILAD_MAX_ITERATIONS;
+	if (para.epsilon <= 0.0) return LCG_INVILAD_EPSILON;
 
 	// locate memory
 	lcg_float *rk = NULL, *zk = NULL;
@@ -151,32 +148,31 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, lcg_float* P, int n_siz
 		dk[i] = zk[i];
 	}
 
-	lcg_float zTr = 0.0;
+	lcg_float zTr = 0.0, B_mod = 0.0;
 	for (int i = 0; i < n_size; i++)
 	{
 		zTr += zk[i]*rk[i];
+		B_mod = B[i]*B[i];
 	}
 
 	lcg_float dTAd, ak, betak, zTr1, rk_mod;
 	for (int time = 0; time <= para.max_iterations; time++)
 	{
-		// we use averaged absolute difference to evaluate the function
-		rk_mod = 0.0;
-		for (int i = 0; i < n_size; i++)
+		if (para.abs_diff)
 		{
-			rk_mod += lcg_fabs(rk[i]);
-		}
-		rk_mod /= 1.0*n_size;
-
-		if (rk_mod <= para.epsilon)
-		{
-			clog << "LPCG-times: " << time << "\tconvergence: " << rk_mod << endl;
-			break;
+			rk_mod = 0.0;
+			for (int i = 0; i < n_size; i++)
+			{
+				rk_mod += lcg_fabs(rk[i]);
+			}
+			rk_mod /= 1.0*n_size;
+			if (Pfp(instance, m, rk_mod, &para, n_size, time)) return LCG_STOP;
+			if (rk_mod <= para.epsilon) return LCG_CONVERGENCE;
 		}
 		else
 		{
-			clog << "LPCG-times: " << time << "\tconvergence: " << rk_mod << endl;
-			clog << "\033[1A\033[K";
+			if (Pfp(instance, m, zTr/B_mod, &para, n_size, time)) return LCG_STOP;
+			if (zTr/B_mod <= para.epsilon) return LCG_CONVERGENCE;
 		}
 
 		Afp(instance , dk, Adk, n_size);
@@ -211,5 +207,5 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, lcg_float* P, int n_siz
 
 	lcg_free(rk); lcg_free(zk);
 	lcg_free(dk); lcg_free(Adk);
-	return 0;
+	return LCG_SUCCESS;
 }
