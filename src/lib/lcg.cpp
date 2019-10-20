@@ -35,6 +35,29 @@ void lcg_para_set(lcg_para *param, int itimes, lcg_float eps, bool diff_mod)
 	return;
 }
 
+const char* lcg_error_str(int er_index)
+{
+	switch (er_index)
+	{
+		case LCG_SUCCESS:
+			return "The iteration reached convergence.";
+		case LCG_STOP:
+			return "The conjugate gradient method stopped by the progress evaluation function.";
+		case LCG_ALREADY_OPTIMIZIED:
+			return "The input variables are already optimized results.";
+		case LCG_UNKNOWN_ERROR:
+			return "Unknown error.";
+		case LCG_INVILAD_VARIABLE_SIZE:
+			return "The size of variables is negative.";
+		case LCG_INVILAD_MAX_ITERATIONS:
+			return "The maximal iteration times is negative.";
+		case LCG_INVILAD_EPSILON:
+			return "The epsilon is negative.";
+		default:
+			return "Unknown error.";
+	}
+}
+
 int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, lcg_float* B, int n_size, lcg_para* param, void* instance)
 {
 	// set CG parameters

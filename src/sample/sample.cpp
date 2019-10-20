@@ -93,9 +93,11 @@ int TESTFUNC::Progress(const lcg_float* m, const lcg_float converge, const lcg_p
 void TESTFUNC::Routine()
 {
 	lcg_para self_para;
-	lcg_para_set(&self_para, 10, 1e-6, true);
+	lcg_para_set(&self_para, 10, 1e-6, false);
 	// 调用函数求解
-	lcg(_Ax, _Progress, m_, b_, 3, &self_para, this);
+	int ret = lcg(_Ax, _Progress, m_, b_, 3, &self_para, this);
+	if (ret < 0)
+		cout << lcg_error_str(ret) << endl;
 	// 输出解
 	for (int i = 0; i < 3; i++)
 	{
@@ -105,7 +107,9 @@ void TESTFUNC::Routine()
 	// rest m_ and solve with lpcg
 	m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;
 	// use lpcg to solve the linear system
-	lpcg(_Ax, _Progress, m_, b_, p_, 3, &self_para, this);
+	ret = lpcg(_Ax, _Progress, m_, b_, p_, 3, &self_para, this);
+	if (ret < 0)
+		cout << lcg_error_str(ret) << endl;
 	// output solution
 	for (int i = 0; i < 3; i++)
 	{

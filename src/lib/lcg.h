@@ -124,6 +124,15 @@ void lcg_free(lcg_float* x);
 void lcg_para_set(lcg_para *param, int itimes, lcg_float eps, bool diff_mod);
 
 /**
+ * @brief      return a string explanation for lcg() and lpcg() return values
+ *
+ * @param[in]  er_index  The error index returned by lcg() and lpcg()
+ *
+ * @return     A string explanation of the error
+ */
+const char* lcg_error_str(int er_index);
+
+/**
  * @brief      The conjugate gradient method
  *
  * @param[in]  Afp       Callback function for calculating the product of Ax.
