@@ -1,9 +1,5 @@
 #include "lcg.h"
-#include "iostream"
-
-using std::clog;
-using std::cerr;
-using std::endl;
+#include "cstddef"
 
 // default parameter for conjugate gradient
 static const lcg_para defparam = {100, 1e-6, false};
