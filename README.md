@@ -49,6 +49,10 @@ typedef void (*lcg_axfunc_ptr)(void* instance, const lcg_float* x, lcg_float* pr
 
 用户可以以下面的模版创建函数来显示共轭梯度迭代中的参数，并可以在适当的情况下停止迭代的进程。
 
+```c++
+typedef int (*lcg_progress_ptr)(void* instance, const lcg_float* m, const lcg_float converge, const lcg_para* param, const int n_size, const int k);
+```
+
 函数接收6个参数，分别为：
 1. `void* instance` 传入的实例对象；
 2. `const lcg_float* m` 当前迭代的模型参数数组；
@@ -56,10 +60,6 @@ typedef void (*lcg_axfunc_ptr)(void* instance, const lcg_float* x, lcg_float* pr
 4. `const lcg_para* param` 当前迭代过程使用的参数；
 5. `const int n_size` 模型数组的大小；
 6. `const int k` 当前迭代的次数。
-
-```c++
-typedef int (*lcg_progress_ptr)(void* instance, const lcg_float* m, const lcg_float converge, const lcg_para* param, const int n_size, const int k);
-```
 
 ### 调用 lcg() 函数求解
 
