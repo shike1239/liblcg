@@ -3,6 +3,12 @@
 #include "lcg.h"
 #include "cstddef"
 
+#ifdef LCG_OPENMP
+
+#include "omp.h"
+
+#endif
+
 #ifdef LCG_FABS
 /**
  * @brief      return absolute value of lcg_float
@@ -85,12 +91,16 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
 
 	Afp(instance, m, Adk, n_size);
 
-	lcg_float B_mod = 0.0, gk_mod = 0.0;
+#pragma omp parallel for private (i) schedule(guided)
 	for (int i = 0; i < n_size; i++)
 	{
 		gk[i] = Adk[i] - B[i];
 		dk[i] = -1.0*gk[i];
+	}
 
+	lcg_float B_mod = 0.0, gk_mod = 0.0;
+	for (int i = 0; i < n_size; i++)
+	{
 		B_mod += B[i]*B[i];
 		gk_mod += gk[i]*gk[i];
 	}
@@ -130,16 +140,22 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
 		}
 		ak = gk_mod/dTAd;
 
-		gk1_mod = 0.0;
+#pragma omp parallel for private (i) schedule(guided)
 		for (int i = 0; i < n_size; i++)
 		{
 			m[i] += ak*dk[i];
 			gk[i] += ak*Adk[i];
-			gk1_mod += gk[i]*gk[i];
 		}
 
+		gk1_mod = 0.0;
+		for (int i = 0; i < n_size; i++)
+		{
+			gk1_mod += gk[i]*gk[i];
+		}
 		betak = gk1_mod/gk_mod;
 		gk_mod = gk1_mod;
+
+#pragma omp parallel for private (i) schedule(guided)
 		for (int i = 0; i < n_size; i++)
 		{
 			dk[i] = betak*dk[i] - gk[i];
@@ -171,11 +187,13 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 
 	Afp(instance , m, Adk, n_size);
 
+#pragma omp parallel for private (i) schedule(guided)
 	for (int i = 0; i < n_size; i++)
 	{
 		rk[i] = B[i] - Adk[i];
 	}
 
+#pragma omp parallel for private (i) schedule(guided)
 	for (int i = 0; i < n_size; i++)
 	{
 		zk[i] = P[i]*rk[i];
@@ -186,7 +204,7 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 	for (int i = 0; i < n_size; i++)
 	{
 		zTr += zk[i]*rk[i];
-		B_mod = B[i]*B[i];
+		B_mod += B[i]*B[i];
 	}
 
 	lcg_float dTAd, ak, betak, zTr1, rk_mod;
@@ -224,6 +242,7 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 		}
 		ak = zTr/dTAd;
 
+#pragma omp parallel for private (i) schedule(guided)
 		for (int i = 0; i < n_size; i++)
 		{
 			m[i] += ak*dk[i];
@@ -237,8 +256,9 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 			zTr1 += zk[i]*rk[i];
 		}
 		betak = zTr1/zTr;
-
 		zTr = zTr1;
+
+#pragma omp parallel for private (i) schedule(guided)
 		for (int i = 0; i < n_size; i++)
 		{
 			dk[i] = zk[i] + betak*dk[i];

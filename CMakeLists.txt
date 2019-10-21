@@ -8,6 +8,7 @@ project(LIBLCG VERSION 1.1.0 LANGUAGES CXX)
 set(CMAKE_INSTALL_PREFIX /usr/local)
 # 添加编译选项
 option(LCG_FABS "use lcg's fabs" ON)
+option(LCG_OPENMP "use openmp" ON)
 # 加入一个头文件配置，让cmake对源码进行操作
 configure_file(
 	"${PROJECT_SOURCE_DIR}/config.h.in"
