@@ -78,15 +78,8 @@ void TESTFUNC::Ax(const lcg_float* a, lcg_float* b, const int num)
 
 int TESTFUNC::Progress(const lcg_float* m, const lcg_float converge, const lcg_para *param, const int n_size, const int k)
 {
-	if (converge <= param->epsilon)
-	{
-		clog << "Iteration-times: " << k << "\tconvergence: " << converge << endl;
-	}
-	else
-	{
-		clog << "Iteration-times: " << k << "\tconvergence: " << converge << endl;
-		clog << "\033[1A\033[K";
-	}
+	clog << "Iteration-times: " << k << "\tconvergence: " << converge << endl;
+	if (converge > param->epsilon) clog << "\033[1A\033[K";
 	return 0;
 }
 
