@@ -1,9 +1,9 @@
+#include "config.h"
+
 #include "lcg.h"
 #include "cstddef"
 
-// default parameter for conjugate gradient
-static const lcg_para defparam = {100, 1e-6, false};
-
+#ifdef LCG_FABS
 /**
  * @brief      return absolute value of lcg_float
  *
@@ -13,6 +13,15 @@ lcg_float lcg_fabs(lcg_float x)
 {
 	return (x < 0.0) ? -1.0*x : x;
 }
+
+#else
+
+#include "cmath"
+
+#endif
+
+// default parameter for conjugate gradient
+static const lcg_para defparam = {100, 1e-6, false};
 
 lcg_float* lcg_malloc(const int n)
 {
@@ -94,7 +103,11 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
 			gk_abs = 0.0;
 			for (int i = 0; i < n_size; i++)
 			{
+#ifdef LCG_FABS
 				gk_abs += lcg_fabs(gk[i]);
+#else
+				gk_abs += fabs(gk[i]);
+#endif
 			}
 			gk_abs /= 1.0*n_size;
 			if (Pfp != NULL)
@@ -184,7 +197,11 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 			rk_mod = 0.0;
 			for (int i = 0; i < n_size; i++)
 			{
+#ifdef LCG_FABS
 				rk_mod += lcg_fabs(rk[i]);
+#else
+				rk_mod += fabs(rk[i]);
+#endif
 			}
 			rk_mod /= 1.0*n_size;
 			if (Pfp != NULL)
