@@ -58,7 +58,7 @@ const char* lcg_error_str(int er_index)
 	}
 }
 
-int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, lcg_float* B, int n_size, lcg_para* param, void* instance)
+int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance)
 {
 	// set CG parameters
 	lcg_para para = (param != NULL) ? (*param) : defparam;
@@ -139,7 +139,7 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, lcg_float* B, in
 	return LCG_SUCCESS;
 }
 
-int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, lcg_float* B, lcg_float* P, int n_size, lcg_para* param, void* instance)
+int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const lcg_float* P, const int n_size, const lcg_para* param, void* instance)
 {
 	// set CG parameters
 	lcg_para para = (param != NULL) ? (*param) : defparam;

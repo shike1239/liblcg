@@ -66,16 +66,35 @@ typedef int (*lcg_progress_ptr)(void* instance, const lcg_float* m, const lcg_fl
 Ax计算函数定义完成后，用户需要给出方程组的初始解（一般可直接赋0）与共轭梯度的B项。然后调用 lcg() 函数求解：
 
 ```c++
-int lcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, int n_size, lcg_para* param, void* instance);
+int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance);
 ```
+
+函数接受7个参数，分别为：
+1. `lcg_axfunc_ptr Afp` 计算Ax的回调函数；
+2. `lcg_progress_ptr Pfp` 监控迭代过程的回调函数（非必须，无需监控时使用NULL参数即可）；
+3. `lcg_float* m` 模型参数数组，解得线性方程组的解也为这个数组；
+4. `const lcg_float* B` Ax = B 中的B项；
+5. `const int n_size` 模型参数数组的大小；
+6. `const lcg_para* param` 此次迭代使用的参数；
+7. `void* instance` 传入的实例对象。
 
 ### 调用 lpcg() 函数求解
 
 Ax计算函数定义完成后，用户需要给出方程组的初始解（一般可直接赋0）、共轭梯度的B项与预优矩阵P项（P一般为一个N阶的对角阵）。然后调用 lpcg() 函数求解：
 
 ```c++
-int lpcg(lcg_axfunc_ptr Afp, lcg_float* m, lcg_float* B, lcg_float* P, int n_size, lcg_para* param, void* instance);
+int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const lcg_float* P, const int n_size, const lcg_para* param, void* instance);
 ```
+
+函数接受8个参数，分别为：
+1. `lcg_axfunc_ptr Afp` 计算Ax的回调函数；
+2. `lcg_progress_ptr Pfp` 监控迭代过程的回调函数（非必须，无需监控时使用NULL参数即可）；
+3. `lcg_float* m` 模型参数数组，解得线性方程组的解也为这个数组；
+4. `const lcg_float* B` Ax = B 中的B项；
+5. `const lcg_float* P` 预优矩阵，一般是一个N阶的对角阵，这里直接用一个一维数组表示；
+6. `const int n_size` 模型参数数组的大小；
+7. `const lcg_para* param` 此次迭代使用的参数；
+8. `void* instance` 传入的实例对象。
 
 ## 示例
 

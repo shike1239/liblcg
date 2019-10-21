@@ -145,7 +145,7 @@ const char* lcg_error_str(int er_index);
  *
  * @return     status of the function
  */
-int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, lcg_float* B, int n_size, lcg_para* param, void* instance);
+int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance);
 
 /**
  * @brief      The preconditioned conjugate gradient method
@@ -160,6 +160,6 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, lcg_float* B, in
  *
  * @return     status of the function
  */
-int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, lcg_float* B, lcg_float* P, int n_size, lcg_para* param, void* instance);
+int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const lcg_float* P, const int n_size, const lcg_para* param, void* instance);
 
 #endif //_LCG_H
