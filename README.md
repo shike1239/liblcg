@@ -24,6 +24,13 @@ Ax = B （可用共轭梯度求解）或者 PAx = PB（可用预优共轭梯度�
    make install
    ```
 
+算法库目前有两个可选的编译命名，分别为LCG_FABS和LCG_OPENMP，默认值均为ON。其中LCG_FABS为是否使用算法库自带的绝对值计算方法。若此值为OFF则会使用标准的（cmath）绝对值计算方法。
+LCG_OPENMP为是否使用openMP对算法进行加速。若此值为OFF则不使用openMP。用户可以使用以下方式进行条件编译：
+
+   ```shell
+   cmake .. -DLCG_FABS=OFF -DLCG_OPENMP=ON
+   ```
+
 2. Windows
 
    请自行拷贝代码新建项目并编译…嘿嘿😁！  
