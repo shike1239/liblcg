@@ -42,12 +42,10 @@ void lcg_free(lcg_float* x)
 	return;
 }
 
-void lcg_para_set(lcg_para *param, int itimes, lcg_float eps, bool diff_mod)
+lcg_para lcg_default_parameters()
 {
-	param->max_iterations = itimes;
-	param->epsilon = eps;
-	param->abs_diff = diff_mod;
-	return;
+	lcg_para param = defparam;
+	return param;
 }
 
 const char* lcg_error_str(int er_index)

@@ -85,8 +85,9 @@ int TESTFUNC::Progress(const lcg_float* m, const lcg_float converge, const lcg_p
 
 void TESTFUNC::Routine()
 {
-	lcg_para self_para;
-	lcg_para_set(&self_para, 10, 1e-6, false);
+	lcg_para self_para = lcg_default_parameters();
+	self_para.max_iterations = 10;
+	self_para.abs_diff = true;
 	// 调用函数求解
 	int ret = lcg(_Ax, _Progress, m_, b_, 3, &self_para, this);
 	if (ret < 0)

@@ -33,16 +33,16 @@ enum lcg_return
 {
 	LCG_SUCCESS = 0,
 	LCG_CONVERGENCE = 0,
-	LCG_STOP,
-	LCG_ALREADY_OPTIMIZIED,
+	LCG_STOP, //1
+	LCG_ALREADY_OPTIMIZIED, //2
 	// A negative number means a error
 	LCG_UNKNOWN_ERROR = -1024,
 	// The variable size is negative
-	LCG_INVILAD_VARIABLE_SIZE,
+	LCG_INVILAD_VARIABLE_SIZE, //-1023
 	// The maximal iteration times is negative.
-	LCG_INVILAD_MAX_ITERATIONS,
+	LCG_INVILAD_MAX_ITERATIONS, //-1022
 	// The epsilon is negative.
-	LCG_INVILAD_EPSILON,
+	LCG_INVILAD_EPSILON, //-1021
 };
 
 /**
@@ -52,7 +52,7 @@ struct lcg_para
 {
 	/**
 	 * Maximal iteration times
-	 * The default value is 100. one adjust this parameter by passing a lcg_para type to the lcg() function.
+	 * The default value is 100. one adjust this parameter by passing a lcg_para type to the lcg() or lpcg() function.
 	*/
 	int max_iterations;
 
@@ -60,7 +60,7 @@ struct lcg_para
 	 * Epsilon for convergence test.
 	 * This parameter determines the accuracy with which the solution is to
 	 * be found. A minimization terminates when
-	 * ||g||/||b|| <= epsilon for conjugate gradient and mean(|rk|) <= epsilon for preconditioned conjugate gradient,
+	 * ||g||/||b|| <= epsilon or |Ax - B| <= epsilon for lcg() and lpcg() functions,
 	 * where ||.|| denotes the Euclidean (L2) norm and | | denotes the L1 norm. The default value of epsilon is 1e-6.
 	*/
 	lcg_float epsilon;
@@ -113,15 +113,12 @@ lcg_float* lcg_malloc(const int n);
 void lcg_free(lcg_float* x);
 
 /**
- * @brief      Set values for a lcg_para type
- *
- * &param      param     Pointer of the lcg_para type.
- * @param[in]  itimes    The maximal iteration times.
- * @param[in]  eps       The epsilon for accuracy.
- * @param[in]  diff_mod  Whether to use absolute differences to evaluate the progress.
+ * @brief      Return a lcg_para type with default values.
+ * 
+ * The user can use function to get default parameters' value.
  *
  */
-void lcg_para_set(lcg_para *param, int itimes, lcg_float eps, bool diff_mod);
+lcg_para lcg_default_parameters();
 
 /**
  * @brief      return a string explanation for lcg() and lpcg() return values
