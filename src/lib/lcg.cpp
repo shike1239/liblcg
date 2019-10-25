@@ -211,8 +211,9 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 		B_mod += B[i]*B[i];
 	}
 
+	int time;
 	lcg_float dTAd, ak, betak, zTr1, rk_mod;
-	for (int time = 0; time < para.max_iterations; time++)
+	for (time = 0; time < para.max_iterations; time++)
 	{
 		if (para.abs_diff)
 		{
