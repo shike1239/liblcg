@@ -212,7 +212,7 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 	}
 
 	lcg_float dTAd, ak, betak, zTr1, rk_mod;
-	for (int time = 0; time <= para.max_iterations; time++)
+	for (int time = 0; time < para.max_iterations; time++)
 	{
 		if (para.abs_diff)
 		{
@@ -271,5 +271,8 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 
 	lcg_free(rk); lcg_free(zk);
 	lcg_free(dk); lcg_free(Adk);
+
+	if (time == para.max_iterations)
+		return LCG_REACHED_MAX_ITERATIONS;
 	return LCG_SUCCESS;
 }
