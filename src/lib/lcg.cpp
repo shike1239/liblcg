@@ -66,6 +66,8 @@ const char* lcg_error_str(int er_index)
 			return "The maximal iteration times is negative.";
 		case LCG_INVILAD_EPSILON:
 			return "The epsilon is negative.";
+		case LCG_REACHED_MAX_ITERATIONS:
+			return "The maximal iteration is reached.";
 		default:
 			return "Unknown error.";
 	}
@@ -103,8 +105,9 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
 		gk_mod += gk[i]*gk[i];
 	}
 
+	int time;
 	lcg_float dTAd, ak, betak, gk1_mod, gk_abs;
-	for (int time = 0; time <= para.max_iterations; time++)
+	for (time = 0; time < para.max_iterations; time++)
 	{
 		if (para.abs_diff)
 		{
@@ -163,6 +166,9 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
 	lcg_free(dk);
 	lcg_free(gk);
 	lcg_free(Adk);
+
+	if (time == para.max_iterations)
+		return LCG_REACHED_MAX_ITERATIONS;
 	return LCG_SUCCESS;
 }
 

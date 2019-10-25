@@ -43,6 +43,8 @@ enum lcg_return
 	LCG_INVILAD_MAX_ITERATIONS, //-1022
 	// The epsilon is negative.
 	LCG_INVILAD_EPSILON, //-1021
+	// iteration reached max limit
+	LCG_REACHED_MAX_ITERATIONS,
 };
 
 /**
