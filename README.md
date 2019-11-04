@@ -106,9 +106,10 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 ## 示例
 
 ```c++
-#include "../lib/lcg.h"
-#include "iostream"
+#include "../lib/lcg.h"   
+#include "iostream"   
 
+using std::cout;
 using std::clog;
 using std::endl;
 
@@ -157,7 +158,7 @@ TESTFUNC::TESTFUNC()
 	m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;
 	// 拟合目标值（含有一定的噪声）
 	b_ = lcg_malloc(3);
-	b_[0] = -2.3723; b_[1] = 5.8221; b_[2] = 5.2165;
+	b_[0] = -2.3723; b_[1] = 5.8201; b_[2] = 5.2065;
 	// 测试预优矩阵 这里只是测试流程 预优矩阵值全为1 并没有什么作用
 	p_ = lcg_malloc(3);
 	p_[0] = p_[1] = p_[2] = 1.0;
@@ -185,24 +186,20 @@ void TESTFUNC::Ax(const lcg_float* a, lcg_float* b, const int num)
 
 int TESTFUNC::Progress(const lcg_float* m, const lcg_float converge, const lcg_para *param, const int n_size, const int k)
 {
-	if (converge <= param->epsilon)
-	{
-		clog << "Iteration-times: " << k << "\tconvergence: " << converge << endl;
-	}
-	else
-	{
-		clog << "Iteration-times: " << k << "\tconvergence: " << converge << endl;
-		clog << "\033[1A\033[K";
-	}
+	clog << "Iteration-times: " << k << "\tconvergence: " << converge << endl;
+	if (converge > param->epsilon) clog << "\033[1A\033[K";
 	return 0;
 }
 
 void TESTFUNC::Routine()
 {
-	lcg_para self_para;
-	lcg_para_set(&self_para, 10, 1e-6, true);
+	lcg_para self_para = lcg_default_parameters();
+	self_para.max_iterations = 10;
+	self_para.abs_diff = true;
 	// 调用函数求解
-	lcg(_Ax, _Progress, m_, b_, 3, &self_para, this);
+	int ret = lcg(_Ax, _Progress, m_, b_, 3, &self_para, this);
+	if (ret < 0)
+		cout << lcg_error_str(ret) << endl;
 	// 输出解
 	for (int i = 0; i < 3; i++)
 	{
@@ -212,7 +209,9 @@ void TESTFUNC::Routine()
 	// rest m_ and solve with lpcg
 	m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;
 	// use lpcg to solve the linear system
-	lpcg(_Ax, _Progress, m_, b_, p_, 3, &self_para, this);
+	ret = lpcg(_Ax, _Progress, m_, b_, p_, 3, &self_para, this);
+	if (ret < 0)
+		cout << lcg_error_str(ret) << endl;
 	// output solution
 	for (int i = 0; i < 3; i++)
 	{
