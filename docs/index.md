@@ -2,6 +2,8 @@
 layout: default
 ---
 
+# C++ Library of Linear Conjugate Gradient (LCG)
+
 ## 简介
 
 liblcg是一个简单的C++线性共轭梯度算法库，包含了一般形式的共轭梯度与预优共轭梯度算法。可用于求解如下形式的线性方程组：
