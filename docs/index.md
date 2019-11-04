@@ -2,7 +2,7 @@
 layout: default
 ---
 
-# C++ Library of Linear Conjugate Gradient (LCG)
+# LCG
 
 ## 简介
 
