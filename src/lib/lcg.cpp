@@ -10,6 +10,7 @@
 #endif
 
 #ifdef LCG_FABS
+
 /**
  * @brief      return absolute value of lcg_float
  *
@@ -128,7 +129,7 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
 		if (para.abs_diff)
 		{
 			gk_abs = 0.0;
-			for (int i = 0; i < n_size; i++)
+			for (i = 0; i < n_size; i++)
 			{
 #ifdef LCG_FABS
 				gk_abs += lcg_fabs(gk[i]);
@@ -248,7 +249,7 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 		if (para.abs_diff)
 		{
 			rk_mod = 0.0;
-			for (int i = 0; i < n_size; i++)
+			for (i = 0; i < n_size; i++)
 			{
 #ifdef LCG_FABS
 				rk_mod += lcg_fabs(rk[i]);
@@ -514,7 +515,7 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
 		Afp(instance, pk, Ax, n_size);
 
 #pragma omp parallel for private (i) schedule(guided)
-		for (int i = 0; i < n_size; i++)
+		for (i = 0; i < n_size; i++)
 		{
 			Apk[i] = Ax[i];
 		}
@@ -536,7 +537,7 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
 		Afp(instance, sk, Ax, n_size);
 
 		Ass = AsAs = 0.0;
-		for (int i = 0; i < n_size; i++)
+		for (i = 0; i < n_size; i++)
 		{
 			Ass  += Ax[i]*sk[i];
 			AsAs += Ax[i]*Ax[i];
@@ -661,7 +662,7 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 		Afp(instance, pk, Ax, n_size);
 
 #pragma omp parallel for private (i) schedule(guided)
-		for (int i = 0; i < n_size; i++)
+		for (i = 0; i < n_size; i++)
 		{
 			Apk[i] = Ax[i];
 		}
@@ -696,7 +697,7 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 				if (Pfp(instance, m, s_abs, &para, n_size, time)) return LCG_STOP;
 			if (s_abs <= para.epsilon)
 			{
-				for (int i = 0; i < n_size; i++)
+				for (i = 0; i < n_size; i++)
 				{
 					m[i] += ak*pk[i];
 				}
@@ -707,7 +708,7 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 		Afp(instance, sk, Ax, n_size);
 
 		Ass = AsAs = 0.0;
-		for (int i = 0; i < n_size; i++)
+		for (i = 0; i < n_size; i++)
 		{
 			Ass  += Ax[i]*sk[i];
 			AsAs += Ax[i]*Ax[i];
@@ -732,41 +733,11 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 		}
 		betak = (ak/wk)*rkr0_T1/rkr0_T;
 
-#ifdef LCG_FABS
-		if (lcg_fabs(rkr0_T1) < para.restart_epsilon)
-		{
-			for (i = 0; i < n_size; i++)
-			{
-				r0_T[i] = rk[i];
-				pk[i] = rk[i];
-			}
-		}
-		else
-		{
 #pragma omp parallel for private (i) schedule(guided)
-			for (i = 0; i < n_size; i++)
-			{
-				pk[i] = rk[i] + betak*(pk[i] - wk*Apk[i]);
-			}
-		}
-#else
-		if (fabs(rkr0_T1) < para.restart_epsilon)
+		for (i = 0; i < n_size; i++)
 		{
-			for (i = 0; i < n_size; i++)
-			{
-				r0_T[i] = rk[i];
-				pk[i] = rk[i];
-			}
+			pk[i] = rk[i] + betak*(pk[i] - wk*Apk[i]);
 		}
-		else
-		{
-#pragma omp parallel for private (i) schedule(guided)
-			for (i = 0; i < n_size; i++)
-			{
-				pk[i] = rk[i] + betak*(pk[i] - wk*Apk[i]);
-			}
-		}
-#endif
 
 		rk_mod = 0.0;
 		for (i = 0; i < n_size; i++)
@@ -775,6 +746,26 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 		}
 
 		rkr0_T = rkr0_T1;
+
+#ifdef LCG_FABS
+		if (lcg_fabs(rkr0_T) < para.restart_epsilon)
+		{
+			for (i = 0; i < n_size; i++)
+			{
+				r0_T[i] = rk[i];
+				pk[i] = rk[i];
+			}
+		}
+#else
+		if (fabs(rkr0_T) < para.restart_epsilon)
+		{
+			for (i = 0; i < n_size; i++)
+			{
+				r0_T[i] = rk[i];
+				pk[i] = rk[i];
+			}
+		}
+#endif
 	}
 
 	lcg_free(rk); lcg_free(r0_T);
