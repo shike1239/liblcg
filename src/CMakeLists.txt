@@ -1,6 +1,5 @@
 # 设定源文件文件夹
 aux_source_directory(lib/ LCGLIB_SRC)
-aux_source_directory(sample/ SAMPLE_SRC)
 
 # 以下部分为库的编译
 # 注意目标名必须唯一 所以不能直接生成相同名称的动态库与静态库
@@ -28,8 +27,15 @@ install(FILES lib/lcg.h DESTINATION include)
 # 设置可执行文件的输出地址
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 # 添加可执行文件 命令行
-add_executable(lcg_sample ${SAMPLE_SRC})
+add_executable(lcg_sample sample/sample.cpp)
 # 为安装文件添加动态库的搜索地址
 set_target_properties(lcg_sample PROPERTIES INSTALL_RPATH "/usr/local/lib")
 # 链接动态库
 target_link_libraries(lcg_sample PUBLIC lcg)
+
+# 添加可执行文件 命令行
+add_executable(lcg_sample2 sample/sample2.cpp)
+# 为安装文件添加动态库的搜索地址
+set_target_properties(lcg_sample2 PROPERTIES INSTALL_RPATH "/usr/local/lib")
+# 链接动态库
+target_link_libraries(lcg_sample2 PUBLIC lcg)

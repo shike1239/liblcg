@@ -43,6 +43,8 @@ enum lcg_return
 	LCG_INVILAD_MAX_ITERATIONS, //-1022
 	// The epsilon is negative.
 	LCG_INVILAD_EPSILON, //-1021
+	// The restart epsilon is negative
+	LCG_INVILAD_RESTART_EPSILON,
 	// iteration reached max limit
 	LCG_REACHED_MAX_ITERATIONS,
 };
@@ -72,6 +74,11 @@ struct lcg_para
 	 * means to use the gradient based evaluating method. The AMD based method will be used if this variable is set to true.
 	 */
 	bool abs_diff;
+
+	/**
+	 * restart epsilon for the bicgstab2() algorithm. The default value is 1e-6
+	 */
+	lcg_float restart_epsilon;
 };
 
 /**
@@ -161,4 +168,48 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
  */
 int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const lcg_float* P, const int n_size, const lcg_para* param, void* instance);
 
+/**
+ * @brief      The conjugate gradient squared method
+ *
+ * @param[in]  Afp       Callback function for calculating the product of Ax.
+ * @param[in]  Pfp       Callback function for calculating the product of Ax.
+ * @param      m         Initial solution vector.
+ * @param      B         Objective vector of the linear system.
+ * @param[in]  n_size    Size of the solution vector and objective vector.
+ * @param      param     Parameter setup for the conjugate gradient.
+ * @param      instance  The user data sent for lcg() function by the client.
+ *
+ * @return     status of the function
+ */
+int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance);
+
+/**
+ * @brief      The biconjugate gradient stabilized method
+ *
+ * @param[in]  Afp       Callback function for calculating the product of Ax.
+ * @param[in]  Pfp       Callback function for calculating the product of Ax.
+ * @param      m         Initial solution vector.
+ * @param      B         Objective vector of the linear system.
+ * @param[in]  n_size    Size of the solution vector and objective vector.
+ * @param      param     Parameter setup for the conjugate gradient.
+ * @param      instance  The user data sent for lcg() function by the client.
+ *
+ * @return     status of the function
+ */
+int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance);
+
+/**
+ * @brief      The biconjugate gradient stabilized method with restart
+ *
+ * @param[in]  Afp       Callback function for calculating the product of Ax.
+ * @param[in]  Pfp       Callback function for calculating the product of Ax.
+ * @param      m         Initial solution vector.
+ * @param      B         Objective vector of the linear system.
+ * @param[in]  n_size    Size of the solution vector and objective vector.
+ * @param      param     Parameter setup for the conjugate gradient.
+ * @param      instance  The user data sent for lcg() function by the client.
+ *
+ * @return     status of the function
+ */
+int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance);
 #endif //_LCG_H
