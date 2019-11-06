@@ -132,7 +132,7 @@ void lcg_free(lcg_float* x);
 lcg_para lcg_default_parameters();
 
 /**
- * @brief      return a string explanation for lcg() and lpcg() return values
+ * @brief      return a string explanation for a solver's return values
  *
  * @param[in]  er_index  The error index returned by lcg() and lpcg()
  *
