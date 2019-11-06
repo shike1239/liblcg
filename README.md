@@ -1,4 +1,4 @@
-# 线性共轭梯度算法库（C++ Library of Linear Conjugate Gradient，LIBLCG）
+# LCG
 
 张壹（zhangyiss@icloud.com）
 
@@ -14,7 +14,7 @@ Ax = B
 
 ## 安装
 
-算法库使用cmake编译工具进行编译，可在不同平台生成相应的可执行或工程文件。用户请自行下载安装cmake后按如下方法进行编译：
+算法库使用cmake编译工具进行编译，可在不同平台生成相应的可执行或工程文件。用户请自行下载安装cmake后按如下方法进行编译。此方法适用于 MacOS 或 Linux 系统 （默认的编译器为GCC-9，用户可在CMakeLists中自行修改编译器与安装地址），Windows 用户请使用 VS studio 等编译工具新建项目并拷贝 src/lib 文件夹下所有文件至新项目并编译动态库。
 
 ```shell
 mkdir build
@@ -29,6 +29,8 @@ LCG_OPENMP为是否使用openMP对算法进行加速。若此值为OFF则不使�
 ```shell
 cmake .. -DLCG_FABS=OFF -DLCG_OPENMP=ON
 ```
+
+用户也可以将算法库文件直接拷贝至自己的工程目录中直接编译使用。此时需要拷贝的文件包含 src/lib 文件夹下的所有文件。
 
 ## 回调函数
 
@@ -218,4 +220,3 @@ int main(int argc, char const *argv[])
   return 0;
 }
 ```
-
