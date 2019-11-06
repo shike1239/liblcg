@@ -90,7 +90,7 @@ void TESTFUNC::Routine()
 	self_para.abs_diff = true;
 
 	lcg_solver_ptr solver = lcg; //使用lcg或lpcg求解
-	// 使用lcg求解
+	// 使用lcg求解 注意当我们使用函数指针来调用求解函数时默认参数不可以省略
 	int ret = solver(_Ax, _Progress, m_, b_, 3, &self_para, this, NULL);
 	if (ret < 0)
 		cout << lcg_error_str(ret) << endl;
