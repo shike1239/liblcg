@@ -26,6 +26,8 @@
 #ifndef _LCG_H
 #define _LCG_H
 
+#include "cstddef"
+
 ///< A simple define of float type we use here. easy to change in the future
 typedef double lcg_float;
 
@@ -139,6 +141,21 @@ lcg_para lcg_default_parameters();
 const char* lcg_error_str(int er_index);
 
 /**
+ * @brief      Callback interface of the conjugate gradient solver
+ *
+ * @param[in]  Afp       Callback function pointer for calculating the product of Ax.
+ * @param      m         Initial solution vector.
+ * @param      B         Objective vector of the linear system.
+ * @param      P         Precondition vector
+ * @param[in]  n_size    Size of the solution vector and objective vector.
+ * @param      param     Parameter setup for the conjugate gradient.
+ * @param      instance  The user data sent for lpcg() function by the client.
+ *
+ * @return     status of the function
+ */
+typedef int (*lcg_solver_ptr)(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P);
+
+/**
  * @brief      The conjugate gradient method
  *
  * @param[in]  Afp       Callback function for calculating the product of Ax.
@@ -151,7 +168,7 @@ const char* lcg_error_str(int er_index);
  *
  * @return     status of the function
  */
-int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance);
+int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P = NULL);
 
 /**
  * @brief      The preconditioned conjugate gradient method
@@ -166,7 +183,7 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
  *
  * @return     status of the function
  */
-int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const lcg_float* P, const int n_size, const lcg_para* param, void* instance);
+int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P);
 
 /**
  * @brief      The conjugate gradient squared method
@@ -181,7 +198,7 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
  *
  * @return     status of the function
  */
-int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance);
+int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P = NULL);
 
 /**
  * @brief      The biconjugate gradient stabilized method
@@ -196,7 +213,7 @@ int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
  *
  * @return     status of the function
  */
-int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance);
+int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P = NULL);
 
 /**
  * @brief      The biconjugate gradient stabilized method with restart
@@ -211,5 +228,5 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
  *
  * @return     status of the function
  */
-int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance);
+int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P = NULL);
 #endif //_LCG_H

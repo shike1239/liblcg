@@ -88,8 +88,10 @@ void TESTFUNC::Routine()
 	lcg_para self_para = lcg_default_parameters();
 	self_para.max_iterations = 10;
 	self_para.abs_diff = true;
-	// 调用函数求解
-	int ret = lcg(_Ax, _Progress, m_, b_, 3, &self_para, this);
+
+	lcg_solver_ptr solver = lcg; //使用lcg或lpcg求解
+	// 使用lcg求解
+	int ret = solver(_Ax, _Progress, m_, b_, 3, &self_para, this, NULL);
 	if (ret < 0)
 		cout << lcg_error_str(ret) << endl;
 	// 输出解
@@ -98,10 +100,11 @@ void TESTFUNC::Routine()
 		cout << m_[i] << endl;
 	}
 
+	solver = lpcg;
 	// rest m_ and solve with lpcg
 	m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;
 	// use lpcg to solve the linear system
-	ret = lpcg(_Ax, _Progress, m_, b_, p_, 3, &self_para, this);
+	ret = solver(_Ax, _Progress, m_, b_, 3, &self_para, this, p_);
 	if (ret < 0)
 		cout << lcg_error_str(ret) << endl;
 	// output solution

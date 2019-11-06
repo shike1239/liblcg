@@ -13,7 +13,7 @@ set_target_properties(lcg_static PROPERTIES OUTPUT_NAME "lcg")
 set_target_properties(lcg PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 set_target_properties(lcg_static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 # 设置动态库的版本号
-set_target_properties(lcg PROPERTIES VERSION 1.1 SOVERSION 1.0)
+set_target_properties(lcg PROPERTIES VERSION 1.2 SOVERSION 1.2)
 # 设置库文件的输出地址
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 # 库的安装命令
