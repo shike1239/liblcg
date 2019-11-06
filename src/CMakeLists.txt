@@ -26,6 +26,7 @@ install(FILES lib/lcg.h DESTINATION include)
 # 以下部分为例子程序的编译
 # 设置可执行文件的输出地址
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+
 # 添加可执行文件 命令行
 add_executable(lcg_sample sample/sample.cpp)
 # 为安装文件添加动态库的搜索地址

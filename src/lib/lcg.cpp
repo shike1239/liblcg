@@ -12,14 +12,11 @@
 #ifdef LCG_FABS
 
 /**
- * @brief      return absolute value of lcg_float
+ * @brief      return absolute value
  *
- * @param      x     pointer of lcg_float
+ * @param      x     input value
  */
-lcg_float lcg_fabs(lcg_float x)
-{
-	return (x < 0.0) ? -1.0*x : x;
-}
+#define lcg_fabs(x) ((x < 0) ? -1*x : x)
 
 #else
 
