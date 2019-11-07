@@ -82,7 +82,7 @@ void TESTFUNC::Routine()
 {
 	lcg_para self_para = lcg_default_parameters();
 	// 调用函数求解
-	int ret = lcgs(_Ax, _Progress, m_, b_, 3, &self_para, this);
+	int ret = lcg_solver(_Ax, _Progress, m_, b_, 3, &self_para, this);
 	if (ret < 0) cout << lcg_error_str(ret) << endl;
 	// 输出解
 	for (int i = 0; i < 3; i++)
@@ -90,10 +90,9 @@ void TESTFUNC::Routine()
 		cout << m_[i] << endl;
 	}
 
-	// rest m_ and solve with lpcg
 	m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;
 	// 调用函数求解
-	ret = lbicgstab(_Ax, _Progress, m_, b_, 3, &self_para, this);
+	ret = lcg_solver(_Ax, _Progress, m_, b_, 3, &self_para, this, LCG_BICGSTAB);
 	if (ret < 0) cout << lcg_error_str(ret) << endl;
 	// 输出解
 	for (int i = 0; i < 3; i++)
@@ -101,10 +100,9 @@ void TESTFUNC::Routine()
 		cout << m_[i] << endl;
 	}
 
-	// rest m_ and solve with lpcg
 	m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;
 	// 调用函数求解
-	ret = lbicgstab2(_Ax, _Progress, m_, b_, 3, &self_para, this);
+	ret = lcg_solver(_Ax, _Progress, m_, b_, 3, &self_para, this, LCG_BICGSTAB2);
 	if (ret < 0) cout << lcg_error_str(ret) << endl;
 	// 输出解
 	for (int i = 0; i < 3; i++)
