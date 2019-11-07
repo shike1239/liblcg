@@ -14,7 +14,7 @@ liblcg 是一个简单的 C++ 线性共轭梯度算法库，包含了一般形�
 
 Ax = B
 
-其中，A 是一个 N 阶矩阵、x 为 N\*1 的待求解的模型向量，B 为 N\*1 的需拟合的目标向量。共轭梯度法广泛应用于无约束的线性最优化问题，拥有优良的收敛与计算效率。其中，共轭梯度法与预优共轭梯度法可用于求解A为对称形式的线性方程组，而共轭梯度平方法与双稳共轭梯度法可用于求解A为非对称形式的线性方程组。
+其中，A 是一个 N 阶方阵、x 为 N\*1 的待求解的模型向量，B 为 N\*1 的需拟合的目标向量。共轭梯度法广泛应用于无约束的线性最优化问题，拥有优良的收敛与计算效率。其中，共轭梯度法与预优共轭梯度法可用于求解A为对称形式的线性方程组，而共轭梯度平方法与双稳共轭梯度法可用于求解A为非对称形式的线性方程组。
 
 ## 安装
 
@@ -71,33 +71,34 @@ typedef int (*lcg_progress_ptr)(void* instance, const lcg_float* m, const lcg_fl
 
 ## 求解函数
 
-用户在定义 Ax 计算函数与监控函数后即可调用求解函数对线性方程组进行求解。目前可用的函数列表如下：
+用户在定义 Ax 计算函数与监控函数后即可调用求解函数 lcg_solver() 对线性方程组进行求解。目前可用的求解方法如下：
 
-1. lcg()：共轭梯度算法；
-2. lpcg()：预优共轭梯度算法；
-3. lcgs()：共轭梯度平方算法；
-4. lbicgstab()：双稳共轭梯度算法；
-5. lbicgstab2(): 双稳共轭梯度算法（带重启功能）。
+1. LCG_CG：共轭梯度算法；
+2. LCG_PCG：预优共轭梯度算法；
+3. LCG_CGS：共轭梯度平方算法；
+4. LCG_BICGSTAB：双稳共轭梯度算法；
+5. LCG_BICGSTAB2: 双稳共轭梯度算法（带重启功能）。
 
 求解函数的参数形式如下：
 
 ```c++
-int (*lcg_solver_ptr)(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P);
+int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, int solver_id const lcg_float* P);
 ```
 
-其中，\*lcg_solver_ptr 即代表相应的函数指针。函数接受8个参数，分别为：
-1. `lcg_axfunc_ptr Afp` 计算Ax的回调函数；
-2. `lcg_progress_ptr Pfp` 监控迭代过程的回调函数（非必须，无需监控时使用NULL参数即可）；
+函数接受9个参数，分别为：
+1. `lcg_axfunc_ptr Afp` 计算 Ax 的回调函数；
+2. `lcg_progress_ptr Pfp` 监控迭代过程的回调函数（非必须，无需监控时使用 NULL 参数即可）；
 3. `lcg_float* m` 模型参数数组，解得线性方程组的解也为这个数组；
-4. `const lcg_float* B` Ax = B 中的B项；
+4. `const lcg_float* B` Ax = B 中的 B 项；
 5. `const int n_size` 模型参数数组的大小；
-6. `const lcg_para* param` 此次迭代使用的参数；
-7. `void* instance` 传入的实例对象；
-8. `const lcg_float* P` 预优矩阵，一般是一个N阶的对角阵，这里直接用一个一维数组表示。此参数只在 lpcg() 函数中有具体意义，在其他函数中是一个默认为 NULL 的参数。
+6. `const lcg_para* param` 此次迭代使用的参数，此参数为 NULL 即使用默认参数；
+7. `void* instance` 传入的实例对象, 此函数在类中使用即为类的 this 指针, 在普通函数中使用时即为 NULL；
+8. `int solver_id` 求解函数使用的求解方法，即上文中 LCG_CG 至 LCG_BICGSTAB2 五种方法，默认的求解方法为 LCG_CGS；
+9. `const lcg_float* P` 预优矩阵，一般是一个N阶的对角阵，这里直接用一个一维数组表示。此参数只在求解方法为 LCG_PCG 时是必须的，其他情况下是一个默认值为 NULL 的参数。
 
 ## 示例
 
-以下为一个简单的例子。我们使用 lcg() 与 lpcg() 求解一个3X3的对称形式的线性方程组。
+以下为一个简单的例子。我们使用 lcg_solver() 求解一个3X3的对称形式的线性方程组。
 
 ```c++
 #include "../lib/lcg.h"   
@@ -148,7 +149,7 @@ TESTFUNC::TESTFUNC()
   kernel_[1][0] = 3.9; kernel_[1][1] = 1.2; kernel_[1][2] = 3.1;
   kernel_[2][0] = 2.5; kernel_[2][1] = 3.1; kernel_[2][2] = 7.6;
   // 初始解
-  m_ = lcg_malloc(3);
+  m_ = lcg_malloc(3); // 开辟数组空间
   m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;
   // 拟合目标值（含有一定的噪声）
   b_ = lcg_malloc(3);
@@ -160,7 +161,7 @@ TESTFUNC::TESTFUNC()
 
 TESTFUNC::~TESTFUNC()
 {
-  lcg_free(m_);
+  lcg_free(m_); // 销毁数组使用的空间
   lcg_free(b_);
   lcg_free(p_);
 }
@@ -187,13 +188,12 @@ int TESTFUNC::Progress(const lcg_float* m, const lcg_float converge, const lcg_p
 
 void TESTFUNC::Routine()
 {
-  lcg_para self_para = lcg_default_parameters();
+  lcg_para self_para = lcg_default_parameters(); // 得到一个值等于默认值的参数类型
   self_para.max_iterations = 10;
   self_para.abs_diff = true;
 
-  lcg_solver_ptr solver = lcg; //使用lcg或lpcg求解
-  // 使用lcg求解
-  int ret = solver(_Ax, _Progress, m_, b_, 3, &self_para, this, NULL);
+  // 使用LCG_CG求解 
+  int ret = lcg_solver(_Ax, _Progress, m_, b_, 3, &self_para, this, LCG_CG);
   if (ret < 0)
     cout << lcg_error_str(ret) << endl;
   // 输出解
@@ -202,11 +202,10 @@ void TESTFUNC::Routine()
     cout << m_[i] << endl;
   }
 
-  solver = lpcg;
-  // rest m_ and solve with lpcg
+  // rest m_ and solve with LCG_PCG
   m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;
   // use lpcg to solve the linear system
-  ret = solver(_Ax, _Progress, m_, b_, 3, &self_para, this, p_);
+  ret = lcg_solver(_Ax, _Progress, m_, b_, 3, &self_para, this, LCG_PCG, p_);
   if (ret < 0)
     cout << lcg_error_str(ret) << endl;
   // output solution
@@ -224,3 +223,4 @@ int main(int argc, char const *argv[])
   return 0;
 }
 ```
+
