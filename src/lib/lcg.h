@@ -47,8 +47,10 @@ enum lcg_return
 	LCG_INVILAD_EPSILON, //-1021
 	// The restart epsilon is negative
 	LCG_INVILAD_RESTART_EPSILON,
-	// iteration reached max limit
+	// Iteration reached max limit
 	LCG_REACHED_MAX_ITERATIONS,
+	// Null precondition matrix
+	LCG_NULL_PRECONDITION_MATRIX,
 };
 
 /**
@@ -229,4 +231,19 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
  * @return     status of the function
  */
 int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P = NULL);
+
+/**
+ * @brief      A combined solver function
+ *
+ * @param[in]  Afp       Callback function for calculating the product of Ax.
+ * @param[in]  Pfp       Callback function for calculating the product of Ax.
+ * @param      m         Initial solution vector.
+ * @param      B         Objective vector of the linear system.
+ * @param[in]  n_size    Size of the solution vector and objective vector.
+ * @param      param     Parameter setup for the conjugate gradient.
+ * @param      instance  The user data sent for lcg() function by the client.
+ *
+ * @return     status of the function
+ */
+int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, lcg_solver_ptr cg_solver = lcg, const lcg_float* P = NULL);
 #endif //_LCG_H

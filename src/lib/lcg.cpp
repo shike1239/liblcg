@@ -22,7 +22,7 @@
 
 #endif
 
-// default parameter for conjugate gradient
+// default parameter for conjugate gradient methods
 static const lcg_para defparam = {100, 1e-6, false, 1e-6};
 
 lcg_float* lcg_malloc(const int n)
@@ -66,6 +66,8 @@ const char* lcg_error_str(int er_index)
 			return "The restart epsilon is negative.";
 		case LCG_REACHED_MAX_ITERATIONS:
 			return "The maximal iteration is reached.";
+		case LCG_NULL_PRECONDITION_MATRIX:
+			return "The precondition matrix can't be null for a preconditioned conjugate gradient method.";
 		default:
 			return "Unknown error.";
 	}
@@ -767,4 +769,26 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 	if (time == para.max_iterations)
 		return LCG_REACHED_MAX_ITERATIONS;
 	return LCG_SUCCESS;
+}
+
+/**
+ * @brief      A combined solver function
+ *
+ * @param[in]  Afp       Callback function for calculating the product of Ax.
+ * @param[in]  Pfp       Callback function for calculating the product of Ax.
+ * @param      m         Initial solution vector.
+ * @param      B         Objective vector of the linear system.
+ * @param[in]  n_size    Size of the solution vector and objective vector.
+ * @param      param     Parameter setup for the conjugate gradient.
+ * @param      instance  The user data sent for lcg() function by the client.
+ *
+ * @return     status of the function
+ */
+int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, lcg_solver_ptr cg_solver, const lcg_float* P)
+{
+	if (cg_solver == lpcg && P == NULL)
+	{
+		return LCG_NULL_PRECONDITION_MATRIX;
+	}
+	else return cg_solver(Afp, Pfp, m, B, n_size, param, instance, P);
 }

@@ -112,6 +112,19 @@ void TESTFUNC::Routine()
 	{
 		cout << m_[i] << endl;
 	}
+
+	// 测试lcg_solver函数， 我们可以通过这个函数快速切换不同的求解方法
+	// rest m_ and solve with lpcg
+	m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;
+	// use lpcg to solve the linear system
+	ret = lcg_solver(_Ax, _Progress, m_, b_, 3, &self_para, this);
+	if (ret < 0)
+		cout << lcg_error_str(ret) << endl;
+	// output solution
+	for (int i = 0; i < 3; i++)
+	{
+		cout << m_[i] << endl;
+	}
 	return;
 }
 
