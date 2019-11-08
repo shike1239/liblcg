@@ -1,5 +1,6 @@
 #include "config.h"
 #include "lcg.h"
+#include "iostream"
 
 #ifdef LCG_OPENMP
 
@@ -492,17 +493,22 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
 		pk[i] = r0_T[i] = rk[i] = B[i] - Ax[i];
 	}
 
-	lcg_float B_mod = 0.0, rk_mod = 0.0;
+	lcg_float B_mod = 0.0;
 	for (i = 0; i < n_size; i++)
 	{
 		B_mod += B[i]*B[i];
-		rk_mod += rk[i]*rk[i];
 	}
 
 	int time;
-	lcg_float ak, wk, rk_abs, rkr0_T, rkr0_T1, Apr_T, betak, Ass, AsAs;
+	lcg_float ak, wk, rk_abs, rkr0_T, rkr0_T1, Apr_T, betak, Ass, AsAs, rk_mod;
 	for (time = 0; time < para.max_iterations; time++)
 	{
+		rk_mod = 0.0;
+		for (i = 0; i < n_size; i++)
+		{
+			rk_mod += rk[i]*rk[i];
+		}
+
 		if (para.abs_diff)
 		{
 			rk_abs = 0.0;
@@ -526,13 +532,7 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
 			if (rk_mod/B_mod <= para.epsilon) return LCG_CONVERGENCE;
 		}
 
-		Afp(instance, pk, Ax, n_size);
-
-#pragma omp parallel for private (i) schedule(guided)
-		for (i = 0; i < n_size; i++)
-		{
-			Apk[i] = Ax[i];
-		}
+		Afp(instance, pk, Apk, n_size);
 
 		rkr0_T = Apr_T = 0.0;
 		for (i = 0; i < n_size; i++)
@@ -560,7 +560,7 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
 
 		for (i = 0; i < n_size; i++)
 		{
-			m[i] += ak*pk[i] + wk*sk[i];
+			m[i] += (ak*pk[i] + wk*sk[i]);
 		}
 
 #pragma omp parallel for private (i) schedule(guided)
@@ -574,21 +574,13 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
 		{
 			rkr0_T1 += rk[i]*r0_T[i];
 		}
-		betak = (ak/wk)*rkr0_T1/rkr0_T;
+		betak = (ak/wk)*rkr0_T1/(rkr0_T+1e-30);
 
 #pragma omp parallel for private (i) schedule(guided)
 		for (i = 0; i < n_size; i++)
 		{
 			pk[i] = rk[i] + betak*(pk[i] - wk*Apk[i]);
 		}
-
-		rk_mod = 0.0;
-		for (i = 0; i < n_size; i++)
-		{
-			rk_mod += rk[i]*rk[i];
-		}
-
-		rkr0_T = rkr0_T1;
 	}
 
 	lcg_free(rk); lcg_free(r0_T);
@@ -732,7 +724,7 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 		{
 			rkr0_T1 += rk[i]*r0_T[i];
 		}
-		betak = (ak/wk)*rkr0_T1/rkr0_T;
+		betak = (ak/wk)*rkr0_T1/(rkr0_T+1e-30);
 
 #ifdef LCG_FABS
 		rr1_abs = lcg_fabs(rkr0_T1);
