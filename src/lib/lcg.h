@@ -54,6 +54,8 @@ enum lcg_return_enum
 	LCG_REACHED_MAX_ITERATIONS,
 	// Null precondition matrix
 	LCG_NULL_PRECONDITION_MATRIX,
+	// Nan value
+	LCG_NAN_VALUE,
 };
 
 /**
