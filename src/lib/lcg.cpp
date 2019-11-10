@@ -136,13 +136,8 @@ int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 			cg_solver = lbicgstab2;
 			break;
 		default:
-			cg_solver = unknown;
+			cg_solver = lcgs;
 			break;
-	}
-
-	if (cg_solver == unknown)
-	{
-		return LCG_UNKNOWN_METHOD;
 	}
 
 	if (cg_solver == lpcg && P == NULL)
