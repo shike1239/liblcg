@@ -700,13 +700,7 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 			if (rk_mod/B_mod <= para.epsilon) return LCG_CONVERGENCE;
 		}
 
-		Afp(instance, pk, Ax, n_size);
-
-#pragma omp parallel for private (i) schedule(guided)
-		for (i = 0; i < n_size; i++)
-		{
-			Apk[i] = Ax[i];
-		}
+		Afp(instance, pk, Apk, n_size);
 
 		Apr_T = 0.0;
 		for (i = 0; i < n_size; i++)
@@ -779,25 +773,34 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 		{
 			rkr0_T1 += rk[i]*r0_T[i];
 		}
-		betak = (ak/wk)*rkr0_T1/rkr0_T;
-		rkr0_T = rkr0_T1;
 
 #ifdef LCG_FABS
-		rr1_abs = lcg_fabs(rkr0_T);
+		rr1_abs = lcg_fabs(rkr0_T1);
 #else
-		rr1_abs = fabs(rkr0_T);
+		rr1_abs = fabs(rkr0_T1);
 #endif
 
-		if (lcg_fabs(rr1_abs) < para.restart_epsilon)
+		if (rr1_abs < para.restart_epsilon)
 		{
 			for (i = 0; i < n_size; i++)
 			{
 				r0_T[i] = rk[i];
 				pk[i] = rk[i];
 			}
+
+			rkr0_T1 = 0.0;
+			for (i = 0; i < n_size; i++)
+			{
+				rkr0_T1 += rk[i]*r0_T[i];
+			}
+			betak = (ak/wk)*rkr0_T1/rkr0_T;
+			rkr0_T = rkr0_T1;
 		}
 		else
 		{
+			betak = (ak/wk)*rkr0_T1/rkr0_T;
+			rkr0_T = rkr0_T1;
+
 #pragma omp parallel for private (i) schedule(guided)
 			for (i = 0; i < n_size; i++)
 			{
