@@ -56,6 +56,8 @@ enum lcg_return_enum
 	LCG_NULL_PRECONDITION_MATRIX,
 	// Nan value
 	LCG_NAN_VALUE,
+	// Unknown solver type
+	LCG_UNKNOWN_METHOD,
 };
 
 /**

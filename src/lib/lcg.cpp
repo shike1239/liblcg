@@ -71,6 +71,8 @@ const char* lcg_error_str(int er_index)
 			return "The precondition matrix can't be null for a preconditioned conjugate gradient method.";
 		case LCG_NAN_VALUE:
 			return "The model values are NaN.";
+		case LCG_UNKNOWN_METHOD:
+			return "Unknown conjugate method.";
 		default:
 			return "Unknown error.";
 	}
@@ -134,15 +136,21 @@ int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 			cg_solver = lbicgstab2;
 			break;
 		default:
-			cg_solver = lcgs;
+			cg_solver = unknown;
 			break;
+	}
+
+	if (cg_solver == unknown)
+	{
+		return LCG_UNKNOWN_METHOD;
 	}
 
 	if (cg_solver == lpcg && P == NULL)
 	{
 		return LCG_NULL_PRECONDITION_MATRIX;
 	}
-	else return cg_solver(Afp, Pfp, m, B, n_size, param, instance, P);
+	
+	return cg_solver(Afp, Pfp, m, B, n_size, param, instance, P);
 }
 
 int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P)
@@ -374,14 +382,16 @@ int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 
 	int i;
 	lcg_float *rk = NULL, *r0_T = NULL, *pk = NULL;
-	lcg_float *Ax = NULL, *uk = NULL,   *qk = NULL, *uqk = NULL;
+	lcg_float *Ax = NULL, *uk = NULL,   *qk = NULL, *wk = NULL;
 	rk   = lcg_malloc(n_size); r0_T = lcg_malloc(n_size);
 	pk   = lcg_malloc(n_size); Ax  = lcg_malloc(n_size);
 	uk   = lcg_malloc(n_size); qk   = lcg_malloc(n_size);
-	uqk  = lcg_malloc(n_size);
+	wk  = lcg_malloc(n_size);
 
 	Afp(instance, m, Ax, n_size);
 
+	// 假设p0和q0为零向量 则在第一次迭代是pk和uk都等于rk
+	// 所以我们能直接从计算Apk开始迭代
 #pragma omp parallel for private (i) schedule(guided)
 	for (i = 0; i < n_size; i++)
 	{
@@ -404,6 +414,7 @@ int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 	lcg_float ak, rk_abs, rkr0_T1, Apr_T, betak, rk_mod;
 	for (time = 0; time < para.max_iterations; time++)
 	{
+		// 我们在迭代开始的时候先检查m是否符合终止条件以避免不必要的迭代
 		rk_mod = 0.0;
 		for (i = 0; i < n_size; i++)
 		{
@@ -446,15 +457,15 @@ int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 		for (i = 0; i < n_size; i++)
 		{
 			qk[i] = uk[i] - ak*Ax[i];
-			uqk[i] = uk[i] + qk[i];
+			wk[i] = uk[i] + qk[i];
 		}
 
-		Afp(instance, uqk, Ax, n_size);
+		Afp(instance, wk, Ax, n_size);
 
 #pragma omp parallel for private (i) schedule(guided)
 		for (i = 0; i < n_size; i++)
 		{
-			m[i] += ak*uqk[i];
+			m[i] += ak*wk[i];
 			rk[i] -= ak*Ax[i];
 		}
 
@@ -482,7 +493,7 @@ int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 	lcg_free(rk); lcg_free(r0_T);
 	lcg_free(pk); lcg_free(Ax);
 	lcg_free(uk); lcg_free(qk);
-	lcg_free(uqk);
+	lcg_free(wk);
 
 	if (time == para.max_iterations)
 		return LCG_REACHED_MAX_ITERATIONS;
