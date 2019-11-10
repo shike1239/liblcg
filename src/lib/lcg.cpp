@@ -505,7 +505,7 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
 
 	int i;
 	lcg_float *rk = NULL, *r0_T = NULL, *pk = NULL;
-	lcg_float *Ax = NULL, *sk = NULL,   *Apk = NULL;
+	lcg_float *Ax = NULL, *sk = NULL, *Apk = NULL;
 	rk = lcg_malloc(n_size); r0_T = lcg_malloc(n_size);
 	pk = lcg_malloc(n_size); Ax   = lcg_malloc(n_size);
 	sk = lcg_malloc(n_size); Apk  = lcg_malloc(n_size);
