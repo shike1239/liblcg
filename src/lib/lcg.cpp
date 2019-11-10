@@ -71,8 +71,6 @@ const char* lcg_error_str(int er_index)
 			return "The precondition matrix can't be null for a preconditioned conjugate gradient method.";
 		case LCG_NAN_VALUE:
 			return "The model values are NaN.";
-		case LCG_UNKNOWN_METHOD:
-			return "Unknown conjugate method.";
 		default:
 			return "Unknown error.";
 	}
