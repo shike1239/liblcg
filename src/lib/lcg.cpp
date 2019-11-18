@@ -1,6 +1,5 @@
 #include "config.h"
 #include "lcg.h"
-#include "iostream"
 
 #ifdef LCG_OPENMP
 
