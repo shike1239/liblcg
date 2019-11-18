@@ -32,33 +32,6 @@
 typedef double lcg_float;
 
 /**
- * @brief      return value of the lcg_solver() function
- */
-enum lcg_return_enum
-{
-	LCG_SUCCESS = 0,
-	LCG_CONVERGENCE = 0,
-	LCG_STOP, //1
-	LCG_ALREADY_OPTIMIZIED, //2
-	// A negative number means a error
-	LCG_UNKNOWN_ERROR = -1024,
-	// The variable size is negative
-	LCG_INVILAD_VARIABLE_SIZE, //-1023
-	// The maximal iteration times is negative.
-	LCG_INVILAD_MAX_ITERATIONS, //-1022
-	// The epsilon is negative.
-	LCG_INVILAD_EPSILON, //-1021
-	// The restart epsilon is negative
-	LCG_INVILAD_RESTART_EPSILON,
-	// Iteration reached max limit
-	LCG_REACHED_MAX_ITERATIONS,
-	// Null precondition matrix
-	LCG_NULL_PRECONDITION_MATRIX,
-	// Nan value
-	LCG_NAN_VALUE,
-};
-
-/**
  * @brief      solver types that are used by lcg_solver() function
  */
 enum lcg_solver_enum
@@ -168,7 +141,7 @@ const char* lcg_error_str(int er_index);
  * @brief      A combined conjugate gradient solver function
  *
  * @param[in]  Afp       Callback function for calculating the product of Ax.
- * @param[in]  Pfp       Callback function for calculating the product of Ax.
+ * @param[in]  Pfp       Callback function for monitoring the iteration progress.
  * @param      m         Initial solution vector.
  * @param      B         Objective vector of the linear system.
  * @param[in]  n_size    Size of the solution vector and objective vector.
