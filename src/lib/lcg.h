@@ -55,7 +55,7 @@ struct lcg_para
 {
 	/**
 	 * Maximal iteration times
-	 * The default value is 100. one adjust this parameter by passing a lcg_para type to the lcg() or lpcg() function.
+	 * The default value is 100. one adjust this parameter by passing a lcg_para type to the lcg_solver() function.
 	*/
 	int max_iterations;
 
@@ -63,7 +63,7 @@ struct lcg_para
 	 * Epsilon for convergence test.
 	 * This parameter determines the accuracy with which the solution is to
 	 * be found. A minimization terminates when
-	 * ||g||/||b|| <= epsilon or |Ax - B| <= epsilon for lcg() and lpcg() functions,
+	 * ||g||/||b|| <= epsilon or |Ax - B| <= epsilon for lcg_solver() functions,
 	 * where ||.|| denotes the Euclidean (L2) norm and | | denotes the L1 norm. The default value of epsilon is 1e-6.
 	*/
 	lcg_float epsilon;
@@ -75,7 +75,7 @@ struct lcg_para
 	bool abs_diff;
 
 	/**
-	 * restart epsilon for the bicgstab2() algorithm. The default value is 1e-6
+	 * restart epsilon for the bicgstab2 algorithm. The default value is 1e-6
 	 */
 	lcg_float restart_epsilon;
 };
@@ -83,7 +83,7 @@ struct lcg_para
 /**
  * Callback interface for calculating the product of Ax
  * 
- * @param  instance    The user data sent for lcg() and lpcg() functions by the client.
+ * @param  instance    The user data sent for lcg_solver() functions by the client.
  * @param  x           Multiplier of the Ax product
  * @param  Ax          Product of Ax
  * @param  n_size      Size of x and column/row numbers of A
