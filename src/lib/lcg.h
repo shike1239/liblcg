@@ -26,8 +26,6 @@
 #ifndef _LCG_H
 #define _LCG_H
 
-#include "cstddef"
-
 ///< A simple define of float type we use here. easy to change in the future
 typedef double lcg_float;
 
@@ -152,5 +150,6 @@ const char* lcg_error_str(int er_index);
  *
  * @return     status of the function
  */
-int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, int solver_id = LCG_CGS, const lcg_float* P = NULL);
+int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, 
+	const lcg_para* param, void* instance, int solver_id = LCG_CGS, const lcg_float* P = nullptr);
 #endif //_LCG_H
