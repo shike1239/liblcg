@@ -111,7 +111,7 @@ int main(int argc, char const *argv[])
 	self_para.max_iterations = 1000;
 	self_para.epsilon = 1e-10;
 
-	// 声明两组解
+	// 声明一组解
 	double *m = new double [N];
 	for (int i = 0; i < N; i++)
 		m[i] = 0.0;
