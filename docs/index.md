@@ -2,7 +2,7 @@
 layout: default
 ---
 
-# LCG
+# LCG说明文档
 
 张壹（zhangyiss@icloud.com）
 
@@ -10,59 +10,74 @@ _浙江大学地球科学学院·地球物理研究所_
 
 ## 简介
 
-liblcg 是一个简单的 C++ 线性共轭梯度算法库，包含了一般形式的共轭梯度算法、预优共轭梯度算法、共轭梯度平方算法与双稳共轭梯度算法。可用于求解如下形式的线性方程组：
+liblcg 是一个简单的 C++ 线性共轭梯度算法库，其中包含了一般形式的共轭梯度算法、预优共轭梯度算法、共轭梯度平方算法与双稳共轭梯度算法。可用于求解如下形式的线性方程组：
 
+```
 Ax = B
+```
 
-其中，A 是一个 N 阶方阵、x 为 N\*1 的待求解的模型向量，B 为 N\*1 的需拟合的目标向量。共轭梯度法广泛应用于无约束的线性最优化问题，拥有优良的收敛与计算效率。其中，共轭梯度法与预优共轭梯度法可用于求解A为对称形式的线性方程组，而共轭梯度平方法与双稳共轭梯度法可用于求解A为非对称形式的线性方程组。
+其中，A 是一个 N 阶的方阵、x 为 N\*1 的待求解的模型向量，B 为 N\*1 的需拟合的目标向量。共轭梯度法广泛应用于无约束的线性最优化问题，拥有优良的收敛与计算效率。其中，共轭梯度法与预优共轭梯度法可用于求解A为对称形式的线性方程组，而共轭梯度平方法与双稳共轭梯度法可用于求解A为非对称形式的线性方程组。
 
 ## 安装
 
-算法库使用cmake编译工具进行编译，可在不同平台生成相应的可执行或工程文件。用户请自行下载安装cmake后按如下方法进行编译。此方法适用于 MacOS 或 Linux 系统 （默认的编译器为GCC-9，用户可在CMakeLists中自行修改编译器与安装地址），Windows 用户请使用 VS studio 等编译工具新建项目并拷贝 src/lib 文件夹下所有文件至新项目并编译动态库。
+算法库默认使用 Cmake 编译工具进行编译，可在不同平台生成相应的可执行或工程文件。请用户自行下载安装 Cmake 软件后按如下方法进行编译。此方法适用于 MacOS 或 Linux 系统 （默认的编译器为 GCC-9，用户可在 CMakeLists.txt 中自行修改编译器与安装地址），Windows 用户请使用 VS studio 等编译工具新建项目并拷贝 src/lib 文件夹下所有文件至新项目并编译动态库。
 
 ```shell
-mkdir build
-cd build
-cmake ..
-make install
+./routine.sh configure
+./routine.sh build
 ```
 
-算法库目前有两个可选的编译命名，分别为LCG_FABS和LCG_OPENMP，默认值均为ON。其中LCG_FABS为是否使用算法库自带的绝对值计算方法。若此值为OFF则会使用标准的（cmath）绝对值计算方法。
-LCG_OPENMP为是否使用openMP对算法进行加速。若此值为OFF则不使用openMP。用户可以使用以下方式进行条件编译：
+算法库目前有两个可用的编译选项，分别为 LCG_FABS 和 LCG_OPENMP，默认值均为 ON。其中 LCG_FABS 表示是否使用算法库自带的绝对值计算方法。若此值为 OFF 则会使用标准的（cmath）绝对值计算方法。
+LCG_OPENMP 为是否使用 OpenMP 对算法进行加速。若此值为 OFF 则表示不使用openMP。用户可以使用以下方式进行条件编译：
 
 ```shell
 cmake .. -DLCG_FABS=OFF -DLCG_OPENMP=ON
 ```
 
-用户也可以将算法库文件直接拷贝至自己的工程目录中直接编译使用。此时需要拷贝的文件包含 src/lib 文件夹下的所有文件。
+用户也可以将算法库文件直接拷贝至自己的工程目录中编译使用。此时你需要拷贝的文件包含 src/lib 文件夹下的所有文件。
 
-## 回调函数
+## 数据类型
 
-### 自定义Ax计算函数
+1. 浮点类型 `lcg_float` 。目前只是简单的 `double` 类型的别名；
+2. 枚举类型 `lcg_solver_enum` 包含了可用的共轭梯度类型。有 `LCG_CG`，`LCG_PCG`，`LCG_CGS`，`LCG_BICGSTAB`，`LCG_BICGSTAB2`共5个。分别表示共轭梯度、预优共轭梯度、共轭梯度平方算法与两种双稳共轭梯度算法；
+3. 结构体 `lcg_para` 为共轭梯度参数类型。包含 `max_iterations`，`epsilon`，`abs_diff`，`restart_epsilon` 四个变量，包含最大迭代次数、终止精度等条件变量。具体含义请见头文件内的注释。
 
-通常我们在使用共轭梯度法求解线性方程组Ax=B时A的维度可能会很大，直接储存A将消耗大量的内存空间，因此一般并不直接计算并储存A而是在需要的时候计算Ax的乘积。因此用户在使用liblcg时需要定义Ax的计算函数，同时提供初始解x与共轭梯度的B项（即拟合的对象）。如果使用预优方法还需要提供预优矩阵P项。Ax计算函数的形式必须满足算法库定义的一般形式：
+## 头文件与函数接口
+
+使用库函数需在源文件中包含头文件`lcg.h`，可用的函数接口包括
+
+1. `lcg_float* lcg_malloc(const int n)` 开辟数组空间；
+2. `void lcg_free(lcg_float* x)` 释放数组空间；
+3. `lcg_para lcg_default_parameters()` 返回一组默认的共轭梯度参数；
+4. `const char* lcg_error_str(int er_index)` 按照 `lcg_solver()` 函数的返回值显示可能的错误信息。
+
+### 回调函数
+
+#### 自定义Ax计算函数
+
+通常我们在使用共轭梯度法求解线性方程组Ax=B时A的维度可能会很大，直接储存A将消耗大量的内存空间，因此一般并不直接计算并储存A而是在需要的时候计算Ax的乘积。因此用户在使用liblcg时需要定义Ax的计算函数。Ax计算函数的形式必须满足算法库定义的一般形式：
 
 ```c++
 typedef void (*lcg_axfunc_ptr)(void* instance, const lcg_float* x, lcg_float* prod_Ax, const int n_size);
 ```
 
-函数接受4个参数，分别为：
+函数需定义4个参数，分别为：
 
-1. `void *instance` 传入的实例对象；
-2. `const lcg_float *input_array` Ax计算中的x数组的指针；
-3. `lcg_float *output_array` Ax的乘积；
+1. `void *instance` 传入的实例对象（无需使用）；
+2. `const lcg_float *x` Ax计算中的x数组的指针；
+3. `lcg_float *prod_Ax` Ax的乘积；
 4. `const int n_size` 矩阵的大小。
 
-### 自定义进程监控函数
+#### 自定义进程监控函数
 
-用户可以以下面的模版创建函数来显示共轭梯度迭代中的参数，并可以在适当的情况下停止迭代的进程。一般来说，当监控函数的返回值为非0即为终结迭代进程。
+用户可用下面的模版创建函数来显示共轭梯度迭代中的参数，并可以在适当的情况下停止迭代的进程。具体地，当监控函数的返回值非0时迭代进程便会终止。
 
 ```c++
 typedef int (*lcg_progress_ptr)(void* instance, const lcg_float* m, const lcg_float converge, const lcg_para* param, const int n_size, const int k);
 ```
 
-函数接收6个参数，分别为：
-1. `void* instance` 传入的实例对象；
+函数需定义6个参数（你不需要全部使用它们），分别为：
+1. `void* instance` 传入的实例对象（无需使用）；
 2. `const lcg_float* m` 当前迭代的模型参数数组；
 3. `const lcg_float converge` 当前迭代的目标值；
 4. `const lcg_para* param` 当前迭代过程使用的参数；
@@ -71,7 +86,7 @@ typedef int (*lcg_progress_ptr)(void* instance, const lcg_float* m, const lcg_fl
 
 ## 求解函数
 
-用户在定义 Ax 计算函数与监控函数后即可调用求解函数 lcg_solver() 对线性方程组进行求解。目前可用的求解方法如下：
+用户在定义 Ax 计算函数与监控函数后即可调用求解函数 lcg_solver() 对线性方程组进行求解，同时提供初始解x与共轭梯度的B项（即拟合的对象）。如果使用预优方法还需要提供预优矩阵P项。目前可用的求解方法如下：
 
 1. LCG_CG：共轭梯度算法；
 2. LCG_PCG：预优共轭梯度算法；
@@ -98,10 +113,10 @@ int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 
 ## 示例
 
-以下为一个简单的例子。我们使用 lcg_solver() 求解一个3X3的对称形式的线性方程组。
+以下为一个简单的例子。我们使用 lcg_solver() 求解一个3\*3的对称形式的线性方程组。其中 Ax 计算函数与监控函数均为类的成员函数。
 
 ```c++
-#include "../lib/lcg.h"   
+#include "lcg.h"   
 #include "iostream"   
 
 using std::cout;
@@ -220,6 +235,144 @@ int main(int argc, char const *argv[])
 {
   TESTFUNC test;
   test.Routine();
+  return 0;
+}
+```
+
+第二个例子，我们使用 lcg_solver() 求解一个随机的100\*80的线性方程组的最小二乘解。其中 Ax 计算函数与监控函数均为全局函数。
+
+```c++
+#include "lcg.h"   
+#include "ctime"   
+#include "random"   
+#include "iostream"  
+
+#define M 100
+#define N 80
+
+//返回范围内的随机浮点值 注意调取函数之前要调用srand(time(0));
+double random_double(double L,double T)
+{
+  return (T-L)*rand()*1.0/RAND_MAX + L;
+}
+
+//返回范围内的随机整数 注意调取函数之前要调用srand(time(0));
+int random_int(int small, int big)
+{
+  return (rand() % (big - small))+ small;
+}
+
+// 普通二维数组做核矩阵
+double **kernel;
+// 中间结果数组
+double *tmp_arr;
+
+// 计算核矩阵乘向量的乘积
+void CalAx(void* instance, const lcg_float* x, lcg_float* prod_Ax, const int n_s)
+{
+  for (int i = 0; i < M; i++)
+  {
+    tmp_arr[i] = 0.0;
+    for (int j = 0; j < n_s; j++)
+    {
+      tmp_arr[i] += kernel[i][j] * x[j];
+    }
+  }
+
+  for (int j = 0; j < n_s; j++)
+  {
+    prod_Ax[j] = 0.0;
+    for (int i = 0; i < M; i++)
+    {
+      prod_Ax[j] += kernel[i][j] * tmp_arr[i];
+    }
+  }
+  return;
+}
+
+//定义共轭梯度监控函数
+int Prog(void* instance, const lcg_float* m, const lcg_float converge, const lcg_para* param, const int n_s, const int k)
+{
+  std::clog << "Iteration-times: " << k << "\tconvergence: " << converge << std::endl;
+  if (converge > param->epsilon) std::clog << "\033[1A\033[K";
+  return 0;
+}
+
+int main(int argc, char const *argv[])
+{
+  kernel = new double *[M];
+  for (int i = 0; i < M; i++)
+  {
+    kernel[i] = new double [N];
+  }
+
+  tmp_arr = new double [M];
+
+  srand(time(0));
+  // 添加一些大数
+  int tmp_id, tmp_size, tmp_val;
+  for (int i = 0; i < M; i++)
+  {
+    tmp_size = random_int(25, 35);
+    for (int j = 0; j < tmp_size; j++)
+    {
+      tmp_id = random_int(0, N);
+      tmp_val = random_double(-10, 10);
+
+      kernel[i][tmp_id] = tmp_val;
+    }
+  }
+
+  // 生成一组正演解
+  double *fm = new double [N];
+  for (int i = 0; i < N; i++)
+  {
+    fm[i] = random_double(1, 2);
+  }
+
+  // 计算共轭梯度B项
+  double *B = new double [N];
+  for (int i = 0; i < M; i++)
+  {
+    tmp_arr[i] = 0.0;
+    for (int j = 0; j < N; j++)
+    {
+      tmp_arr[i] += kernel[i][j]*fm[j];
+    }
+  }
+
+  for (int j = 0; j < N; j++)
+  {
+    B[j] = 0.0;
+    for (int i = 0; i < M; i++)
+    {
+      B[j] += kernel[i][j]*tmp_arr[i];
+    }
+  }
+
+  /********************准备工作完成************************/
+  lcg_para self_para = lcg_default_parameters();
+  self_para.max_iterations = 1000;
+  self_para.epsilon = 1e-10;
+
+  // 声明一组解
+  double *m = new double [N];
+  for (int i = 0; i < N; i++)
+    m[i] = 0.0;
+
+  int ret = lcg_solver(CalAx, Prog, m, B, N, &self_para, NULL, LCG_CG);
+  if (ret < 0) std::cerr << lcg_error_str(ret) << std::endl;
+
+  for (int i = 0; i < N; i++)
+  {
+    std::cout << fm[i] << " " << m[i] << std::endl;
+  }
+
+  delete[] kernel;
+  delete[] tmp_arr;
+  delete[] fm;
+  delete[] B;
+  delete[] m;
   return 0;
 }
 ```
