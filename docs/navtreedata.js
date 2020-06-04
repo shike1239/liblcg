@@ -25,6 +25,7 @@ var NAVTREE =
 [
   [ "Liblcg", "index.html", [
     [ "LCG说明文档", "index.html", null ],
+    [ "下载", "^https://github.com/YiZhangCUG/liblcg", null ],
     [ "结构体", "annotated.html", [
       [ "结构体", "annotated.html", "annotated_dup" ],
       [ "结构体索引", "classes.html", null ],
