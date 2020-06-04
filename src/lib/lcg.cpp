@@ -290,6 +290,8 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
 
 /**
  * @brief      Preconditioned conjugate gradient method
+ * 
+ * @note       Algorithm 1 in "Preconditioned conjugate gradients for singular systems" by Kaasschieter (1988).
  *
  * @param[in]  Afp         Callback function for calculating the product of 'Ax'.
  * @param[in]  Pfp         Callback function for monitoring the iteration progress.
@@ -419,6 +421,8 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 
 /**
  * @brief      Conjugate gradient squared method.
+ * 
+ * @note       Algorithm 2 in "Generalized conjugate gradient method" by Fokkema et al. (1996).
  *
  * @param[in]  Afp         Callback function for calculating the product of 'Ax'.
  * @param[in]  Pfp         Callback function for monitoring the iteration progress.
