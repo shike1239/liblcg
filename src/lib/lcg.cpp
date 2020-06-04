@@ -49,7 +49,9 @@ enum lcg_return_enum
 	LCG_NAN_VALUE,
 };
 
-// default parameter for conjugate gradient methods
+/**
+ * Default parameter for conjugate gradient methods
+ */
 static const lcg_para defparam = {100, 1e-6, false, 1e-6};
 
 lcg_float* lcg_malloc(const int n)
@@ -105,41 +107,34 @@ const char* lcg_error_str(int er_index)
 /**
  * @brief      Callback interface of the conjugate gradient solver
  *
- * @param[in]  Afp       Callback function pointer for calculating the product of Ax.
- * @param[in]  Pfp       Callback function for calculating the product of Ax.
- * @param      m         Initial solution vector.
- * @param      B         Objective vector of the linear system.
- * @param[in]  n_size    Size of the solution vector and objective vector.
- * @param      param     Parameter setup for the conjugate gradient.
- * @param      instance  The user data sent for lcg_solver() function by the client.
- * @param      P         Precondition vector
+ * @param[in]  Afp         Callback function for calculating the product of 'Ax'.
+ * @param[in]  Pfp         Callback function for monitoring the iteration progress.
+ * @param      m           Initial solution vector.
+ * @param      B           Objective vector of the linear system.
+ * @param[in]  n_size      Size of the solution vector and objective vector.
+ * @param      param       Parameter setup for the conjugate gradient methods.
+ * @param      instance    The user data sent for the lcg_solver() function by the client. 
+ * This variable is either 'this' for class member functions or 'NULL' for global functions.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
  *
- * @return     status of the function
+ * @return     Status of the function.
  */
-typedef int (*lcg_solver_ptr)(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P);
+typedef int (*lcg_solver_ptr)(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, 
+	const lcg_para* param, void* instance, const lcg_float* P);
 
-int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P);
-int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P);
-int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P);
-int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P);
-int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P);
+int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, 
+	const lcg_para* param, void* instance, const lcg_float* P);
+int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, 
+	const lcg_para* param, void* instance, const lcg_float* P);
+int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, 
+	const lcg_para* param, void* instance, const lcg_float* P);
+int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, 
+	const lcg_para* param, void* instance, const lcg_float* P);
+int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, 
+	const lcg_para* param, void* instance, const lcg_float* P);
 
-/**
- * @brief      A combined conjugate gradient solver function
- *
- * @param[in]  Afp       Callback function for calculating the product of Ax.
- * @param[in]  Pfp       Callback function for calculating the product of Ax.
- * @param      m         Initial solution vector.
- * @param      B         Objective vector of the linear system.
- * @param[in]  n_size    Size of the solution vector and objective vector.
- * @param      param     Parameter setup for the conjugate gradient.
- * @param      instance  The user data sent for lcg() function by the client.
- * @param      solver_id Solver type defined by lcg_solver_enum. The default value is LCG_CGS.
- * @param      P         Precondition vector (optional expect for LCG_PCG). The default value is NULL.
- *
- * @return     status of the function
- */
-int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, int solver_id, const lcg_float* P)
+int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, 
+	const lcg_para* param, void* instance, lcg_solver_enum solver_id, const lcg_float* P)
 {
 	lcg_solver_ptr cg_solver;
 	switch (solver_id)
@@ -172,7 +167,23 @@ int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 	return cg_solver(Afp, Pfp, m, B, n_size, param, instance, P);
 }
 
-int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P)
+/**
+ * @brief      Conjugate gradient method
+ *
+ * @param[in]  Afp         Callback function for calculating the product of 'Ax'.
+ * @param[in]  Pfp         Callback function for monitoring the iteration progress.
+ * @param      m           Initial solution vector.
+ * @param      B           Objective vector of the linear system.
+ * @param[in]  n_size      Size of the solution vector and objective vector.
+ * @param      param       Parameter setup for the conjugate gradient methods.
+ * @param      instance    The user data sent for the lcg_solver() function by the client. 
+ * This variable is either 'this' for class member functions or 'NULL' for global functions.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
+ *
+ * @return     Status of the function.
+ */
+int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, 
+	const lcg_para* param, void* instance, const lcg_float* P)
 {
 	// set CG parameters
 	lcg_para para = (param != nullptr) ? (*param) : defparam;
@@ -277,7 +288,23 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
 	return LCG_SUCCESS;
 }
 
-int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P)
+/**
+ * @brief      Preconditioned conjugate gradient method
+ *
+ * @param[in]  Afp         Callback function for calculating the product of 'Ax'.
+ * @param[in]  Pfp         Callback function for monitoring the iteration progress.
+ * @param      m           Initial solution vector.
+ * @param      B           Objective vector of the linear system.
+ * @param[in]  n_size      Size of the solution vector and objective vector.
+ * @param      param       Parameter setup for the conjugate gradient methods.
+ * @param      instance    The user data sent for the lcg_solver() function by the client. 
+ * This variable is either 'this' for class member functions or 'NULL' for global functions.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
+ *
+ * @return     Status of the function.
+ */
+int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, 
+	const lcg_para* param, void* instance, const lcg_float* P)
 {
 	// set CG parameters
 	lcg_para para = (param != nullptr) ? (*param) : defparam;
@@ -389,7 +416,24 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 	return LCG_SUCCESS;
 }
 
-int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P)
+
+/**
+ * @brief      Conjugate gradient squared method.
+ *
+ * @param[in]  Afp         Callback function for calculating the product of 'Ax'.
+ * @param[in]  Pfp         Callback function for monitoring the iteration progress.
+ * @param      m           Initial solution vector.
+ * @param      B           Objective vector of the linear system.
+ * @param[in]  n_size      Size of the solution vector and objective vector.
+ * @param      param       Parameter setup for the conjugate gradient methods.
+ * @param      instance    The user data sent for the lcg_solver() function by the client. 
+ * This variable is either 'this' for class member functions or 'NULL' for global functions.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
+ *
+ * @return     Status of the function.
+ */
+int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, 
+	const lcg_para* param, void* instance, const lcg_float* P)
 {
 	// set CGS parameters
 	lcg_para para = (param != nullptr) ? (*param) : defparam;
@@ -519,7 +563,23 @@ int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 	return LCG_SUCCESS;
 }
 
-int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P)
+/**
+ * @brief      Biconjugate gradient method.
+ *
+ * @param[in]  Afp         Callback function for calculating the product of 'Ax'.
+ * @param[in]  Pfp         Callback function for monitoring the iteration progress.
+ * @param      m           Initial solution vector.
+ * @param      B           Objective vector of the linear system.
+ * @param[in]  n_size      Size of the solution vector and objective vector.
+ * @param      param       Parameter setup for the conjugate gradient methods.
+ * @param      instance    The user data sent for the lcg_solver() function by the client. 
+ * This variable is either 'this' for class member functions or 'NULL' for global functions.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
+ *
+ * @return     Status of the function.
+ */
+int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, 
+	const lcg_para* param, void* instance, const lcg_float* P)
 {
 	// set CGS parameters
 	lcg_para para = (param != nullptr) ? (*param) : defparam;
@@ -655,7 +715,24 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
 	return LCG_SUCCESS;
 }
 
-int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, const lcg_float* P)
+
+/**
+ * @brief      Biconjugate gradient method 2.
+ *
+ * @param[in]  Afp         Callback function for calculating the product of 'Ax'.
+ * @param[in]  Pfp         Callback function for monitoring the iteration progress.
+ * @param      m           Initial solution vector.
+ * @param      B           Objective vector of the linear system.
+ * @param[in]  n_size      Size of the solution vector and objective vector.
+ * @param      param       Parameter setup for the conjugate gradient methods.
+ * @param      instance    The user data sent for the lcg_solver() function by the client. 
+ * This variable is either 'this' for class member functions or 'NULL' for global functions.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
+ *
+ * @return     Status of the function.
+ */
+int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, 
+	const lcg_para* param, void* instance, const lcg_float* P)
 {
 	// set CGS parameters
 	lcg_para para = (param != nullptr) ? (*param) : defparam;

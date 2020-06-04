@@ -15,5 +15,5 @@ var lcg_8h =
     [ "lcg_error_str", "lcg_8h.html#a7d76a821bc6ddd804abaf1974e5d7583", null ],
     [ "lcg_free", "lcg_8h.html#a51d9b69c6afbba37a48470b4e1db4739", null ],
     [ "lcg_malloc", "lcg_8h.html#ad4d1ad1663815eb1214f7683acfd1cbe", null ],
-    [ "lcg_solver", "lcg_8h.html#a6291c46aa8e2fa943bbe2afdd826e594", null ]
+    [ "lcg_solver", "lcg_8h.html#a618c2554bf309b8a3d1257915772eec0", null ]
 ];

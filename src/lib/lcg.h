@@ -118,53 +118,56 @@ typedef void (*lcg_axfunc_ptr)(void* instance, const lcg_float* x, lcg_float* pr
 typedef int (*lcg_progress_ptr)(void* instance, const lcg_float* m, const lcg_float converge, const lcg_para* param, const int n_size, const int k);
 
 /**
- * @brief      Locate memory for a lcg_float pointer type
+ * @brief      Locate memory for a lcg_float pointer type.
  *
- * @param[in]  n     size of the float array.
+ * @param[in]  n     Size of the lcg_float array.
  *
- * @return     pointer of the location
+ * @return     Pointer of the array's location.
  */
 lcg_float* lcg_malloc(const int n);
 
 /**
- * @brief      Destroy memory used by lcg_float pointer type
+ * @brief      Destroy memory used by the lcg_float type array.
  *
- * @param      x     pointer of the array.
+ * @param      x     Pointer of the array.
  */
 void lcg_free(lcg_float* x);
 
 /**
- * @brief      Return a lcg_para type with default values.
+ * @brief      Return a lcg_para type instance with default values.
  * 
- * The user can use function to get default parameters' value.
- *
+ * Users can use this function to get default parameters' value for the conjugate gradient methods.
+ * 
+ * @return     A lcg_para type instance.
  */
 lcg_para lcg_default_parameters();
 
 /**
- * @brief      return a string explanation for a solver's return values
+ * @brief      Return a string explanation for the lcg_solver() function's return values.
  *
- * @param[in]  er_index  The error index returned by lcg_solver()
+ * @param[in]  er_index  The error index returned by the lcg_solver() function.
  *
- * @return     A string explanation of the error
+ * @return     A string explanation of the error.
  */
 const char* lcg_error_str(int er_index);
 
 /**
- * @brief      A combined conjugate gradient solver function
+ * @brief      A combined conjugate gradient solver function.
  *
- * @param[in]  Afp       Callback function for calculating the product of Ax.
- * @param[in]  Pfp       Callback function for monitoring the iteration progress.
- * @param      m         Initial solution vector.
- * @param      B         Objective vector of the linear system.
- * @param[in]  n_size    Size of the solution vector and objective vector.
- * @param      param     Parameter setup for the conjugate gradient.
- * @param      instance  The user data sent for lcg_solver() function by the client.
- * @param      solver_id Solver type defined by lcg_solver_enum. The default value is LCG_CGS.
- * @param      P         Precondition vector (optional expect for LCG_PCG). The default value is NULL.
+ * @param[in]  Afp         Callback function for calculating the product of 'Ax'.
+ * @param[in]  Pfp         Callback function for monitoring the iteration progress.
+ * @param      m           Initial solution vector.
+ * @param      B           Objective vector of the linear system.
+ * @param[in]  n_size      Size of the solution vector and objective vector.
+ * @param      param       Parameter setup for the conjugate gradient methods.
+ * @param      instance    The user data sent for the lcg_solver() function by the client. 
+ * This variable is either 'this' for class member functions or 'NULL' for global functions.
+ * @param      solver_id   Solver type used to solve the linear system. The default value is LCG_CGS.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
  *
- * @return     status of the function
+ * @return     Status of the function.
  */
 int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, 
-	const lcg_para* param, void* instance, int solver_id = LCG_CGS, const lcg_float* P = nullptr);
+	const lcg_para* param, void* instance, lcg_solver_enum solver_id = LCG_CGS, const lcg_float* P = nullptr);
+
 #endif //_LCG_H

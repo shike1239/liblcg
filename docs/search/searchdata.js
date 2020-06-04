@@ -1,14 +1,15 @@
 var indexSectionsWithContent =
 {
-  0: "aelmr",
+  0: "acelmr",
   1: "l",
-  2: "lr",
+  2: "clr",
   3: "l",
   4: "aemr",
   5: "l",
   6: "l",
   7: "l",
-  8: "l"
+  8: "l",
+  9: "l"
 };
 
 var indexSectionNames =
@@ -21,7 +22,8 @@ var indexSectionNames =
   5: "typedefs",
   6: "enums",
   7: "enumvalues",
-  8: "pages"
+  8: "defines",
+  9: "pages"
 };
 
 var indexSectionLabels =
@@ -34,6 +36,7 @@ var indexSectionLabels =
   5: "类型定义",
   6: "枚举",
   7: "枚举值",
-  8: "页"
+  8: "宏定义",
+  9: "页"
 };
 
