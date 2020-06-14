@@ -6,7 +6,7 @@ _浙江大学地球科学学院·地球物理研究所_
 
 ## 简介
 
-liblcg 是一个简单的 C++ 线性共轭梯度算法库，其中包含了一般形式的共轭梯度算法、预优共轭梯度算法、共轭梯度平方算法与双稳共轭梯度算法。可用于求解如下形式的线性方程组：
+liblcg 是一个简单、高效的 C++ 线性共轭梯度算法库，其中包含了一般形式的共轭梯度算法、预优共轭梯度算法、共轭梯度平方算法与双稳共轭梯度算法。可用于求解如下形式的线性方程组：
 
 ```
 Ax = B
@@ -53,7 +53,7 @@ cmake .. -DLCG_FABS=OFF -DLCG_OPENMP=ON
 
 通常我们在使用共轭梯度法求解线性方程组Ax=B时A的维度可能会很大，直接储存A将消耗大量的内存空间，因此一般并不直接计算并储存A而是在需要的时候计算Ax的乘积。因此用户在使用liblcg时需要定义Ax的计算函数。Ax计算函数的形式必须满足算法库定义的一般形式：
 
-```c++
+```c
 typedef void (*lcg_axfunc_ptr)(void* instance, const lcg_float* x, lcg_float* prod_Ax, const int n_size);
 ```
 
@@ -68,7 +68,7 @@ typedef void (*lcg_axfunc_ptr)(void* instance, const lcg_float* x, lcg_float* pr
 
 用户可用下面的模版创建函数来显示共轭梯度迭代中的参数，并可以在适当的情况下停止迭代的进程。具体地，当监控函数的返回值非0时迭代进程便会终止。
 
-```c++
+```c
 typedef int (*lcg_progress_ptr)(void* instance, const lcg_float* m, const lcg_float converge, const lcg_para* param, const int n_size, const int k);
 ```
 
@@ -92,8 +92,8 @@ typedef int (*lcg_progress_ptr)(void* instance, const lcg_float* m, const lcg_fl
 
 求解函数的参数形式如下：
 
-```c++
-int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, int solver_id const lcg_float* P);
+```c
+int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, lcg_solver_enum solver_id const lcg_float* P);
 ```
 
 函数接受9个参数，分别为：
@@ -111,7 +111,7 @@ int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 
 以下为一个简单的例子。我们使用 lcg_solver() 求解一个3\*3的对称形式的线性方程组。其中 Ax 计算函数与监控函数均为类的成员函数。
 
-```c++
+```c
 #include "lcg.h"   
 #include "iostream"   
 
@@ -237,7 +237,7 @@ int main(int argc, char const *argv[])
 
 第二个例子，我们使用 lcg_solver() 求解一个随机的100\*80的线性方程组的最小二乘解。其中 Ax 计算函数与监控函数均为全局函数。
 
-```c++
+```c
 #include "lcg.h"   
 #include "ctime"   
 #include "random"   

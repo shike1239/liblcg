@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['lcg_2eh',['lcg.h',['../lcg_8h.html',1,'']]]
+  ['config_2eh',['config.h',['../config_8h.html',1,'']]]
 ];
