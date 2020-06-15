@@ -9,7 +9,7 @@ set(VERSION_MAJOR 1)
 set(VERSION_MINOR 5)
 set(VERSION_PATCH 1)
 # 设置安装地址
-# set(CMAKE_INSTALL_PREFIX /usr/local)
+set(CMAKE_INSTALL_PREFIX /usr/local)
 # 添加编译选项
 option(LCG_FABS "use lcg's fabs() function" ON)
 option(LCG_OPENMP "use openmp" ON)
@@ -28,7 +28,7 @@ endif()
 add_subdirectory(src/)
 # 构建一个 CPack 安装包
 include (InstallRequiredSystemLibraries)
-	set(CPACK_OUTPUT_FILE_PREFIX "${PROJECT_SOURCE_DIR}/package")
+	set(CPACK_OUTPUT_FILE_PREFIX "${PROJECT_SOURCE_DIR}/pack")
 	set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 	set(CPACK_PACKAGE_VERSION_MAJOR "${VERSION_MAJOR}")
 	set(CPACK_PACKAGE_VERSION_MINOR "${VERSION_MINOR}")
