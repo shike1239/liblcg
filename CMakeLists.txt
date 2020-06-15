@@ -5,7 +5,7 @@ set(CMAKE_CXX_COMPILER /usr/local/bin/g++-9)
 # 设置工程名称和语言
 project(LIBLCG VERSION 1.5 LANGUAGES CXX)
 # 设置安装地址
-set(CMAKE_INSTALL_PREFIX /usr/local)
+# set(CMAKE_INSTALL_PREFIX /usr/local)
 # 添加编译选项
 option(LCG_FABS "use lcg's fabs() function" ON)
 option(LCG_OPENMP "use openmp" ON)
