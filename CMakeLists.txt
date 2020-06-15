@@ -6,8 +6,8 @@ set(CMAKE_CXX_COMPILER /usr/local/bin/g++-9)
 project(LIBLCG LANGUAGES CXX)
 # 设置库版本号
 set(VERSION_MAJOR 1)
-set(VERSION_MINOR 0)
-set(VERSION_PATCH 0)
+set(VERSION_MINOR 5)
+set(VERSION_PATCH 1)
 # 设置安装地址
 # set(CMAKE_INSTALL_PREFIX /usr/local)
 # 添加编译选项
