@@ -13,9 +13,18 @@ set_target_properties(lcg_static PROPERTIES OUTPUT_NAME "lcg")
 set_target_properties(lcg PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 set_target_properties(lcg_static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 # 设置动态库的版本号
-set_target_properties(lcg PROPERTIES VERSION 1.5.1 SOVERSION 1.5)
+set_target_properties(lcg PROPERTIES VERSION 1.5.2 SOVERSION 1.5)
 # 设置库文件的输出地址
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
+# 添加openmp的编译命令 设置编译选项
+find_package(OpenMP REQUIRED)
+if (OpenMP_CXX_FOUND)
+	message("-- OpenMP Found.")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+	target_link_libraries(lcg PUBLIC OpenMP::OpenMP_CXX)
+	target_link_libraries(lcg_static OpenMP::OpenMP_CXX)
+endif()
 # 库的安装命令
 install(TARGETS lcg lcg_static
 	LIBRARY DESTINATION lib
