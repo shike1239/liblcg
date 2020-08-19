@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15.2)
 # 设置cxx编译器
 # 如果你使用别的编译器，请在这里修改
-set(CMAKE_CXX_COMPILER /usr/local/bin/g++-9)
+set(CMAKE_CXX_COMPILER /usr/local/bin/g++-10)
 # 设置工程名称和语言
 project(LIBLCG LANGUAGES CXX)
 # 设置库版本号
