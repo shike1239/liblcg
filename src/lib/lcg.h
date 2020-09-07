@@ -93,18 +93,21 @@ struct lcg_para
 };
 
 /**
- * @brief  Callback interface for calculating the product of a N*N matrix 'A' multiplied by a vertical vector 'x'.
+ * @brief  Callback interface for calculating the product of a N*N matrix 'A' multiplied 
+ * by a vertical vector 'x'.
  * 
  * @param  instance    The user data sent for the lcg_solver() functions by the client.
  * @param  x           Multiplier of the Ax product.
  * @param  Ax          Product of A multiplied by x.
  * @param  n_size      Size of x and column/row numbers of A.
  */
-typedef void (*lcg_axfunc_ptr)(void* instance, const lcg_float* x, lcg_float* prod_Ax, const int n_size);
+typedef void (*lcg_axfunc_ptr)(void* instance, const lcg_float* x, lcg_float* prod_Ax, 
+	const int n_size);
 
 
 /**
- * @brief     Callback interface for monitoring the progress and terminate the iteration if necessary.
+ * @brief     Callback interface for monitoring the progress and terminate the iteration 
+ * if necessary.
  * 
  * @param    instance    The user data sent for the lcg_solver() functions by the client.
  * @param    m           The current solutions.
@@ -115,7 +118,8 @@ typedef void (*lcg_axfunc_ptr)(void* instance, const lcg_float* x, lcg_float* pr
  * @retval   int         Zero to continue the optimization process. Returning a
  *                       non-zero value will terminate the optimization process.
  */
-typedef int (*lcg_progress_ptr)(void* instance, const lcg_float* m, const lcg_float converge, const lcg_para* param, const int n_size, const int k);
+typedef int (*lcg_progress_ptr)(void* instance, const lcg_float* m, const lcg_float converge, 
+	const lcg_para* param, const int n_size, const int k);
 
 /**
  * @brief      Locate memory for a lcg_float pointer type.
