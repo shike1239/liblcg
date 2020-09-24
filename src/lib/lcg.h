@@ -28,7 +28,7 @@
 
 /**
  * @brief      A simple definition of the float type we use here. 
- * Easy to change in the future.
+ * Easy to change in the future. Right now it is just an alias of double
  */
 typedef double lcg_float;
 
@@ -57,6 +57,10 @@ enum lcg_solver_enum
 	 * Biconjugate gradient method with restart.
 	 */
 	LCG_BICGSTAB2,
+	/**
+	 * Conjugate gradient method with projected gradient for inequality constraints.
+	 */
+	LCG_CG_PG,
 };
 
 /**
@@ -90,6 +94,11 @@ struct lcg_para
 	 * Restart epsilon for the LCG_BICGSTAB2 algorithm. The default value is 1e-6
 	 */
 	lcg_float restart_epsilon;
+
+	/**
+	 * Initial step length for the project gradient method. The default is 1.0
+	 */
+	lcg_float lambda;
 };
 
 /**
@@ -173,5 +182,27 @@ const char* lcg_error_str(int er_index);
  */
 int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, 
 	const lcg_para* param, void* instance, lcg_solver_enum solver_id = LCG_CGS, const lcg_float* P = nullptr);
+
+/**
+ * @brief      A combined conjugate gradient solver function.
+ *
+ * @param[in]  Afp         Callback function for calculating the product of 'Ax'.
+ * @param[in]  Pfp         Callback function for monitoring the iteration progress.
+ * @param      m           Initial solution vector.
+ * @param      B           Objective vector of the linear system.
+ * @param[in]  low         The lower boundary of the acceptable solution.
+ * @param[in]  hig         The higher boundary of the acceptable solution.
+ * @param[in]  n_size      Size of the solution vector and objective vector.
+ * @param      param       Parameter setup for the conjugate gradient methods.
+ * @param      instance    The user data sent for the lcg_solver() function by the client. 
+ * This variable is either 'this' for class member functions or 'NULL' for global functions.
+ * @param      solver_id   Solver type used to solve the linear system. The default value is LCG_CGS.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
+ *
+ * @return     Status of the function.
+ */
+int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
+	const lcg_float* low, const lcg_float *hig, const int n_size, const lcg_para* param, 
+	void* instance, lcg_solver_enum solver_id = LCG_CG_PG);
 
 #endif //_LCG_H
