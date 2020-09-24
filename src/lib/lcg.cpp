@@ -73,12 +73,20 @@ enum lcg_return_enum
 	LCG_NAN_VALUE,
 	// Invalid pointer
 	LCG_INVALID_POINTER,
+	// Invalid range for lambda
+	LCG_INVALID_LAMBDA,
+	// Invalid range for sigma
+	LCG_INVALID_SIGMA,
+	// Invalid range for beta
+	LCG_INVALID_BETA,
+	// Invalid range for maxi_m
+	LCG_INVALID_MAXIM,
 };
 
 /**
  * Default parameter for conjugate gradient methods
  */
-static const lcg_para defparam = {100, 1e-6, false, 1e-6, 1.0};
+static const lcg_para defparam = {100, 1e-6, false, 1e-6, 1.0, 0.95, 0.9, 10};
 
 lcg_float* lcg_malloc(const int n)
 {
@@ -127,6 +135,14 @@ const char* lcg_error_str(int er_index)
 			return "The model values are NaN.";
 		case LCG_INVALID_POINTER:
 			return "Invalid pointer.";
+		case LCG_INVALID_LAMBDA:
+			return "Invalid range for lambda.";
+		case LCG_INVALID_SIGMA:
+			return "Invalid range for sigma.";
+		case LCG_INVALID_BETA:
+			return "Invalid range for beta.";
+		case LCG_INVALID_MAXIM:
+			return "Invalid range for maxi_m.";
 		default:
 			return "Unknown error.";
 	}
@@ -215,6 +231,10 @@ int lcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_flo
 	const lcg_float* low, const lcg_float* hig, const int n_size, const lcg_para* param, 
 	void* instance);
 
+int lcg_spg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
+	const lcg_float* low, const lcg_float* hig, const int n_size, const lcg_para* param, 
+	void* instance);
+
 int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
 	const lcg_float* low, const lcg_float *hig, const int n_size, const lcg_para* param, 
 	void* instance, lcg_solver_enum solver_id)
@@ -222,8 +242,11 @@ int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 	lcg_solver_ptr2 cg_solver;
 	switch (solver_id)
 	{
-		case LCG_CG_PG:
+		case LCG_PG:
 			cg_solver = lcg_pg;
+			break;
+		case LCG_SPG:
+			cg_solver = lcg_spg;
 			break;
 		default:
 			cg_solver = lcg_pg;
@@ -1037,6 +1060,7 @@ int lcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_flo
 	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
 	if (para.max_iterations <= 0) return LCG_INVILAD_MAX_ITERATIONS;
 	if (para.epsilon <= 0.0) return LCG_INVILAD_EPSILON;
+	if (para.lambda <= 0.0) return LCG_INVALID_LAMBDA;
 
 	if (m == nullptr) return LCG_INVALID_POINTER;
 	if (B == nullptr) return LCG_INVALID_POINTER;
@@ -1132,6 +1156,210 @@ int lcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_flo
 	lcg_free(sk);
 	lcg_free(yk);
 	lcg_free(Adk);
+
+	if (time == para.max_iterations)
+		return LCG_REACHED_MAX_ITERATIONS;
+	return LCG_SUCCESS;
+}
+
+/**
+ * @brief      Conjugate gradient method with projected gradient for inequality constraints.
+ *
+ * @param[in]  Afp         Callback function for calculating the product of 'Ax'.
+ * @param[in]  Pfp         Callback function for monitoring the iteration progress.
+ * @param      m           Initial solution vector.
+ * @param      B           Objective vector of the linear system.
+ * @param[in]  low         The lower boundary of the acceptable solution.
+ * @param[in]  hig         The higher boundary of the acceptable solution.
+ * @param[in]  n_size      Size of the solution vector and objective vector.
+ * @param      param       Parameter setup for the conjugate gradient methods.
+ * @param      instance    The user data sent for the lcg_solver() function by the client. 
+ * This variable is either 'this' for class member functions or 'NULL' for global functions.
+ * @param      solver_id   Solver type used to solve the linear system. The default value is LCG_CGS.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
+ *
+ * @return     Status of the function.
+ */
+int lcg_spg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
+	const lcg_float* low, const lcg_float* hig, const int n_size, const lcg_para* param, 
+	void* instance)
+{
+	// set CG parameters
+	lcg_para para = (param != nullptr) ? (*param) : defparam;
+
+	// check parameters
+	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
+	if (para.max_iterations <= 0) return LCG_INVILAD_MAX_ITERATIONS;
+	if (para.epsilon <= 0.0) return LCG_INVILAD_EPSILON;
+	if (para.lambda <= 0.0) return LCG_INVALID_LAMBDA;
+	if (para.sigma <= 0.0 || para.sigma >= 1.0) return LCG_INVALID_SIGMA;
+	if (para.beta <= 0.0 || para.beta >= 1.0) return LCG_INVALID_BETA;
+	if (para.maxi_m <= 0) return LCG_INVALID_MAXIM;
+
+	if (m == nullptr) return LCG_INVALID_POINTER;
+	if (B == nullptr) return LCG_INVALID_POINTER;
+	if (low == nullptr) return LCG_INVALID_POINTER;
+	if (hig == nullptr) return LCG_INVALID_POINTER;
+
+	// locate memory
+	lcg_float *gk = nullptr, *Adk = nullptr;
+	lcg_float *m_new = nullptr, *gk_new = nullptr;
+	lcg_float *sk = nullptr, *yk = nullptr;
+	lcg_float *dk = nullptr, *qk_m = nullptr;
+	gk = lcg_malloc(n_size);
+	Adk = lcg_malloc(n_size);
+	m_new = lcg_malloc(n_size);
+	gk_new = lcg_malloc(n_size);
+	sk = lcg_malloc(n_size);
+	yk = lcg_malloc(n_size);
+	dk = lcg_malloc(n_size);
+	qk_m = lcg_malloc(para.maxi_m);
+
+	int i;
+	// project the initial model
+#pragma omp parallel for private (i) schedule(guided)
+	for (i = 0; i < n_size; i++)
+	{
+		m[i] = lcg_set2box(low[i], hig[i], m[i]);
+	}
+
+	Afp(instance, m, Adk, n_size);
+
+#pragma omp parallel for private (i) schedule(guided)
+	for (i = 0; i < n_size; i++)
+	{
+		gk[i] = Adk[i] - B[i];
+	}
+
+	lcg_float qk = 0;
+	// calculate qk
+	for (i = 0; i < n_size; i++)
+	{
+		qk += (0.5*m[i]*Adk[i] - B[i]*m[i]);
+	}
+	qk_m[0] = qk;
+
+	for (i = 1; i < para.maxi_m; i++)
+	{
+		qk_m[i] = -1e+30;
+	}
+
+	int time;
+	lcg_float lambda_k = para.lambda;
+	lcg_float alpha_k, maxi_qk;
+	lcg_float p_mod, alpha_mod, sk_mod, syk_mod;
+	for (time = 0; time < para.max_iterations; time++)
+	{
+#pragma omp parallel for private (i) schedule(guided)
+		for (i = 0; i < n_size; i++)
+		{
+			m_new[i] = lcg_set2box(low[i], hig[i], m[i] - gk[i]);
+		}
+
+		p_mod = 0.0;
+		for (i = 0; i < n_size; i++)
+		{
+			p_mod += (m_new[i] - m[i])*(m_new[i] - m[i]);
+		}
+		p_mod = sqrt(p_mod);
+
+		if (Pfp != nullptr)
+			if (Pfp(instance, m, p_mod, &para, n_size, time)) return LCG_STOP;
+		if (p_mod <= para.epsilon) return LCG_CONVERGENCE;
+
+		// project the model
+#pragma omp parallel for private (i) schedule(guided)
+		for (i = 0; i < n_size; i++)
+		{
+			dk[i] = lcg_set2box(low[i], hig[i], m[i] - lambda_k*gk[i]) - m[i];
+		}
+
+		alpha_k = 1.0;
+		for (i = 0; i < n_size; i++)
+		{
+			m_new[i] = m[i] + alpha_k*dk[i];
+		}
+
+		Afp(instance, m_new, Adk, n_size);
+
+		qk = 0.0;
+		for (i = 0; i < n_size; i++)
+		{
+			qk += (0.5*m_new[i]*Adk[i] - B[i]*m_new[i]);
+		}
+
+		alpha_mod = 0.0;
+		for (i = 0; i < n_size; i++)
+		{
+			alpha_mod += para.sigma*alpha_k*gk[i]*dk[i];
+		}
+
+		maxi_qk = qk_m[0];
+		for (i = 1; i < para.maxi_m; i++)
+		{
+			maxi_qk = lcg_max(maxi_qk, qk_m[i]);
+		}
+
+		while(qk > maxi_qk + alpha_mod)
+		{
+			alpha_k = alpha_k*para.beta;
+
+			for (i = 0; i < n_size; i++)
+			{
+				m_new[i] = m[i] + alpha_k*dk[i];
+			}
+
+			Afp(instance, m_new, Adk, n_size);
+
+			qk = 0.0;
+			for (i = 0; i < n_size; i++)
+			{
+				qk += (0.5*m_new[i]*Adk[i] - B[i]*m_new[i]);
+			}
+
+			alpha_mod = 0.0;
+			for (i = 0; i < n_size; i++)
+			{
+				alpha_mod += para.sigma*alpha_k*gk[i]*dk[i];
+			}
+		}
+
+		// put new values in qk_m
+		qk_m[(time+1)%para.maxi_m] = qk;
+
+#pragma omp parallel for private (i) schedule(guided)
+		for (i = 0; i < n_size; i++)
+		{
+			gk_new[i] = Adk[i] - B[i];
+			sk[i] = m_new[i] - m[i];
+			yk[i] = gk_new[i] - gk[i];
+		}
+
+		sk_mod = 0.0;
+		syk_mod = 0.0;
+		for (i = 0; i < n_size; i++)
+		{
+			sk_mod += sk[i]*sk[i];
+			syk_mod += sk[i]*yk[i];
+		}
+		lambda_k = sk_mod/syk_mod;
+
+#pragma omp parallel for private (i) schedule(guided)
+		for (i = 0; i < n_size; i++)
+		{
+			m[i] = m_new[i];
+			gk[i] = gk_new[i];
+		}
+	}
+
+	lcg_free(gk);
+	lcg_free(gk_new);
+	lcg_free(m_new);
+	lcg_free(sk);
+	lcg_free(yk);
+	lcg_free(Adk);
+	lcg_free(dk);
+	lcg_free(qk_m);
 
 	if (time == para.max_iterations)
 		return LCG_REACHED_MAX_ITERATIONS;

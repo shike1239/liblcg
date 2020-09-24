@@ -59,8 +59,14 @@ enum lcg_solver_enum
 	LCG_BICGSTAB2,
 	/**
 	 * Conjugate gradient method with projected gradient for inequality constraints.
+	 * This algorithm comes without non-monotonic linear search for the step length.
 	 */
-	LCG_CG_PG,
+	LCG_PG,
+	/**
+	 * Conjugate gradient method with spectral projected gradient for inequality constraints.
+	 * This algorithm comes with non-monotonic linear search for the step length.
+	 */
+	LCG_SPG,
 };
 
 /**
@@ -79,14 +85,17 @@ struct lcg_para
 	 * This parameter determines the accuracy with which the solution is to be found. 
 	 * A minimization terminates when ||g||/||b|| <= epsilon or |Ax - B| <= epsilon for 
 	 * the lcg_solver() function, where ||.|| denotes the Euclidean (L2) norm and | | 
-	 * denotes the L1 norm. The default value of epsilon is 1e-6.
+	 * denotes the L1 norm. The default value of epsilon is 1e-6. For box-constrained methods,
+	 * the convergence test is implemented using ||P(m-g) - m|| <= epsilon, in which P is the
+	 * projector that transfers m into the constrained domain.
 	*/
 	lcg_float epsilon;
 
 	/**
 	 * Whether to use absolute mean differences (AMD) between |Ax - B| to evaluate the process. 
 	 * The default value is false which means the gradient based evaluating method is used. 
-	 * The AMD based method will be used if this variable is set to true.
+	 * The AMD based method will be used if this variable is set to true. This parameter is only 
+	 * applied to the non-constrained methods.
 	 */
 	bool abs_diff;
 
@@ -99,6 +108,25 @@ struct lcg_para
 	 * Initial step length for the project gradient method. The default is 1.0
 	 */
 	lcg_float lambda;
+
+	/**
+	 * multiplier for updating solutions with the spectral projected gradient method. The range of
+	 * this variable is (0, 1). The default is given as 0.95
+	 */
+	lcg_float sigma;
+
+	/**
+	 * descending ratio for conducting the non-monotonic linear search. The range of
+	 * this variable is (0, 1). The default is given as 0.9
+	 */
+	lcg_float beta;
+
+	/**
+	 * The maximal record times of the objective values for the SPG method. The method use the 
+	 * objective values from the most recent maxi_m times to preform the non-monotonic linear search.
+	 * The default value is 10.
+	 */
+	int maxi_m;
 };
 
 /**
@@ -184,7 +212,7 @@ int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 	const lcg_para* param, void* instance, lcg_solver_enum solver_id = LCG_CGS, const lcg_float* P = nullptr);
 
 /**
- * @brief      A combined conjugate gradient solver function.
+ * @brief      A combined conjugate gradient solver function with inequality constraints.
  *
  * @param[in]  Afp         Callback function for calculating the product of 'Ax'.
  * @param[in]  Pfp         Callback function for monitoring the iteration progress.
@@ -203,6 +231,6 @@ int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
  */
 int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
 	const lcg_float* low, const lcg_float *hig, const int n_size, const lcg_para* param, 
-	void* instance, lcg_solver_enum solver_id = LCG_CG_PG);
+	void* instance, lcg_solver_enum solver_id = LCG_PG);
 
 #endif //_LCG_H
