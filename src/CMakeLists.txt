@@ -61,3 +61,10 @@ add_executable(lcg_sample3 sample/sample3.cpp)
 set_target_properties(lcg_sample3 PROPERTIES INSTALL_RPATH "/usr/local/lib")
 # 链接动态库
 target_link_libraries(lcg_sample3 PUBLIC lcg)
+
+# 添加可执行文件 命令行
+add_executable(lcg_sample4 sample/sample4.cpp)
+# 为安装文件添加动态库的搜索地址
+set_target_properties(lcg_sample4 PROPERTIES INSTALL_RPATH "/usr/local/lib")
+# 链接动态库
+target_link_libraries(lcg_sample4 PUBLIC lcg)

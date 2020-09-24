@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['config_2eh',['config.h',['../config_8h.html',1,'']]]
+  ['beta_1',['beta',['../structlcg__para.html#a579674af789ee65aab2bf4f606df3bdf',1,'lcg_para']]]
 ];

@@ -1,7 +1,11 @@
 var lcg_8cpp =
 [
     [ "lcg_fabs", "lcg_8cpp.html#a9b5f0f88eb0f6f4f5977f9f1fac57d19", null ],
+    [ "lcg_max", "lcg_8cpp.html#aec408c7e28071f5c37966fb012d0d5fb", null ],
+    [ "lcg_min", "lcg_8cpp.html#aa123c493d8017c2db1152f34db00880d", null ],
+    [ "lcg_set2box", "lcg_8cpp.html#a3e24be8677d4ff564d4e4ce3335b3166", null ],
     [ "lcg_solver_ptr", "lcg_8cpp.html#ab2e7e76629283814614dd3ea4202f66e", null ],
+    [ "lcg_solver_ptr2", "lcg_8cpp.html#abda0052b423e0683d33289f549a34802", null ],
     [ "lcg_return_enum", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81", [
       [ "LCG_SUCCESS", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a32a9bf0edbe7dd63342da1a56038166e", null ],
       [ "LCG_CONVERGENCE", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81aa3247f00ca027f1ac9cd7b9b8dd69b67", null ],
@@ -14,7 +18,12 @@ var lcg_8cpp =
       [ "LCG_INVILAD_RESTART_EPSILON", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a9d6fc5f264fc537012dd935f2bbe4b34", null ],
       [ "LCG_REACHED_MAX_ITERATIONS", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81ae5f6ce62bb4d6aba69ecce84750f0d0e", null ],
       [ "LCG_NULL_PRECONDITION_MATRIX", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a13620b4ffef894ee83310ed42aa83eef", null ],
-      [ "LCG_NAN_VALUE", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a1f2ed35558627d6b93931677c40531a3", null ]
+      [ "LCG_NAN_VALUE", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a1f2ed35558627d6b93931677c40531a3", null ],
+      [ "LCG_INVALID_POINTER", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a62822fc57a40064b6ddc96bac4881544", null ],
+      [ "LCG_INVALID_LAMBDA", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81aa7949f9d6aec19191f5d43fcb2f9f93a", null ],
+      [ "LCG_INVALID_SIGMA", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a638e748add2522474dfe4bb0fcc9cffa", null ],
+      [ "LCG_INVALID_BETA", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81af31d49d816004939ae08e12441c50fd2", null ],
+      [ "LCG_INVALID_MAXIM", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a776c14ddb174249eeaa71b184b366151", null ]
     ] ],
     [ "lbicgstab", "lcg_8cpp.html#ad7dc41a2a07b05c813f9f6fac3e1ab5e", null ],
     [ "lbicgstab2", "lcg_8cpp.html#acd865c9b36b2157a59ca6873e9f708c3", null ],
@@ -23,7 +32,10 @@ var lcg_8cpp =
     [ "lcg_error_str", "lcg_8cpp.html#a7d76a821bc6ddd804abaf1974e5d7583", null ],
     [ "lcg_free", "lcg_8cpp.html#a51d9b69c6afbba37a48470b4e1db4739", null ],
     [ "lcg_malloc", "lcg_8cpp.html#ad4d1ad1663815eb1214f7683acfd1cbe", null ],
+    [ "lcg_pg", "lcg_8cpp.html#a927fd55908422a7132e30304d36ba5d8", null ],
     [ "lcg_solver", "lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9", null ],
+    [ "lcg_solver", "lcg_8cpp.html#a7591a5f664156e765533e5070a666b12", null ],
+    [ "lcg_spg", "lcg_8cpp.html#af2b18a78c6bc55add47bf1b1d566d7a0", null ],
     [ "lcgs", "lcg_8cpp.html#a6ffa1a438fcff05adfd40407c53914ff", null ],
     [ "lpcg", "lcg_8cpp.html#a173936ce2e80d29e520c99c9397d0d37", null ]
 ];

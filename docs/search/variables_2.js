@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['max_5fiterations',['max_iterations',['../structlcg__para.html#a945e14f1204dc4a68eacedc79600694b',1,'lcg_para']]]
+  ['epsilon_79',['epsilon',['../structlcg__para.html#aa67ce230d9611ba0db3facda29851f56',1,'lcg_para']]]
 ];

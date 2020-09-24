@@ -6,25 +6,28 @@ _浙江大学地球科学学院·地球物理研究所_
 
 ## 简介
 
-liblcg 是一个简单、高效的 C++ 线性共轭梯度算法库，其中包含了一般形式的共轭梯度算法、预优共轭梯度算法、共轭梯度平方算法与双稳共轭梯度算法。可用于求解如下形式的线性方程组：
+liblcg 是一个简单、高效的 C++ 线性共轭梯度算法库，其中包含了一般形式的共轭梯度算法、预优共轭梯度算法、共轭梯度平方算法、双稳共轭梯度算法、BB步共轭梯度投影法与SPG共轭梯度投影法。可用于求解如下形式的线性方程组：
 
 ```
 Ax = B
 ```
 
-其中，A 是一个 N 阶的方阵、x 为 N\*1 的待求解的模型向量，B 为 N\*1 的需拟合的目标向量。共轭梯度法广泛应用于无约束的线性最优化问题，拥有优良的收敛与计算效率。其中，共轭梯度法与预优共轭梯度法可用于求解A为对称形式的线性方程组，而共轭梯度平方法与双稳共轭梯度法可用于求解A为非对称形式的线性方程组。
+其中，A 是一个 N 阶的方阵、x 为 N\*1 的待求解的模型向量，B 为 N\*1 的需拟合的目标向量。共轭梯度法广泛应用于无约束与约束的线性最优化问题，拥有优良的收敛与计算效率。其中，共轭梯度法与预优共轭梯度法可用于求解A为对称形式的线性方程组，而共轭梯度平方法与双稳共轭梯度法可用于求解A为非对称形式的线性方程组。同时，两种投影梯度法可用于求解带不等式约束的线性最优化问题。
 
 ## 安装
 
-算法库默认使用 Cmake 编译工具进行编译，可在不同平台生成相应的可执行或工程文件。请用户自行下载安装 Cmake 软件后按如下方法进行编译。此方法适用于 MacOS 或 Linux 系统 （默认的编译器为 GCC-9，用户可在 CMakeLists.txt 中自行修改编译器与安装地址），Windows 用户请使用 VS studio 等编译工具新建项目并拷贝 src/lib 文件夹下所有文件至新项目并编译动态库。
+算法库默认使用 Cmake 编译工具进行编译，可在不同平台生成相应的可执行或工程文件。请用户自行下载安装 Cmake 软件后按如下方法进行编译。此方法适用于 MacOS 或 Linux 系统 （默认的编译器为 G++，用户可在 CMakeLists.txt 中自行修改编译器与安装地址），Windows 用户请使用 VS studio 等编译工具新建项目并拷贝 src/lib 文件夹下所有文件至新项目并编译动态库。
 
 ```shell
-./routine.sh configure
-./routine.sh build
+mkdir build
+cd build
+cmake ..
+make
+make install
 ```
 
 算法库目前有两个可用的编译选项，分别为 LCG_FABS 和 LCG_OPENMP，默认值均为 ON。其中 LCG_FABS 表示是否使用算法库自带的绝对值计算方法。若此值为 OFF 则会使用标准的（cmath）绝对值计算方法。
-LCG_OPENMP 为是否使用 OpenMP 对算法进行加速。若此值为 OFF 则表示不使用openMP。用户可以使用以下方式进行条件编译：
+LCG_OPENMP 为是否使用 OpenMP 对算法进行加速。若此值为 OFF 则表示不使用OpenMP。用户可以使用以下方式进行条件编译：
 
 ```shell
 cmake .. -DLCG_FABS=OFF -DLCG_OPENMP=ON
@@ -35,8 +38,8 @@ cmake .. -DLCG_FABS=OFF -DLCG_OPENMP=ON
 ## 数据类型
 
 1. 浮点类型 `lcg_float` 。目前只是简单的 `double` 类型的别名；
-2. 枚举类型 `lcg_solver_enum` 包含了可用的共轭梯度类型。有 `LCG_CG`，`LCG_PCG`，`LCG_CGS`，`LCG_BICGSTAB`，`LCG_BICGSTAB2`共5个。分别表示共轭梯度、预优共轭梯度、共轭梯度平方算法与两种双稳共轭梯度算法；
-3. 结构体 `lcg_para` 为共轭梯度参数类型。包含 `max_iterations`，`epsilon`，`abs_diff`，`restart_epsilon` 四个变量，包含最大迭代次数、终止精度等条件变量。具体含义请见头文件内的注释。
+2. 枚举类型 `lcg_solver_enum` 包含了可用的共轭梯度类型。有 `LCG_CG`，`LCG_PCG`，`LCG_CGS`，`LCG_BICGSTAB`，`LCG_BICGSTAB2`，`LCG_PG`和`LCG_SPG`共7个。分别表示共轭梯度、预优共轭梯度、共轭梯度平方算法、两种双稳共轭梯度算法与两种投影梯度算法；
+3. 结构体 `lcg_para` 为共轭梯度参数类型。包含 `max_iterations`，`epsilon`，`abs_diff`，`restart_epsilon` 等变量，包含最大迭代次数、终止精度等条件变量。具体含义请见头文件内的注释。
 
 ## 头文件与函数接口
 
@@ -53,7 +56,7 @@ cmake .. -DLCG_FABS=OFF -DLCG_OPENMP=ON
 
 通常我们在使用共轭梯度法求解线性方程组Ax=B时A的维度可能会很大，直接储存A将消耗大量的内存空间，因此一般并不直接计算并储存A而是在需要的时候计算Ax的乘积。因此用户在使用liblcg时需要定义Ax的计算函数。Ax计算函数的形式必须满足算法库定义的一般形式：
 
-```c
+```cpp
 typedef void (*lcg_axfunc_ptr)(void* instance, const lcg_float* x, lcg_float* prod_Ax, const int n_size);
 ```
 
@@ -68,7 +71,7 @@ typedef void (*lcg_axfunc_ptr)(void* instance, const lcg_float* x, lcg_float* pr
 
 用户可用下面的模版创建函数来显示共轭梯度迭代中的参数，并可以在适当的情况下停止迭代的进程。具体地，当监控函数的返回值非0时迭代进程便会终止。
 
-```c
+```cpp
 typedef int (*lcg_progress_ptr)(void* instance, const lcg_float* m, const lcg_float converge, const lcg_para* param, const int n_size, const int k);
 ```
 
@@ -90,13 +93,13 @@ typedef int (*lcg_progress_ptr)(void* instance, const lcg_float* m, const lcg_fl
 4. LCG_BICGSTAB：双稳共轭梯度算法；
 5. LCG_BICGSTAB2: 双稳共轭梯度算法（带重启功能）。
 
-求解函数的参数形式如下：
+无约束求解函数的参数形式如下：
 
-```c
+```cpp
 int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, const lcg_para* param, void* instance, lcg_solver_enum solver_id const lcg_float* P);
 ```
 
-函数接受9个参数，分别为：
+函数接收9个参数，分别为：
 1. `lcg_axfunc_ptr Afp` 计算 Ax 的回调函数；
 2. `lcg_progress_ptr Pfp` 监控迭代过程的回调函数（非必须，无需监控时使用 NULL 参数即可）；
 3. `lcg_float* m` 模型参数数组，解得线性方程组的解也为这个数组；
@@ -107,11 +110,22 @@ int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 8. `int solver_id` 求解函数使用的求解方法，即上文中 LCG_CG 至 LCG_BICGSTAB2 五种方法，默认的求解方法为 LCG_CGS；
 9. `const lcg_float* P` 预优矩阵，一般是一个N阶的对角阵，这里直接用一个一维数组表示。此参数只在求解方法为 LCG_PCG 时是必须的，其他情况下是一个默认值为 NULL 的参数。
 
+投影梯度算法的参数形式如下：
+```cpp
+int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
+  const lcg_float* low, const lcg_float *hig, const int n_size, const lcg_para* param, 
+  void* instance, lcg_solver_enum solver_id);
+```
+
+函数接收10个参数，参数含义于无约束求解函数一致。除了：
+1. `lcg_float* low` 可取的参数范围的底界；
+2. `lcg_float* hig` 可取的参数范围的顶界。
+
 ## 示例
 
 以下为一个简单的例子。我们使用 lcg_solver() 求解一个3\*3的对称形式的线性方程组。其中 Ax 计算函数与监控函数均为类的成员函数。
 
-```c
+```cpp
 #include "lcg.h"   
 #include "iostream"   
 
@@ -237,7 +251,7 @@ int main(int argc, char const *argv[])
 
 第二个例子，我们使用 lcg_solver() 求解一个随机的100\*80的线性方程组的最小二乘解。其中 Ax 计算函数与监控函数均为全局函数。
 
-```c
+```cpp
 #include "lcg.h"   
 #include "ctime"   
 #include "random"   

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['restart_5fepsilon',['restart_epsilon',['../structlcg__para.html#ac6ea8932a62c8d67c618c04999901396',1,'lcg_para']]]
+  ['lambda_80',['lambda',['../structlcg__para.html#a5151a9c973c04e18210d3d6364dad224',1,'lcg_para']]]
 ];

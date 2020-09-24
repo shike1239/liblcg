@@ -1,9 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.14"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Liblcg: src/lib/lcg.cpp 文件参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
@@ -13,10 +13,6 @@
 <script type="text/javascript" src="resize.js"></script>
 <script type="text/javascript" src="navtreedata.js"></script>
 <script type="text/javascript" src="navtree.js"></script>
-<script type="text/javascript">
-/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-  $(document).ready(initResizable);
-/* @license-end */</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -59,7 +55,7 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.14 -->
+<!-- 制作者 Doxygen 1.8.18 -->
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
 var searchBox = new SearchBox("searchBox", "search",false,'搜索');
@@ -78,7 +74,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('lcg_8cpp.html','');});
+$(document).ready(function(){initNavTree('lcg_8cpp.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -108,19 +104,32 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html','');});
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="config_8h_source.html">config.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="lcg_8h_source.html">lcg.h</a>&quot;</code><br />
+<code>#include &quot;cmath&quot;</code><br />
 <code>#include &quot;omp.h&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 宏定义</h2></td></tr>
 <tr class="memitem:a9b5f0f88eb0f6f4f5977f9f1fac57d19"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#a9b5f0f88eb0f6f4f5977f9f1fac57d19">lcg_fabs</a>(x)&#160;&#160;&#160;((x &lt; 0) ? -1*x : x)</td></tr>
-<tr class="memdesc:a9b5f0f88eb0f6f4f5977f9f1fac57d19"><td class="mdescLeft">&#160;</td><td class="mdescRight">return absolute value  <a href="#a9b5f0f88eb0f6f4f5977f9f1fac57d19">更多...</a><br /></td></tr>
+<tr class="memdesc:a9b5f0f88eb0f6f4f5977f9f1fac57d19"><td class="mdescLeft">&#160;</td><td class="mdescRight">return absolute value  <a href="lcg_8cpp.html#a9b5f0f88eb0f6f4f5977f9f1fac57d19">更多...</a><br /></td></tr>
 <tr class="separator:a9b5f0f88eb0f6f4f5977f9f1fac57d19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec408c7e28071f5c37966fb012d0d5fb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#aec408c7e28071f5c37966fb012d0d5fb">lcg_max</a>(a,  b)&#160;&#160;&#160;(a&gt;b?a:b)</td></tr>
+<tr class="memdesc:aec408c7e28071f5c37966fb012d0d5fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">return the bigger value  <a href="lcg_8cpp.html#aec408c7e28071f5c37966fb012d0d5fb">更多...</a><br /></td></tr>
+<tr class="separator:aec408c7e28071f5c37966fb012d0d5fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa123c493d8017c2db1152f34db00880d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#aa123c493d8017c2db1152f34db00880d">lcg_min</a>(a,  b)&#160;&#160;&#160;(a&lt;b?a:b)</td></tr>
+<tr class="memdesc:aa123c493d8017c2db1152f34db00880d"><td class="mdescLeft">&#160;</td><td class="mdescRight">return the smaller value  <a href="lcg_8cpp.html#aa123c493d8017c2db1152f34db00880d">更多...</a><br /></td></tr>
+<tr class="separator:aa123c493d8017c2db1152f34db00880d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e24be8677d4ff564d4e4ce3335b3166"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#a3e24be8677d4ff564d4e4ce3335b3166">lcg_set2box</a>(a,  b,  in)&#160;&#160;&#160;(<a class="el" href="lcg_8cpp.html#aec408c7e28071f5c37966fb012d0d5fb">lcg_max</a>(a, <a class="el" href="lcg_8cpp.html#aa123c493d8017c2db1152f34db00880d">lcg_min</a>(b, in)))</td></tr>
+<tr class="memdesc:a3e24be8677d4ff564d4e4ce3335b3166"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the input value within a box constraint  <a href="lcg_8cpp.html#a3e24be8677d4ff564d4e4ce3335b3166">更多...</a><br /></td></tr>
+<tr class="separator:a3e24be8677d4ff564d4e4ce3335b3166"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 类型定义</h2></td></tr>
 <tr class="memitem:ab2e7e76629283814614dd3ea4202f66e"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#ab2e7e76629283814614dd3ea4202f66e">lcg_solver_ptr</a>) (<a class="el" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a> Afp, <a class="el" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a> Pfp, <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *m, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *B, const int n_size, const <a class="el" href="structlcg__para.html">lcg_para</a> *param, void *instance, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *P)</td></tr>
-<tr class="memdesc:ab2e7e76629283814614dd3ea4202f66e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback interface of the conjugate gradient solver  <a href="#ab2e7e76629283814614dd3ea4202f66e">更多...</a><br /></td></tr>
+<tr class="memdesc:ab2e7e76629283814614dd3ea4202f66e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback interface of the conjugate gradient solver  <a href="lcg_8cpp.html#ab2e7e76629283814614dd3ea4202f66e">更多...</a><br /></td></tr>
 <tr class="separator:ab2e7e76629283814614dd3ea4202f66e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abda0052b423e0683d33289f549a34802"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#abda0052b423e0683d33289f549a34802">lcg_solver_ptr2</a>) (<a class="el" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a> Afp, <a class="el" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a> Pfp, <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *m, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *B, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *low, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *hig, const int n_size, const <a class="el" href="structlcg__para.html">lcg_para</a> *param, void *instance)</td></tr>
+<tr class="memdesc:abda0052b423e0683d33289f549a34802"><td class="mdescLeft">&#160;</td><td class="mdescRight">A combined conjugate gradient solver function.  <a href="lcg_8cpp.html#abda0052b423e0683d33289f549a34802">更多...</a><br /></td></tr>
+<tr class="separator:abda0052b423e0683d33289f549a34802"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 枚举</h2></td></tr>
@@ -138,44 +147,60 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html','');});
 &#160;&#160;<a class="el" href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a9d6fc5f264fc537012dd935f2bbe4b34">LCG_INVILAD_RESTART_EPSILON</a>, 
 <a class="el" href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81ae5f6ce62bb4d6aba69ecce84750f0d0e">LCG_REACHED_MAX_ITERATIONS</a>, 
 <a class="el" href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a13620b4ffef894ee83310ed42aa83eef">LCG_NULL_PRECONDITION_MATRIX</a>, 
-<a class="el" href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a1f2ed35558627d6b93931677c40531a3">LCG_NAN_VALUE</a>
+<a class="el" href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a1f2ed35558627d6b93931677c40531a3">LCG_NAN_VALUE</a>, 
+<br />
+&#160;&#160;<a class="el" href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a62822fc57a40064b6ddc96bac4881544">LCG_INVALID_POINTER</a>, 
+<a class="el" href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81aa7949f9d6aec19191f5d43fcb2f9f93a">LCG_INVALID_LAMBDA</a>, 
+<a class="el" href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a638e748add2522474dfe4bb0fcc9cffa">LCG_INVALID_SIGMA</a>, 
+<a class="el" href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81af31d49d816004939ae08e12441c50fd2">LCG_INVALID_BETA</a>, 
+<br />
+&#160;&#160;<a class="el" href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a776c14ddb174249eeaa71b184b366151">LCG_INVALID_MAXIM</a>
 <br />
  }</td></tr>
-<tr class="memdesc:ad643ef582f994ef247d3e040811feb81"><td class="mdescLeft">&#160;</td><td class="mdescRight">return value of the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function. ">lcg_solver()</a> function  <a href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81">更多...</a><br /></td></tr>
+<tr class="memdesc:ad643ef582f994ef247d3e040811feb81"><td class="mdescLeft">&#160;</td><td class="mdescRight">return value of the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function  <a href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81">更多...</a><br /></td></tr>
 <tr class="separator:ad643ef582f994ef247d3e040811feb81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 函数</h2></td></tr>
 <tr class="memitem:ad4d1ad1663815eb1214f7683acfd1cbe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#ad4d1ad1663815eb1214f7683acfd1cbe">lcg_malloc</a> (const int n)</td></tr>
-<tr class="memdesc:ad4d1ad1663815eb1214f7683acfd1cbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locate memory for a lcg_float pointer type.  <a href="#ad4d1ad1663815eb1214f7683acfd1cbe">更多...</a><br /></td></tr>
+<tr class="memdesc:ad4d1ad1663815eb1214f7683acfd1cbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locate memory for a lcg_float pointer type.  <a href="lcg_8cpp.html#ad4d1ad1663815eb1214f7683acfd1cbe">更多...</a><br /></td></tr>
 <tr class="separator:ad4d1ad1663815eb1214f7683acfd1cbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51d9b69c6afbba37a48470b4e1db4739"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#a51d9b69c6afbba37a48470b4e1db4739">lcg_free</a> (<a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *x)</td></tr>
-<tr class="memdesc:a51d9b69c6afbba37a48470b4e1db4739"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy memory used by the lcg_float type array.  <a href="#a51d9b69c6afbba37a48470b4e1db4739">更多...</a><br /></td></tr>
+<tr class="memdesc:a51d9b69c6afbba37a48470b4e1db4739"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy memory used by the lcg_float type array.  <a href="lcg_8cpp.html#a51d9b69c6afbba37a48470b4e1db4739">更多...</a><br /></td></tr>
 <tr class="separator:a51d9b69c6afbba37a48470b4e1db4739"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae709a311e61bd35843a9f4333c38ab18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlcg__para.html">lcg_para</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#ae709a311e61bd35843a9f4333c38ab18">lcg_default_parameters</a> ()</td></tr>
-<tr class="memdesc:ae709a311e61bd35843a9f4333c38ab18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a <a class="el" href="structlcg__para.html" title="Parameters of the conjugate gradient methods. ">lcg_para</a> type instance with default values.  <a href="#ae709a311e61bd35843a9f4333c38ab18">更多...</a><br /></td></tr>
+<tr class="memdesc:ae709a311e61bd35843a9f4333c38ab18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a <a class="el" href="structlcg__para.html" title="Parameters of the conjugate gradient methods.">lcg_para</a> type instance with default values.  <a href="lcg_8cpp.html#ae709a311e61bd35843a9f4333c38ab18">更多...</a><br /></td></tr>
 <tr class="separator:ae709a311e61bd35843a9f4333c38ab18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d76a821bc6ddd804abaf1974e5d7583"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#a7d76a821bc6ddd804abaf1974e5d7583">lcg_error_str</a> (int er_index)</td></tr>
-<tr class="memdesc:a7d76a821bc6ddd804abaf1974e5d7583"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a string explanation for the <a class="el" href="lcg_8h.html#a618c2554bf309b8a3d1257915772eec0" title="A combined conjugate gradient solver function. ">lcg_solver()</a> function's return values.  <a href="#a7d76a821bc6ddd804abaf1974e5d7583">更多...</a><br /></td></tr>
+<tr class="memdesc:a7d76a821bc6ddd804abaf1974e5d7583"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a string explanation for the <a class="el" href="lcg_8h.html#a618c2554bf309b8a3d1257915772eec0" title="A combined conjugate gradient solver function.">lcg_solver()</a> function's return values.  <a href="lcg_8cpp.html#a7d76a821bc6ddd804abaf1974e5d7583">更多...</a><br /></td></tr>
 <tr class="separator:a7d76a821bc6ddd804abaf1974e5d7583"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af763a8276748cccc9affc39faaeb29ce"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#af763a8276748cccc9affc39faaeb29ce">lcg</a> (<a class="el" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a> Afp, <a class="el" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a> Pfp, <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *m, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *B, const int n_size, const <a class="el" href="structlcg__para.html">lcg_para</a> *param, void *instance, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *P)</td></tr>
-<tr class="memdesc:af763a8276748cccc9affc39faaeb29ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conjugate gradient method  <a href="#af763a8276748cccc9affc39faaeb29ce">更多...</a><br /></td></tr>
+<tr class="memdesc:af763a8276748cccc9affc39faaeb29ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conjugate gradient method  <a href="lcg_8cpp.html#af763a8276748cccc9affc39faaeb29ce">更多...</a><br /></td></tr>
 <tr class="separator:af763a8276748cccc9affc39faaeb29ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a173936ce2e80d29e520c99c9397d0d37"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#a173936ce2e80d29e520c99c9397d0d37">lpcg</a> (<a class="el" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a> Afp, <a class="el" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a> Pfp, <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *m, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *B, const int n_size, const <a class="el" href="structlcg__para.html">lcg_para</a> *param, void *instance, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *P)</td></tr>
-<tr class="memdesc:a173936ce2e80d29e520c99c9397d0d37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Preconditioned conjugate gradient method  <a href="#a173936ce2e80d29e520c99c9397d0d37">更多...</a><br /></td></tr>
+<tr class="memdesc:a173936ce2e80d29e520c99c9397d0d37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Preconditioned conjugate gradient method  <a href="lcg_8cpp.html#a173936ce2e80d29e520c99c9397d0d37">更多...</a><br /></td></tr>
 <tr class="separator:a173936ce2e80d29e520c99c9397d0d37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ffa1a438fcff05adfd40407c53914ff"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#a6ffa1a438fcff05adfd40407c53914ff">lcgs</a> (<a class="el" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a> Afp, <a class="el" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a> Pfp, <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *m, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *B, const int n_size, const <a class="el" href="structlcg__para.html">lcg_para</a> *param, void *instance, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *P)</td></tr>
-<tr class="memdesc:a6ffa1a438fcff05adfd40407c53914ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conjugate gradient squared method.  <a href="#a6ffa1a438fcff05adfd40407c53914ff">更多...</a><br /></td></tr>
+<tr class="memdesc:a6ffa1a438fcff05adfd40407c53914ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conjugate gradient squared method.  <a href="lcg_8cpp.html#a6ffa1a438fcff05adfd40407c53914ff">更多...</a><br /></td></tr>
 <tr class="separator:a6ffa1a438fcff05adfd40407c53914ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7dc41a2a07b05c813f9f6fac3e1ab5e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#ad7dc41a2a07b05c813f9f6fac3e1ab5e">lbicgstab</a> (<a class="el" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a> Afp, <a class="el" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a> Pfp, <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *m, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *B, const int n_size, const <a class="el" href="structlcg__para.html">lcg_para</a> *param, void *instance, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *P)</td></tr>
-<tr class="memdesc:ad7dc41a2a07b05c813f9f6fac3e1ab5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Biconjugate gradient method.  <a href="#ad7dc41a2a07b05c813f9f6fac3e1ab5e">更多...</a><br /></td></tr>
+<tr class="memdesc:ad7dc41a2a07b05c813f9f6fac3e1ab5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Biconjugate gradient method.  <a href="lcg_8cpp.html#ad7dc41a2a07b05c813f9f6fac3e1ab5e">更多...</a><br /></td></tr>
 <tr class="separator:ad7dc41a2a07b05c813f9f6fac3e1ab5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd865c9b36b2157a59ca6873e9f708c3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#acd865c9b36b2157a59ca6873e9f708c3">lbicgstab2</a> (<a class="el" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a> Afp, <a class="el" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a> Pfp, <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *m, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *B, const int n_size, const <a class="el" href="structlcg__para.html">lcg_para</a> *param, void *instance, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *P)</td></tr>
-<tr class="memdesc:acd865c9b36b2157a59ca6873e9f708c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Biconjugate gradient method 2.  <a href="#acd865c9b36b2157a59ca6873e9f708c3">更多...</a><br /></td></tr>
+<tr class="memdesc:acd865c9b36b2157a59ca6873e9f708c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Biconjugate gradient method 2.  <a href="lcg_8cpp.html#acd865c9b36b2157a59ca6873e9f708c3">更多...</a><br /></td></tr>
 <tr class="separator:acd865c9b36b2157a59ca6873e9f708c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d3eb4595fc2c3d6830c5c5fbe130ae9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9">lcg_solver</a> (<a class="el" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a> Afp, <a class="el" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a> Pfp, <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *m, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *B, const int n_size, const <a class="el" href="structlcg__para.html">lcg_para</a> *param, void *instance, <a class="el" href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a> solver_id, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *P)</td></tr>
-<tr class="memdesc:a5d3eb4595fc2c3d6830c5c5fbe130ae9"><td class="mdescLeft">&#160;</td><td class="mdescRight">A combined conjugate gradient solver function.  <a href="#a5d3eb4595fc2c3d6830c5c5fbe130ae9">更多...</a><br /></td></tr>
+<tr class="memdesc:a5d3eb4595fc2c3d6830c5c5fbe130ae9"><td class="mdescLeft">&#160;</td><td class="mdescRight">A combined conjugate gradient solver function.  <a href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9">更多...</a><br /></td></tr>
 <tr class="separator:a5d3eb4595fc2c3d6830c5c5fbe130ae9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a927fd55908422a7132e30304d36ba5d8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#a927fd55908422a7132e30304d36ba5d8">lcg_pg</a> (<a class="el" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a> Afp, <a class="el" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a> Pfp, <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *m, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *B, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *low, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *hig, const int n_size, const <a class="el" href="structlcg__para.html">lcg_para</a> *param, void *instance)</td></tr>
+<tr class="memdesc:a927fd55908422a7132e30304d36ba5d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conjugate gradient method with projected gradient for inequality constraints.  <a href="lcg_8cpp.html#a927fd55908422a7132e30304d36ba5d8">更多...</a><br /></td></tr>
+<tr class="separator:a927fd55908422a7132e30304d36ba5d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2b18a78c6bc55add47bf1b1d566d7a0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#af2b18a78c6bc55add47bf1b1d566d7a0">lcg_spg</a> (<a class="el" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a> Afp, <a class="el" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a> Pfp, <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *m, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *B, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *low, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *hig, const int n_size, const <a class="el" href="structlcg__para.html">lcg_para</a> *param, void *instance)</td></tr>
+<tr class="memdesc:af2b18a78c6bc55add47bf1b1d566d7a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conjugate gradient method with projected gradient for inequality constraints.  <a href="lcg_8cpp.html#af2b18a78c6bc55add47bf1b1d566d7a0">更多...</a><br /></td></tr>
+<tr class="separator:af2b18a78c6bc55add47bf1b1d566d7a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7591a5f664156e765533e5070a666b12"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg_8cpp.html#a7591a5f664156e765533e5070a666b12">lcg_solver</a> (<a class="el" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a> Afp, <a class="el" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a> Pfp, <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *m, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *B, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *low, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *hig, const int n_size, const <a class="el" href="structlcg__para.html">lcg_para</a> *param, void *instance, <a class="el" href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a> solver_id)</td></tr>
+<tr class="memdesc:a7591a5f664156e765533e5070a666b12"><td class="mdescLeft">&#160;</td><td class="mdescRight">A combined conjugate gradient solver function with inequality constraints.  <a href="lcg_8cpp.html#a7591a5f664156e765533e5070a666b12">更多...</a><br /></td></tr>
+<tr class="separator:a7591a5f664156e765533e5070a666b12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">宏定义说明</h2>
 <a id="a9b5f0f88eb0f6f4f5977f9f1fac57d19"></a>
@@ -204,6 +229,127 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html','');});
 
 </div>
 </div>
+<a id="aec408c7e28071f5c37966fb012d0d5fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec408c7e28071f5c37966fb012d0d5fb">&#9670;&nbsp;</a></span>lcg_max</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define lcg_max</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">a, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">b&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;(a&gt;b?a:b)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>return the bigger value </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>input value </td></tr>
+    <tr><td class="paramname">b</td><td>another input value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>the bigger value </dd></dl>
+
+</div>
+</div>
+<a id="aa123c493d8017c2db1152f34db00880d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa123c493d8017c2db1152f34db00880d">&#9670;&nbsp;</a></span>lcg_min</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define lcg_min</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">a, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">b&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;(a&lt;b?a:b)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>return the smaller value </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>input value </td></tr>
+    <tr><td class="paramname">b</td><td>another input value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>the smaller value </dd></dl>
+
+</div>
+</div>
+<a id="a3e24be8677d4ff564d4e4ce3335b3166"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e24be8677d4ff564d4e4ce3335b3166">&#9670;&nbsp;</a></span>lcg_set2box</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define lcg_set2box</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">a, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">b, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">in&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;(<a class="el" href="lcg_8cpp.html#aec408c7e28071f5c37966fb012d0d5fb">lcg_max</a>(a, <a class="el" href="lcg_8cpp.html#aa123c493d8017c2db1152f34db00880d">lcg_min</a>(b, in)))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the input value within a box constraint </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>low boundary </td></tr>
+    <tr><td class="paramname">b</td><td>high boundary </td></tr>
+    <tr><td class="paramname">in</td><td>input value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>box constrained value </dd></dl>
+
+</div>
+</div>
 <h2 class="groupheader">类型定义说明</h2>
 <a id="ab2e7e76629283814614dd3ea4202f66e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab2e7e76629283814614dd3ea4202f66e">&#9670;&nbsp;</a></span>lcg_solver_ptr</h2>
@@ -226,7 +372,40 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html','');});
     <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function. ">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>Status of the function. </dd></dl>
+
+</div>
+</div>
+<a id="abda0052b423e0683d33289f549a34802"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abda0052b423e0683d33289f549a34802">&#9670;&nbsp;</a></span>lcg_solver_ptr2</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef int(* lcg_solver_ptr2) (<a class="el" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a> Afp, <a class="el" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a> Pfp, <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *m, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *B, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *low, const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *hig, const int n_size, const <a class="el" href="structlcg__para.html">lcg_para</a> *param, void *instance)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A combined conjugate gradient solver function. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">Afp</td><td>Callback function for calculating the product of 'Ax'. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Pfp</td><td>Callback function for monitoring the iteration progress. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">m</td><td>Initial solution vector. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">low</td><td>The lower boundary of the acceptable solution. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hig</td><td>The higher boundary of the acceptable solution. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">solver_id</td><td>Solver type used to solve the linear system. The default value is LCG_CGS. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
   </table>
   </dd>
@@ -248,7 +427,7 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html','');});
       </table>
 </div><div class="memdoc">
 
-<p>return value of the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function. ">lcg_solver()</a> function </p>
+<p>return value of the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function </p>
 <table class="fieldtable">
 <tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a32a9bf0edbe7dd63342da1a56038166e"></a>LCG_SUCCESS&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81aa3247f00ca027f1ac9cd7b9b8dd69b67"></a>LCG_CONVERGENCE&#160;</td><td class="fielddoc"></td></tr>
@@ -262,6 +441,11 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html','');});
 <tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81ae5f6ce62bb4d6aba69ecce84750f0d0e"></a>LCG_REACHED_MAX_ITERATIONS&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a13620b4ffef894ee83310ed42aa83eef"></a>LCG_NULL_PRECONDITION_MATRIX&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a1f2ed35558627d6b93931677c40531a3"></a>LCG_NAN_VALUE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a62822fc57a40064b6ddc96bac4881544"></a>LCG_INVALID_POINTER&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81aa7949f9d6aec19191f5d43fcb2f9f93a"></a>LCG_INVALID_LAMBDA&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a638e748add2522474dfe4bb0fcc9cffa"></a>LCG_INVALID_SIGMA&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81af31d49d816004939ae08e12441c50fd2"></a>LCG_INVALID_BETA&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a776c14ddb174249eeaa71b184b366151"></a>LCG_INVALID_MAXIM&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -338,7 +522,7 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html','');});
     <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function. ">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
   </table>
   </dd>
@@ -418,7 +602,7 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html','');});
     <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function. ">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
   </table>
   </dd>
@@ -498,7 +682,7 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html','');});
     <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function. ">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
   </table>
   </dd>
@@ -522,9 +706,9 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html','');});
       </table>
 </div><div class="memdoc">
 
-<p>Return a <a class="el" href="structlcg__para.html" title="Parameters of the conjugate gradient methods. ">lcg_para</a> type instance with default values. </p>
+<p>Return a <a class="el" href="structlcg__para.html" title="Parameters of the conjugate gradient methods.">lcg_para</a> type instance with default values. </p>
 <p>Users can use this function to get default parameters' value for the conjugate gradient methods.</p>
-<dl class="section return"><dt>返回</dt><dd>A <a class="el" href="structlcg__para.html" title="Parameters of the conjugate gradient methods. ">lcg_para</a> type instance. </dd></dl>
+<dl class="section return"><dt>返回</dt><dd>A <a class="el" href="structlcg__para.html" title="Parameters of the conjugate gradient methods.">lcg_para</a> type instance. </dd></dl>
 
 </div>
 </div>
@@ -544,10 +728,10 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html','');});
       </table>
 </div><div class="memdoc">
 
-<p>Return a string explanation for the <a class="el" href="lcg_8h.html#a618c2554bf309b8a3d1257915772eec0" title="A combined conjugate gradient solver function. ">lcg_solver()</a> function's return values. </p>
+<p>Return a string explanation for the <a class="el" href="lcg_8h.html#a618c2554bf309b8a3d1257915772eec0" title="A combined conjugate gradient solver function.">lcg_solver()</a> function's return values. </p>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">er_index</td><td>The error index returned by the <a class="el" href="lcg_8h.html#a618c2554bf309b8a3d1257915772eec0" title="A combined conjugate gradient solver function. ">lcg_solver()</a> function.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">er_index</td><td>The error index returned by the <a class="el" href="lcg_8h.html#a618c2554bf309b8a3d1257915772eec0" title="A combined conjugate gradient solver function.">lcg_solver()</a> function.</td></tr>
   </table>
   </dd>
 </dl>
@@ -608,8 +792,97 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html','');});
 
 </div>
 </div>
+<a id="a927fd55908422a7132e30304d36ba5d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a927fd55908422a7132e30304d36ba5d8">&#9670;&nbsp;</a></span>lcg_pg()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int lcg_pg </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a>&#160;</td>
+          <td class="paramname"><em>Afp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a>&#160;</td>
+          <td class="paramname"><em>Pfp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>B</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>hig</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>n_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structlcg__para.html">lcg_para</a> *&#160;</td>
+          <td class="paramname"><em>param</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>instance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Conjugate gradient method with projected gradient for inequality constraints. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">Afp</td><td>Callback function for calculating the product of 'Ax'. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Pfp</td><td>Callback function for monitoring the iteration progress. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">m</td><td>Initial solution vector. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">low</td><td>The lower boundary of the acceptable solution. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hig</td><td>The higher boundary of the acceptable solution. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">solver_id</td><td>Solver type used to solve the linear system. The default value is LCG_CGS. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>Status of the function. </dd></dl>
+
+</div>
+</div>
 <a id="a5d3eb4595fc2c3d6830c5c5fbe130ae9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d3eb4595fc2c3d6830c5c5fbe130ae9">&#9670;&nbsp;</a></span>lcg_solver()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d3eb4595fc2c3d6830c5c5fbe130ae9">&#9670;&nbsp;</a></span>lcg_solver() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -685,7 +958,191 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html','');});
     <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8h.html#a618c2554bf309b8a3d1257915772eec0" title="A combined conjugate gradient solver function. ">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8h.html#a618c2554bf309b8a3d1257915772eec0" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">solver_id</td><td>Solver type used to solve the linear system. The default value is LCG_CGS. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>Status of the function. </dd></dl>
+
+</div>
+</div>
+<a id="a7591a5f664156e765533e5070a666b12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7591a5f664156e765533e5070a666b12">&#9670;&nbsp;</a></span>lcg_solver() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int lcg_solver </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a>&#160;</td>
+          <td class="paramname"><em>Afp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a>&#160;</td>
+          <td class="paramname"><em>Pfp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>B</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>hig</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>n_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structlcg__para.html">lcg_para</a> *&#160;</td>
+          <td class="paramname"><em>param</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a>&#160;</td>
+          <td class="paramname"><em>solver_id</em> = <code><a class="el" href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a0da166a7b3f85cc3a16baae92395a62d">LCG_PG</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A combined conjugate gradient solver function with inequality constraints. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">Afp</td><td>Callback function for calculating the product of 'Ax'. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Pfp</td><td>Callback function for monitoring the iteration progress. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">m</td><td>Initial solution vector. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">low</td><td>The lower boundary of the acceptable solution. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hig</td><td>The higher boundary of the acceptable solution. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8h.html#a618c2554bf309b8a3d1257915772eec0" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">solver_id</td><td>Solver type used to solve the linear system. The default value is LCG_CGS. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>Status of the function. </dd></dl>
+
+</div>
+</div>
+<a id="af2b18a78c6bc55add47bf1b1d566d7a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2b18a78c6bc55add47bf1b1d566d7a0">&#9670;&nbsp;</a></span>lcg_spg()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int lcg_spg </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a>&#160;</td>
+          <td class="paramname"><em>Afp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a>&#160;</td>
+          <td class="paramname"><em>Pfp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>B</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>hig</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>n_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structlcg__para.html">lcg_para</a> *&#160;</td>
+          <td class="paramname"><em>param</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>instance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Conjugate gradient method with projected gradient for inequality constraints. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">Afp</td><td>Callback function for calculating the product of 'Ax'. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Pfp</td><td>Callback function for monitoring the iteration progress. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">m</td><td>Initial solution vector. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">low</td><td>The lower boundary of the acceptable solution. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hig</td><td>The higher boundary of the acceptable solution. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">solver_id</td><td>Solver type used to solve the linear system. The default value is LCG_CGS. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
   </table>
@@ -767,7 +1224,7 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html','');});
     <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function. ">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
   </table>
   </dd>
@@ -848,7 +1305,7 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html','');});
     <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function. ">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
   </table>
   </dd>
@@ -865,7 +1322,7 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html','');});
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li><li class="navelem"><a class="el" href="lcg_8cpp.html">lcg.cpp</a></li>
     <li class="footer">制作者
     <a href="http://www.doxygen.org/index.html">
-    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>
 </div>
 </body>

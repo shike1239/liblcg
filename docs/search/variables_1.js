@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['epsilon',['epsilon',['../structlcg__para.html#aa67ce230d9611ba0db3facda29851f56',1,'lcg_para']]]
+  ['beta_78',['beta',['../structlcg__para.html#a579674af789ee65aab2bf4f606df3bdf',1,'lcg_para']]]
 ];

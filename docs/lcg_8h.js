@@ -9,11 +9,14 @@ var lcg_8h =
       [ "LCG_PCG", "lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a883bb6d23fbf342404921510838cc921", null ],
       [ "LCG_CGS", "lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1acc5dd438a153e97dc12881d78f9023e6", null ],
       [ "LCG_BICGSTAB", "lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1aad28288f368765535f046e9cd47c9827", null ],
-      [ "LCG_BICGSTAB2", "lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a91f1452bb812869a8dcb50fbe0e60ca4", null ]
+      [ "LCG_BICGSTAB2", "lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a91f1452bb812869a8dcb50fbe0e60ca4", null ],
+      [ "LCG_PG", "lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a0da166a7b3f85cc3a16baae92395a62d", null ],
+      [ "LCG_SPG", "lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a742a59eb85b7fe90ed34e348da29ce0b", null ]
     ] ],
     [ "lcg_default_parameters", "lcg_8h.html#ae709a311e61bd35843a9f4333c38ab18", null ],
     [ "lcg_error_str", "lcg_8h.html#a7d76a821bc6ddd804abaf1974e5d7583", null ],
     [ "lcg_free", "lcg_8h.html#a51d9b69c6afbba37a48470b4e1db4739", null ],
     [ "lcg_malloc", "lcg_8h.html#ad4d1ad1663815eb1214f7683acfd1cbe", null ],
-    [ "lcg_solver", "lcg_8h.html#a618c2554bf309b8a3d1257915772eec0", null ]
+    [ "lcg_solver", "lcg_8h.html#a618c2554bf309b8a3d1257915772eec0", null ],
+    [ "lcg_solver", "lcg_8h.html#a860a6d6e3b54ad6a711a9ce593ff442c", null ]
 ];
