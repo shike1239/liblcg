@@ -51,36 +51,24 @@
  */
 enum lcg_return_enum
 {
-	LCG_SUCCESS = 0,
-	LCG_CONVERGENCE = 0,
-	LCG_STOP, //1
-	LCG_ALREADY_OPTIMIZIED, //2
+	LCG_SUCCESS = 0, ///< The solver function terminated successfully.
+	LCG_CONVERGENCE = 0, ///< The iteration reached convergence.
+	LCG_STOP, ///< The iteration is stopped by the monitoring function.
+	LCG_ALREADY_OPTIMIZIED, ///< The initial solution is already optimized.
 	// A negative number means a error
-	LCG_UNKNOWN_ERROR = -1024,
-	// The variable size is negative
-	LCG_INVILAD_VARIABLE_SIZE, //-1023
-	// The maximal iteration times is negative.
-	LCG_INVILAD_MAX_ITERATIONS, //-1022
-	// The epsilon is negative.
-	LCG_INVILAD_EPSILON, //-1021
-	// The restart epsilon is negative
-	LCG_INVILAD_RESTART_EPSILON,
-	// Iteration reached max limit
-	LCG_REACHED_MAX_ITERATIONS,
-	// Null precondition matrix
-	LCG_NULL_PRECONDITION_MATRIX,
-	// Nan value
-	LCG_NAN_VALUE,
-	// Invalid pointer
-	LCG_INVALID_POINTER,
-	// Invalid range for lambda
-	LCG_INVALID_LAMBDA,
-	// Invalid range for sigma
-	LCG_INVALID_SIGMA,
-	// Invalid range for beta
-	LCG_INVALID_BETA,
-	// Invalid range for maxi_m
-	LCG_INVALID_MAXIM,
+	LCG_UNKNOWN_ERROR = -1024, ///< Unknown error.
+	LCG_INVILAD_VARIABLE_SIZE, ///< The variable size is negative
+	LCG_INVILAD_MAX_ITERATIONS, ///< The maximal iteration times is negative.
+	LCG_INVILAD_EPSILON, ///< The epsilon is negative.
+	LCG_INVILAD_RESTART_EPSILON, ///< The restart epsilon is negative.
+	LCG_REACHED_MAX_ITERATIONS, ///< Iteration reached maximal limit.
+	LCG_NULL_PRECONDITION_MATRIX, ///< Null precondition matrix.
+	LCG_NAN_VALUE, ///< Nan value.
+	LCG_INVALID_POINTER, ///< Invalid pointer.
+	LCG_INVALID_LAMBDA, ///< Invalid range for lambda.
+	LCG_INVALID_SIGMA, ///< Invalid range for sigma.
+	LCG_INVALID_BETA, ///< Invalid range for beta.
+	LCG_INVALID_MAXIM, ///< Invalid range for maxi_m.
 };
 
 /**
