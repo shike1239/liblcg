@@ -91,7 +91,9 @@ typedef int (*lcg_progress_ptr)(void* instance, const lcg_float* m, const lcg_fl
 2. LCG_PCG：预优共轭梯度算法；
 3. LCG_CGS：共轭梯度平方算法；
 4. LCG_BICGSTAB：双稳共轭梯度算法；
-5. LCG_BICGSTAB2: 双稳共轭梯度算法（带重启功能）。
+5. LCG_BICGSTAB2: 双稳共轭梯度算法（带重启功能）；
+6. LCG_PG: BB步投影梯度算法；
+7. LCG_SPG: SPG2投影梯度算法。
 
 无约束求解函数的参数形式如下：
 
