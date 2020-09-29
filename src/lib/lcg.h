@@ -26,6 +26,13 @@
 #ifndef _LCG_H
 #define _LCG_H
 
+#ifdef __cplusplus
+extern "C"
+{
+
+#include "stddef.h"
+#endif
+
 /**
  * @brief      A simple definition of the float type we use here. 
  * Easy to change in the future. Right now it is just an alias of double
@@ -35,7 +42,7 @@ typedef double lcg_float;
 /**
  * @brief      Types of method that could be recognized by the lcg_solver() function.
  */
-enum lcg_solver_enum
+typedef enum
 {
 	/**
 	 * Conjugate gradient method.
@@ -67,12 +74,12 @@ enum lcg_solver_enum
 	 * This algorithm comes with non-monotonic linear search for the step length.
 	 */
 	LCG_SPG,
-};
+} lcg_solver_enum;
 
 /**
  * @brief      Parameters of the conjugate gradient methods.
  */
-struct lcg_para
+typedef struct
 {
 	/**
 	 * Maximal iteration times. The default value is 100. one adjust this parameter 
@@ -97,7 +104,7 @@ struct lcg_para
 	 * The AMD based method will be used if this variable is set to true. This parameter is only 
 	 * applied to the non-constrained methods.
 	 */
-	bool abs_diff;
+	int abs_diff;
 
 	/**
 	 * Restart epsilon for the LCG_BICGSTAB2 algorithm. The default value is 1e-6
@@ -127,7 +134,7 @@ struct lcg_para
 	 * The default value is 10.
 	 */
 	int maxi_m;
-};
+} lcg_para;
 
 /**
  * @brief  Callback interface for calculating the product of a N*N matrix 'A' multiplied 
@@ -209,7 +216,7 @@ const char* lcg_error_str(int er_index);
  * @return     Status of the function.
  */
 int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const int n_size, 
-	const lcg_para* param, void* instance, lcg_solver_enum solver_id = LCG_CGS, const lcg_float* P = nullptr);
+	const lcg_para* param, void* instance, lcg_solver_enum solver_id = LCG_CGS, const lcg_float* P = NULL);
 
 /**
  * @brief      A combined conjugate gradient solver function with inequality constraints.
@@ -229,8 +236,12 @@ int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
  *
  * @return     Status of the function.
  */
-int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
+int lcg_solver_constrained(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
 	const lcg_float* low, const lcg_float *hig, const int n_size, const lcg_para* param, 
 	void* instance, lcg_solver_enum solver_id = LCG_PG);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //_LCG_H

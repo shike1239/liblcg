@@ -84,8 +84,8 @@ lcg_float* lcg_malloc(const int n)
 
 void lcg_free(lcg_float* x)
 {
-	if (x != nullptr) delete[] x;
-	x = nullptr;
+	if (x != NULL) delete[] x;
+	x = NULL;
 	return;
 }
 
@@ -223,7 +223,7 @@ int lcg_spg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_fl
 	const lcg_float* low, const lcg_float* hig, const int n_size, const lcg_para* param, 
 	void* instance);
 
-int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
+int lcg_solver_constrained(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
 	const lcg_float* low, const lcg_float *hig, const int n_size, const lcg_para* param, 
 	void* instance, lcg_solver_enum solver_id)
 {
@@ -264,18 +264,18 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
 	const lcg_para* param, void* instance, const lcg_float* P)
 {
 	// set CG parameters
-	lcg_para para = (param != nullptr) ? (*param) : defparam;
+	lcg_para para = (param != NULL) ? (*param) : defparam;
 
 	//check parameters
 	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
 	if (para.max_iterations <= 0) return LCG_INVILAD_MAX_ITERATIONS;
 	if (para.epsilon <= 0.0) return LCG_INVILAD_EPSILON;
 
-	if (m == nullptr) return LCG_INVALID_POINTER;
-	if (B == nullptr) return LCG_INVALID_POINTER;
+	if (m == NULL) return LCG_INVALID_POINTER;
+	if (B == NULL) return LCG_INVALID_POINTER;
 
 	// locate memory
-	lcg_float *gk = nullptr, *dk = nullptr, *Adk = nullptr;
+	lcg_float *gk = NULL, *dk = NULL, *Adk = NULL;
 	gk = lcg_malloc(n_size);
 	dk = lcg_malloc(n_size);
 	Adk = lcg_malloc(n_size);
@@ -313,13 +313,13 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
 #endif
 			}
 			gk_abs /= 1.0*n_size;
-			if (Pfp != nullptr)
+			if (Pfp != NULL)
 				if (Pfp(instance, m, gk_abs, &para, n_size, time)) return LCG_STOP;
 			if (gk_abs <= para.epsilon) return LCG_CONVERGENCE;
 		}
 		else
 		{
-			if (Pfp != nullptr)
+			if (Pfp != NULL)
 				if (Pfp(instance, m, gk_mod/B_mod, &para, n_size, time)) return LCG_STOP;
 			if (gk_mod/B_mod <= para.epsilon) return LCG_CONVERGENCE;
 		}
@@ -390,20 +390,20 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 	const lcg_para* param, void* instance, const lcg_float* P)
 {
 	// set CG parameters
-	lcg_para para = (param != nullptr) ? (*param) : defparam;
+	lcg_para para = (param != NULL) ? (*param) : defparam;
 
 	//check parameters
 	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
 	if (para.max_iterations <= 0) return LCG_INVILAD_MAX_ITERATIONS;
 	if (para.epsilon <= 0.0) return LCG_INVILAD_EPSILON;
 
-	if (m == nullptr) return LCG_INVALID_POINTER;
-	if (B == nullptr) return LCG_INVALID_POINTER;
-	if (P == nullptr) return LCG_NULL_PRECONDITION_MATRIX;
+	if (m == NULL) return LCG_INVALID_POINTER;
+	if (B == NULL) return LCG_INVALID_POINTER;
+	if (P == NULL) return LCG_NULL_PRECONDITION_MATRIX;
 
 	// locate memory
-	lcg_float *rk = nullptr, *zk = nullptr;
-	lcg_float *dk = nullptr, *Adk = nullptr;
+	lcg_float *rk = NULL, *zk = NULL;
+	lcg_float *dk = NULL, *Adk = NULL;
 
 	rk = lcg_malloc(n_size); zk = lcg_malloc(n_size);
 	dk = lcg_malloc(n_size); Adk = lcg_malloc(n_size);
@@ -447,13 +447,13 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 #endif
 			}
 			rk_mod /= 1.0*n_size;
-			if (Pfp != nullptr)
+			if (Pfp != NULL)
 				if (Pfp(instance, m, rk_mod, &para, n_size, time)) return LCG_STOP;
 			if (rk_mod <= para.epsilon) return LCG_CONVERGENCE;
 		}
 		else
 		{
-			if (Pfp != nullptr)
+			if (Pfp != NULL)
 				if (Pfp(instance, m, zTr/B_mod, &para, n_size, time)) return LCG_STOP;
 			if (zTr/B_mod <= para.epsilon) return LCG_CONVERGENCE;
 		}
@@ -525,19 +525,19 @@ int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 	const lcg_para* param, void* instance, const lcg_float* P)
 {
 	// set CGS parameters
-	lcg_para para = (param != nullptr) ? (*param) : defparam;
+	lcg_para para = (param != NULL) ? (*param) : defparam;
 
 	//check parameters
 	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
 	if (para.max_iterations <= 0) return LCG_INVILAD_MAX_ITERATIONS;
 	if (para.epsilon <= 0.0) return LCG_INVILAD_EPSILON;
 
-	if (m == nullptr) return LCG_INVALID_POINTER;
-	if (B == nullptr) return LCG_INVALID_POINTER;
+	if (m == NULL) return LCG_INVALID_POINTER;
+	if (B == NULL) return LCG_INVALID_POINTER;
 
 	int i;
-	lcg_float *rk = nullptr, *r0_T = nullptr, *pk = nullptr;
-	lcg_float *Ax = nullptr, *uk = nullptr,   *qk = nullptr, *wk = nullptr;
+	lcg_float *rk = NULL, *r0_T = NULL, *pk = NULL;
+	lcg_float *Ax = NULL, *uk = NULL,   *qk = NULL, *wk = NULL;
 	rk   = lcg_malloc(n_size); r0_T = lcg_malloc(n_size);
 	pk   = lcg_malloc(n_size); Ax  = lcg_malloc(n_size);
 	uk   = lcg_malloc(n_size); qk   = lcg_malloc(n_size);
@@ -588,13 +588,13 @@ int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 #endif
 			}
 			rk_abs /= 1.0*n_size;
-			if (Pfp != nullptr)
+			if (Pfp != NULL)
 				if (Pfp(instance, m, rk_abs, &para, n_size, time)) return LCG_STOP;
 			if (rk_abs <= para.epsilon) return LCG_CONVERGENCE;
 		}
 		else
 		{
-			if (Pfp != nullptr)
+			if (Pfp != NULL)
 				if (Pfp(instance, m, rk_mod/B_mod, &para, n_size, time)) return LCG_STOP;
 			if (rk_mod/B_mod <= para.epsilon) return LCG_CONVERGENCE;
 		}
@@ -674,19 +674,19 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
 	const lcg_para* param, void* instance, const lcg_float* P)
 {
 	// set CGS parameters
-	lcg_para para = (param != nullptr) ? (*param) : defparam;
+	lcg_para para = (param != NULL) ? (*param) : defparam;
 
 	//check parameters
 	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
 	if (para.max_iterations <= 0) return LCG_INVILAD_MAX_ITERATIONS;
 	if (para.epsilon <= 0.0) return LCG_INVILAD_EPSILON;
 
-	if (m == nullptr) return LCG_INVALID_POINTER;
-	if (B == nullptr) return LCG_INVALID_POINTER;
+	if (m == NULL) return LCG_INVALID_POINTER;
+	if (B == NULL) return LCG_INVALID_POINTER;
 
 	int i;
-	lcg_float *rk = nullptr, *r0_T = nullptr, *pk = nullptr;
-	lcg_float *Ax = nullptr, *sk = nullptr, *Apk = nullptr;
+	lcg_float *rk = NULL, *r0_T = NULL, *pk = NULL;
+	lcg_float *Ax = NULL, *sk = NULL, *Apk = NULL;
 	rk = lcg_malloc(n_size); r0_T = lcg_malloc(n_size);
 	pk = lcg_malloc(n_size); Ax   = lcg_malloc(n_size);
 	sk = lcg_malloc(n_size); Apk  = lcg_malloc(n_size);
@@ -733,13 +733,13 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
 #endif
 			}
 			rk_abs /= 1.0*n_size;
-			if (Pfp != nullptr)
+			if (Pfp != NULL)
 				if (Pfp(instance, m, rk_abs, &para, n_size, time)) return LCG_STOP;
 			if (rk_abs <= para.epsilon) return LCG_CONVERGENCE;
 		}
 		else
 		{
-			if (Pfp != nullptr)
+			if (Pfp != NULL)
 				if (Pfp(instance, m, rk_mod/B_mod, &para, n_size, time)) return LCG_STOP;
 			if (rk_mod/B_mod <= para.epsilon) return LCG_CONVERGENCE;
 		}
@@ -830,7 +830,7 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 	const lcg_para* param, void* instance, const lcg_float* P)
 {
 	// set CGS parameters
-	lcg_para para = (param != nullptr) ? (*param) : defparam;
+	lcg_para para = (param != NULL) ? (*param) : defparam;
 
 	//check parameters
 	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
@@ -838,12 +838,12 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 	if (para.epsilon <= 0.0) return LCG_INVILAD_EPSILON;
 	if (para.restart_epsilon <= 0.0) return LCG_INVILAD_RESTART_EPSILON;
 
-	if (m == nullptr) return LCG_INVALID_POINTER;
-	if (B == nullptr) return LCG_INVALID_POINTER;
+	if (m == NULL) return LCG_INVALID_POINTER;
+	if (B == NULL) return LCG_INVALID_POINTER;
 
 	int i;
-	lcg_float *rk = nullptr, *r0_T = nullptr, *pk = nullptr;
-	lcg_float *Ax = nullptr, *sk = nullptr,   *Apk = nullptr;
+	lcg_float *rk = NULL, *r0_T = NULL, *pk = NULL;
+	lcg_float *Ax = NULL, *sk = NULL,   *Apk = NULL;
 	rk = lcg_malloc(n_size); r0_T = lcg_malloc(n_size);
 	pk = lcg_malloc(n_size); Ax   = lcg_malloc(n_size);
 	sk = lcg_malloc(n_size); Apk  = lcg_malloc(n_size);
@@ -890,13 +890,13 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 #endif
 			}
 			rk_abs /= 1.0*n_size;
-			if (Pfp != nullptr)
+			if (Pfp != NULL)
 				if (Pfp(instance, m, rk_abs, &para, n_size, time)) return LCG_STOP;
 			if (rk_abs <= para.epsilon) return LCG_CONVERGENCE;
 		}
 		else
 		{
-			if (Pfp != nullptr)
+			if (Pfp != NULL)
 				if (Pfp(instance, m, rk_mod/B_mod, &para, n_size, time)) return LCG_STOP;
 			if (rk_mod/B_mod <= para.epsilon) return LCG_CONVERGENCE;
 		}
@@ -928,7 +928,7 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 #endif
 			}
 			s_abs /= 1.0*n_size;
-			if (Pfp != nullptr)
+			if (Pfp != NULL)
 				if (Pfp(instance, m, s_abs, &para, n_size, time)) return LCG_STOP;
 			if (s_abs <= para.epsilon)
 			{
@@ -1042,7 +1042,7 @@ int lcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_flo
 	void* instance)
 {
 	// set CG parameters
-	lcg_para para = (param != nullptr) ? (*param) : defparam;
+	lcg_para para = (param != NULL) ? (*param) : defparam;
 
 	// check parameters
 	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
@@ -1050,15 +1050,15 @@ int lcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_flo
 	if (para.epsilon <= 0.0) return LCG_INVILAD_EPSILON;
 	if (para.lambda <= 0.0) return LCG_INVALID_LAMBDA;
 
-	if (m == nullptr) return LCG_INVALID_POINTER;
-	if (B == nullptr) return LCG_INVALID_POINTER;
-	if (low == nullptr) return LCG_INVALID_POINTER;
-	if (hig == nullptr) return LCG_INVALID_POINTER;
+	if (m == NULL) return LCG_INVALID_POINTER;
+	if (B == NULL) return LCG_INVALID_POINTER;
+	if (low == NULL) return LCG_INVALID_POINTER;
+	if (hig == NULL) return LCG_INVALID_POINTER;
 
 	// locate memory
-	lcg_float *gk = nullptr, *Adk = nullptr;
-	lcg_float *m_new = nullptr, *gk_new = nullptr;
-	lcg_float *sk = nullptr, *yk = nullptr;
+	lcg_float *gk = NULL, *Adk = NULL;
+	lcg_float *m_new = NULL, *gk_new = NULL;
+	lcg_float *sk = NULL, *yk = NULL;
 	gk = lcg_malloc(n_size);
 	Adk = lcg_malloc(n_size);
 	m_new = lcg_malloc(n_size);
@@ -1100,7 +1100,7 @@ int lcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_flo
 		}
 		p_mod = sqrt(p_mod);
 
-		if (Pfp != nullptr)
+		if (Pfp != NULL)
 			if (Pfp(instance, m, p_mod, &para, n_size, time)) return LCG_STOP;
 		if (p_mod <= para.epsilon) return LCG_CONVERGENCE;
 
@@ -1173,7 +1173,7 @@ int lcg_spg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_fl
 	void* instance)
 {
 	// set CG parameters
-	lcg_para para = (param != nullptr) ? (*param) : defparam;
+	lcg_para para = (param != NULL) ? (*param) : defparam;
 
 	// check parameters
 	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
@@ -1184,16 +1184,16 @@ int lcg_spg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_fl
 	if (para.beta <= 0.0 || para.beta >= 1.0) return LCG_INVALID_BETA;
 	if (para.maxi_m <= 0) return LCG_INVALID_MAXIM;
 
-	if (m == nullptr) return LCG_INVALID_POINTER;
-	if (B == nullptr) return LCG_INVALID_POINTER;
-	if (low == nullptr) return LCG_INVALID_POINTER;
-	if (hig == nullptr) return LCG_INVALID_POINTER;
+	if (m == NULL) return LCG_INVALID_POINTER;
+	if (B == NULL) return LCG_INVALID_POINTER;
+	if (low == NULL) return LCG_INVALID_POINTER;
+	if (hig == NULL) return LCG_INVALID_POINTER;
 
 	// locate memory
-	lcg_float *gk = nullptr, *Adk = nullptr;
-	lcg_float *m_new = nullptr, *gk_new = nullptr;
-	lcg_float *sk = nullptr, *yk = nullptr;
-	lcg_float *dk = nullptr, *qk_m = nullptr;
+	lcg_float *gk = NULL, *Adk = NULL;
+	lcg_float *m_new = NULL, *gk_new = NULL;
+	lcg_float *sk = NULL, *yk = NULL;
+	lcg_float *dk = NULL, *qk_m = NULL;
 	gk = lcg_malloc(n_size);
 	Adk = lcg_malloc(n_size);
 	m_new = lcg_malloc(n_size);
@@ -1251,7 +1251,7 @@ int lcg_spg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_fl
 		}
 		p_mod = sqrt(p_mod);
 
-		if (Pfp != nullptr)
+		if (Pfp != NULL)
 			if (Pfp(instance, m, p_mod, &para, n_size, time)) return LCG_STOP;
 		if (p_mod <= para.epsilon) return LCG_CONVERGENCE;
 

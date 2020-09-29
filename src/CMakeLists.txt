@@ -41,30 +41,17 @@ install(TARGETS lcg lcg_static
 # 头文件安装命令
 install(FILES lib/lcg.h DESTINATION include)
 
-# 添加可执行文件 命令行
-add_executable(lcg_sample sample/sample.cpp)
-# 为安装文件添加动态库的搜索地址
-set_target_properties(lcg_sample PROPERTIES INSTALL_RPATH "/usr/local/lib")
-# 链接动态库
-target_link_libraries(lcg_sample PUBLIC lcg)
+# 例子的编译方法
+macro(add_sample name file)
+	# 添加可执行文件 命令行
+	add_executable(${name} sample/${file}.cpp)
+	# 为安装文件添加动态库的搜索地址
+	set_target_properties(${name} PROPERTIES INSTALL_RPATH "/usr/local/lib")
+	# 链接动态库
+	target_link_libraries(${name} PUBLIC lcg)
+endmacro()
 
-# 添加可执行文件 命令行
-add_executable(lcg_sample2 sample/sample2.cpp)
-# 为安装文件添加动态库的搜索地址
-set_target_properties(lcg_sample2 PROPERTIES INSTALL_RPATH "/usr/local/lib")
-# 链接动态库
-target_link_libraries(lcg_sample2 PUBLIC lcg)
-
-# 添加可执行文件 命令行
-add_executable(lcg_sample3 sample/sample3.cpp)
-# 为安装文件添加动态库的搜索地址
-set_target_properties(lcg_sample3 PROPERTIES INSTALL_RPATH "/usr/local/lib")
-# 链接动态库
-target_link_libraries(lcg_sample3 PUBLIC lcg)
-
-# 添加可执行文件 命令行
-add_executable(lcg_sample4 sample/sample4.cpp)
-# 为安装文件添加动态库的搜索地址
-set_target_properties(lcg_sample4 PROPERTIES INSTALL_RPATH "/usr/local/lib")
-# 链接动态库
-target_link_libraries(lcg_sample4 PUBLIC lcg)
+add_sample(lcg_sample sample)
+add_sample(lcg_sample2 sample2)
+add_sample(lcg_sample3 sample3)
+add_sample(lcg_sample4 sample4)

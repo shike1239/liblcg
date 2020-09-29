@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.15.2)
 
 # 设置工程名称和语言
-project(LIBLCG LANGUAGES CXX)
+#project(LIBLCG LANGUAGES CXX)
+project(LIBLCG)
 
 # 设置库版本号
 set(VERSION_MAJOR 1)
