@@ -6,8 +6,8 @@ project(LIBLCG)
 
 # 设置库版本号
 set(VERSION_MAJOR 1)
-set(VERSION_MINOR 5)
-set(VERSION_PATCH 2)
+set(VERSION_MINOR 6)
+set(VERSION_PATCH 0)
 
 # 添加源文件地址
 add_subdirectory(src/)
