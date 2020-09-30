@@ -74,7 +74,7 @@ enum lcg_return_enum
 /**
  * Default parameter for conjugate gradient methods
  */
-static const lcg_para defparam = {100, 1e-6, false, 1e-6, 1.0, 0.95, 0.9, 10};
+static const lcg_para defparam = {100, 1e-6, 0, 1e-6, 1.0, 0.95, 0.9, 10};
 
 lcg_float* lcg_malloc(const int n)
 {
