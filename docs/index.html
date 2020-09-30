@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.15"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Liblcg: LCG说明文档</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
@@ -13,10 +13,6 @@
 <script type="text/javascript" src="resize.js"></script>
 <script type="text/javascript" src="navtreedata.js"></script>
 <script type="text/javascript" src="navtree.js"></script>
-<script type="text/javascript">
-/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-  $(document).ready(initResizable);
-/* @license-end */</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -35,7 +31,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Liblcg
-   &#160;<span id="projectnumber">1.5</span>
+   &#160;<span id="projectnumber">1.6.0</span>
    </div>
    <div id="projectbrief">C++ Library of Linear Conjugate Gradient Methods</div>
   </td>
@@ -59,7 +55,7 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.15 -->
+<!-- 制作者 Doxygen 1.8.18 -->
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
 var searchBox = new SearchBox("searchBox", "search",false,'搜索');
@@ -78,7 +74,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('index.html','');});
+$(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -101,22 +97,29 @@ $(document).ready(function(){initNavTree('index.html','');});
 <div class="title">LCG说明文档 </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>张壹（zhangyiss@icloud.com）</p>
+<div class="textblock"><p><a class="anchor" id="md_README"></a> 张壹（zhangyiss@icloud.com）</p>
 <p><em>浙江大学地球科学学院·地球物理研究所</em></p>
-<h2>简介</h2>
+<h1>简介</h1>
 <p>liblcg 是一个简单、高效的 C++ 线性共轭梯度算法库，其中包含了一般形式的共轭梯度算法、预优共轭梯度算法、共轭梯度平方算法、双稳共轭梯度算法、BB步共轭梯度投影法与SPG共轭梯度投影法。可用于求解如下形式的线性方程组：</p>
-<div class="fragment"><div class="line">Ax = B</div></div><!-- fragment --><p>其中，A 是一个 N 阶的方阵、x 为 N*1 的待求解的模型向量，B 为 N*1 的需拟合的目标向量。共轭梯度法广泛应用于无约束与约束的线性最优化问题，拥有优良的收敛与计算效率。其中，共轭梯度法与预优共轭梯度法可用于求解A为对称形式的线性方程组，而共轭梯度平方法与双稳共轭梯度法可用于求解A为非对称形式的线性方程组。同时，两种投影梯度法可用于求解带不等式约束的线性最优化问题。</p>
-<h2>安装</h2>
+<div class="fragment"><div class="line">Ax = B</div>
+</div><!-- fragment --><p>其中，A 是一个 N 阶的方阵、x 为 N*1 的待求解的模型向量，B 为 N*1 的需拟合的目标向量。共轭梯度法广泛应用于无约束与约束的线性最优化问题，拥有优良的收敛与计算效率。其中，共轭梯度法与预优共轭梯度法可用于求解A为对称形式的线性方程组，而共轭梯度平方法与双稳共轭梯度法可用于求解A为非对称形式的线性方程组。同时，两种投影梯度法可用于求解带不等式约束的线性最优化问题。</p>
+<h1>安装</h1>
 <p>算法库默认使用 Cmake 编译工具进行编译，可在不同平台生成相应的可执行或工程文件。请用户自行下载安装 Cmake 软件后按如下方法进行编译。此方法适用于 MacOS 或 Linux 系统 （默认的编译器为 G++，用户可在 CMakeLists.txt 中自行修改编译器与安装地址），Windows 用户请使用 VS studio 等编译工具新建项目并拷贝 src/lib 文件夹下所有文件至新项目并编译动态库。</p>
-<div class="fragment"><div class="line">mkdir build</div><div class="line">cd build</div><div class="line">cmake ..</div><div class="line">make</div><div class="line">make install</div></div><!-- fragment --><p>算法库目前有两个可用的编译选项，分别为 LCG_FABS 和 LCG_OPENMP，默认值均为 ON。其中 LCG_FABS 表示是否使用算法库自带的绝对值计算方法。若此值为 OFF 则会使用标准的（cmath）绝对值计算方法。 LCG_OPENMP 为是否使用 OpenMP 对算法进行加速。若此值为 OFF 则表示不使用OpenMP。用户可以使用以下方式进行条件编译：</p>
-<div class="fragment"><div class="line">cmake .. -DLCG_FABS=OFF -DLCG_OPENMP=ON</div></div><!-- fragment --><p>用户也可以将算法库文件直接拷贝至自己的工程目录中编译使用。此时你需要拷贝的文件包含 src/lib 文件夹下的所有文件。</p>
-<h2>数据类型</h2>
+<div class="fragment"><div class="line">mkdir build</div>
+<div class="line">cd build</div>
+<div class="line">cmake ..</div>
+<div class="line">make</div>
+<div class="line">make install</div>
+</div><!-- fragment --><p>算法库目前有两个可用的编译选项，分别为 LCG_FABS 和 LCG_OPENMP，默认值均为 ON。其中 LCG_FABS 表示是否使用算法库自带的绝对值计算方法。若此值为 OFF 则会使用标准的（cmath）绝对值计算方法。 LCG_OPENMP 为是否使用 OpenMP 对算法进行加速。若此值为 OFF 则表示不使用OpenMP。用户可以使用以下方式进行条件编译：</p>
+<div class="fragment"><div class="line">cmake .. -DLCG_FABS=OFF -DLCG_OPENMP=ON</div>
+</div><!-- fragment --><p>用户也可以将算法库文件直接拷贝至自己的工程目录中编译使用。此时你需要拷贝的文件包含 src/lib 文件夹下的所有文件。</p>
+<h1>数据类型</h1>
 <ol type="1">
 <li>浮点类型 <code>lcg_float</code> 。目前只是简单的 <code>double</code> 类型的别名；</li>
 <li>枚举类型 <code>lcg_solver_enum</code> 包含了可用的共轭梯度类型。有 <code>LCG_CG</code>，<code>LCG_PCG</code>，<code>LCG_CGS</code>，<code>LCG_BICGSTAB</code>，<code>LCG_BICGSTAB2</code>，<code>LCG_PG</code>和<code>LCG_SPG</code>共7个。分别表示共轭梯度、预优共轭梯度、共轭梯度平方算法、两种双稳共轭梯度算法与两种投影梯度算法；</li>
 <li>结构体 <code><a class="el" href="structlcg__para.html" title="Parameters of the conjugate gradient methods.">lcg_para</a></code> 为共轭梯度参数类型。包含 <code>max_iterations</code>，<code>epsilon</code>，<code>abs_diff</code>，<code>restart_epsilon</code> 等变量，包含最大迭代次数、终止精度等条件变量。具体含义请见头文件内的注释。</li>
 </ol>
-<h2>头文件与函数接口</h2>
+<h1>头文件与函数接口</h1>
 <p>使用库函数需在源文件中包含头文件<code><a class="el" href="lcg_8h.html">lcg.h</a></code>，可用的函数接口包括</p>
 <ol type="1">
 <li><code>lcg_float* <a class="el" href="lcg_8h.html#ad4d1ad1663815eb1214f7683acfd1cbe" title="Locate memory for a lcg_float pointer type.">lcg_malloc(const int n)</a></code> 开辟数组空间；</li>
@@ -124,19 +127,21 @@ $(document).ready(function(){initNavTree('index.html','');});
 <li><code><a class="el" href="structlcg__para.html" title="Parameters of the conjugate gradient methods.">lcg_para</a> <a class="el" href="lcg_8cpp.html#ae709a311e61bd35843a9f4333c38ab18" title="Return a lcg_para type instance with default values.">lcg_default_parameters()</a></code> 返回一组默认的共轭梯度参数；</li>
 <li><code>const char* <a class="el" href="lcg_8h.html#a7d76a821bc6ddd804abaf1974e5d7583" title="Return a string explanation for the lcg_solver() function&#39;s return values.">lcg_error_str(int er_index)</a></code> 按照 <code><a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a></code> 函数的返回值显示可能的错误信息。</li>
 </ol>
-<h3>回调函数</h3>
-<h4>自定义Ax计算函数</h4>
+<h2>回调函数</h2>
+<h3>自定义Ax计算函数</h3>
 <p>通常我们在使用共轭梯度法求解线性方程组Ax=B时A的维度可能会很大，直接储存A将消耗大量的内存空间，因此一般并不直接计算并储存A而是在需要的时候计算Ax的乘积。因此用户在使用liblcg时需要定义Ax的计算函数。Ax计算函数的形式必须满足算法库定义的一般形式：</p>
-<div class="fragment"><div class="line"><span class="keyword">typedef</span> void (*<a class="code" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a>)(<span class="keywordtype">void</span>* instance, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* x, <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* prod_Ax, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size);</div></div><!-- fragment --><p>函数需定义4个参数，分别为：</p>
+<div class="fragment"><div class="line"><span class="keyword">typedef</span> void (*<a class="code" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a>)(<span class="keywordtype">void</span>* instance, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* x, <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* prod_Ax, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size);</div>
+</div><!-- fragment --><p>函数需定义4个参数，分别为：</p>
 <ol type="1">
 <li><code>void *instance</code> 传入的实例对象（无需使用）；</li>
 <li><code>const lcg_float *x</code> Ax计算中的x数组的指针；</li>
 <li><code>lcg_float *prod_Ax</code> Ax的乘积；</li>
 <li><code>const int n_size</code> 矩阵的大小。</li>
 </ol>
-<h4>自定义进程监控函数</h4>
+<h3>自定义进程监控函数</h3>
 <p>用户可用下面的模版创建函数来显示共轭梯度迭代中的参数，并可以在适当的情况下停止迭代的进程。具体地，当监控函数的返回值非0时迭代进程便会终止。</p>
-<div class="fragment"><div class="line"><span class="keyword">typedef</span> int (*<a class="code" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a>)(<span class="keywordtype">void</span>* instance, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> converge, <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a>* param, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> k);</div></div><!-- fragment --><p>函数需定义6个参数（你不需要全部使用它们），分别为：</p><ol type="1">
+<div class="fragment"><div class="line"><span class="keyword">typedef</span> int (*<a class="code" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a>)(<span class="keywordtype">void</span>* instance, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> converge, <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a>* param, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> k);</div>
+</div><!-- fragment --><p>函数需定义6个参数（你不需要全部使用它们），分别为：</p><ol type="1">
 <li><code>void* instance</code> 传入的实例对象（无需使用）；</li>
 <li><code>const lcg_float* m</code> 当前迭代的模型参数数组；</li>
 <li><code>const lcg_float converge</code> 当前迭代的目标值；</li>
@@ -144,7 +149,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <li><code>const int n_size</code> 模型数组的大小；</li>
 <li><code>const int k</code> 当前迭代的次数。</li>
 </ol>
-<h2>求解函数</h2>
+<h1>求解函数</h1>
 <p>用户在定义 Ax 计算函数与监控函数后即可调用求解函数 <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> 对线性方程组进行求解，同时提供初始解x与共轭梯度的B项（即拟合的对象）。如果使用预优方法还需要提供预优矩阵P项。目前可用的求解方法如下：</p>
 <ol type="1">
 <li>LCG_CG：共轭梯度算法；</li>
@@ -156,7 +161,8 @@ $(document).ready(function(){initNavTree('index.html','');});
 <li>LCG_SPG: SPG2投影梯度算法。</li>
 </ol>
 <p>无约束求解函数的参数形式如下：</p>
-<div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9">lcg_solver</a>(<a class="code" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a> Afp, <a class="code" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a> Pfp, <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* B, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a>* param, <span class="keywordtype">void</span>* instance, <a class="code" href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a> solver_id <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* P);</div></div><!-- fragment --><p>函数接收9个参数，分别为：</p><ol type="1">
+<div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9">lcg_solver</a>(<a class="code" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a> Afp, <a class="code" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a> Pfp, <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* B, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a>* param, <span class="keywordtype">void</span>* instance, <a class="code" href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a> solver_id <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* P);</div>
+</div><!-- fragment --><p>函数接收9个参数，分别为：</p><ol type="1">
 <li><code>lcg_axfunc_ptr Afp</code> 计算 Ax 的回调函数；</li>
 <li><code>lcg_progress_ptr Pfp</code> 监控迭代过程的回调函数（非必须，无需监控时使用 NULL 参数即可）；</li>
 <li><code>lcg_float* m</code> 模型参数数组，解得线性方程组的解也为这个数组；</li>
@@ -167,22 +173,292 @@ $(document).ready(function(){initNavTree('index.html','');});
 <li><code>int solver_id</code> 求解函数使用的求解方法，即上文中 LCG_CG 至 LCG_BICGSTAB2 五种方法，默认的求解方法为 LCG_CGS；</li>
 <li><code>const lcg_float* P</code> 预优矩阵，一般是一个N阶的对角阵，这里直接用一个一维数组表示。此参数只在求解方法为 LCG_PCG 时是必须的，其他情况下是一个默认值为 NULL 的参数。</li>
 </ol>
-<p>投影梯度算法的参数形式如下： </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9">lcg_solver</a>(<a class="code" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a> Afp, <a class="code" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a> Pfp, <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* B, </div><div class="line">  <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* low, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *hig, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a>* param, </div><div class="line">  <span class="keywordtype">void</span>* instance, <a class="code" href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a> solver_id);</div></div><!-- fragment --><p>函数接收10个参数，参数含义于无约束求解函数一致。除了：</p><ol type="1">
+<p>投影梯度算法的参数形式如下： </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code" href="lcg_8cpp.html#a976f01b2ab8c203b5a3bc069094509fd">lcg_solver_constrained</a>(<a class="code" href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a> Afp, <a class="code" href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a> Pfp, <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* B, </div>
+<div class="line">  <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* low, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *hig, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a>* param, </div>
+<div class="line">  <span class="keywordtype">void</span>* instance, <a class="code" href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a> solver_id);</div>
+</div><!-- fragment --><p>函数接收10个参数，参数含义与无约束求解函数一致。除了：</p><ol type="1">
 <li><code>lcg_float* low</code> 可取的参数范围的底界；</li>
-<li><code>lcg_float* hig</code> 可取的参数范围的顶界。</li>
+<li><code>lcg_float* hig</code> 可取的参数范围的顶界；</li>
+<li><code>int solver_id</code> 求解函数使用的求解方法，可选的类型包括 LCG_PG 与 LCG_SPG。默认类型为 LCG_PG。</li>
 </ol>
-<h2>示例</h2>
+<h1>示例</h1>
 <p>以下为一个简单的例子。我们使用 <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> 求解一个3*3的对称形式的线性方程组。其中 Ax 计算函数与监控函数均为类的成员函数。</p>
-<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="lcg_8h.html">lcg.h</a>&quot;</span>   </div><div class="line"><span class="preprocessor">#include &quot;iostream&quot;</span>   </div><div class="line"></div><div class="line"><span class="keyword">using</span> std::cout;</div><div class="line"><span class="keyword">using</span> std::clog;</div><div class="line"><span class="keyword">using</span> std::endl;</div><div class="line"></div><div class="line"><span class="keyword">class </span>TESTFUNC</div><div class="line">{</div><div class="line"><span class="keyword">public</span>:</div><div class="line">  TESTFUNC();</div><div class="line">  ~TESTFUNC();</div><div class="line">  <span class="keywordtype">void</span> Routine();</div><div class="line">  <span class="keyword">static</span> <span class="keywordtype">void</span> _Ax(<span class="keywordtype">void</span>* instance, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* a, <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* b, <span class="keyword">const</span> <span class="keywordtype">int</span> num)</div><div class="line">  {</div><div class="line">    <span class="keywordflow">return</span> reinterpret_cast&lt;TESTFUNC*&gt;(instance)-&gt;Ax(a, b, num);</div><div class="line">  }</div><div class="line">  <span class="keywordtype">void</span> Ax(<span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* a, <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* b, <span class="keyword">const</span> <span class="keywordtype">int</span> num); <span class="comment">//定义共轭梯度中Ax的算法</span></div><div class="line"></div><div class="line">  <span class="keyword">static</span> <span class="keywordtype">int</span> _Progress(<span class="keywordtype">void</span>* instance, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> converge, <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a> *param, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> k)</div><div class="line">  {</div><div class="line">    <span class="keywordflow">return</span> reinterpret_cast&lt;TESTFUNC*&gt;(instance)-&gt;Progress(m, converge, param, n_size, k);</div><div class="line">  }</div><div class="line">  <span class="keywordtype">int</span> Progress(<span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> converge, <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a> *param, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> k);</div><div class="line"><span class="keyword">private</span>:</div><div class="line">  <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m_;</div><div class="line">  <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* b_;</div><div class="line">  <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* p_;</div><div class="line">  <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> kernel_[3][3];</div><div class="line">};</div><div class="line"></div><div class="line">TESTFUNC::TESTFUNC()</div><div class="line">{</div><div class="line">  <span class="comment">// 测试线性方程组</span></div><div class="line">  <span class="comment">// 6.3*x1 + 3.9*x2 + 2.5*x3 = -2.37</span></div><div class="line">  <span class="comment">// 3.9*x1 + 1.2*x2 + 3.1*x3 = 5.82</span></div><div class="line">  <span class="comment">// 2.5*x1 + 3.1*x2 + 7.6*x3 = 5.21</span></div><div class="line">  <span class="comment">// 目标解 x1=1.2 x2=-3.7 x3=1.8</span></div><div class="line">  <span class="comment">// 注意根据共轭梯度法的要求 kernel是一个N阶对称阵</span></div><div class="line">  kernel_[0][0] = 6.3; kernel_[0][1] = 3.9; kernel_[0][2] = 2.5;</div><div class="line">  kernel_[1][0] = 3.9; kernel_[1][1] = 1.2; kernel_[1][2] = 3.1;</div><div class="line">  kernel_[2][0] = 2.5; kernel_[2][1] = 3.1; kernel_[2][2] = 7.6;</div><div class="line">  <span class="comment">// 初始解</span></div><div class="line">  m_ = <a class="code" href="lcg_8cpp.html#ad4d1ad1663815eb1214f7683acfd1cbe">lcg_malloc</a>(3); <span class="comment">// 开辟数组空间</span></div><div class="line">  m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;</div><div class="line">  <span class="comment">// 拟合目标值（含有一定的噪声）</span></div><div class="line">  b_ = <a class="code" href="lcg_8cpp.html#ad4d1ad1663815eb1214f7683acfd1cbe">lcg_malloc</a>(3);</div><div class="line">  b_[0] = -2.3723; b_[1] = 5.8201; b_[2] = 5.2065;</div><div class="line">  <span class="comment">// 测试预优矩阵 这里只是测试流程 预优矩阵值全为1 并没有什么作用</span></div><div class="line">  p_ = <a class="code" href="lcg_8cpp.html#ad4d1ad1663815eb1214f7683acfd1cbe">lcg_malloc</a>(3);</div><div class="line">  p_[0] = p_[1] = p_[2] = 1.0;</div><div class="line">}</div><div class="line"></div><div class="line">TESTFUNC::~TESTFUNC()</div><div class="line">{</div><div class="line">  <a class="code" href="lcg_8cpp.html#a51d9b69c6afbba37a48470b4e1db4739">lcg_free</a>(m_); <span class="comment">// 销毁数组使用的空间</span></div><div class="line">  <a class="code" href="lcg_8cpp.html#a51d9b69c6afbba37a48470b4e1db4739">lcg_free</a>(b_);</div><div class="line">  <a class="code" href="lcg_8cpp.html#a51d9b69c6afbba37a48470b4e1db4739">lcg_free</a>(p_);</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keywordtype">void</span> TESTFUNC::Ax(<span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* a, <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* b, <span class="keyword">const</span> <span class="keywordtype">int</span> num)</div><div class="line">{</div><div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; num; i++)</div><div class="line">  {</div><div class="line">    b[i] = 0.0;</div><div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; num; j++)</div><div class="line">    {</div><div class="line">      b[i] += kernel_[i][j]*a[j];</div><div class="line">    }</div><div class="line">  }</div><div class="line">  <span class="keywordflow">return</span>;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keywordtype">int</span> TESTFUNC::Progress(<span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> converge, <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a> *param, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> k)</div><div class="line">{</div><div class="line">  clog &lt;&lt; <span class="stringliteral">&quot;Iteration-times: &quot;</span> &lt;&lt; k &lt;&lt; <span class="stringliteral">&quot;\tconvergence: &quot;</span> &lt;&lt; converge &lt;&lt; endl;</div><div class="line">  <span class="keywordflow">if</span> (converge &gt; param-&gt;<a class="code" href="structlcg__para.html#aa67ce230d9611ba0db3facda29851f56">epsilon</a>) clog &lt;&lt; <span class="stringliteral">&quot;\033[1A\033[K&quot;</span>;</div><div class="line">  <span class="keywordflow">return</span> 0;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keywordtype">void</span> TESTFUNC::Routine()</div><div class="line">{</div><div class="line">  <a class="code" href="structlcg__para.html">lcg_para</a> self_para = <a class="code" href="lcg_8cpp.html#ae709a311e61bd35843a9f4333c38ab18">lcg_default_parameters</a>(); <span class="comment">// 得到一个值等于默认值的参数类型</span></div><div class="line">  self_para.<a class="code" href="structlcg__para.html#a945e14f1204dc4a68eacedc79600694b">max_iterations</a> = 10;</div><div class="line">  self_para.<a class="code" href="structlcg__para.html#a68761ab7e1b3c94a32c17e24a3f72e37">abs_diff</a> = <span class="keyword">true</span>;</div><div class="line"></div><div class="line">  <span class="comment">// 使用LCG_CG求解 </span></div><div class="line">  <span class="keywordtype">int</span> ret = <a class="code" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9">lcg_solver</a>(_Ax, _Progress, m_, b_, 3, &amp;self_para, <span class="keyword">this</span>, <a class="code" href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">LCG_CG</a>);</div><div class="line">  <span class="keywordflow">if</span> (ret &lt; 0)</div><div class="line">    cout &lt;&lt; <a class="code" href="lcg_8cpp.html#a7d76a821bc6ddd804abaf1974e5d7583">lcg_error_str</a>(ret) &lt;&lt; endl;</div><div class="line">  <span class="comment">// 输出解</span></div><div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 3; i++)</div><div class="line">  {</div><div class="line">    cout &lt;&lt; m_[i] &lt;&lt; endl;</div><div class="line">  }</div><div class="line"></div><div class="line">  <span class="comment">// rest m_ and solve with LCG_PCG</span></div><div class="line">  m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;</div><div class="line">  <span class="comment">// use lpcg to solve the linear system</span></div><div class="line">  ret = <a class="code" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9">lcg_solver</a>(_Ax, _Progress, m_, b_, 3, &amp;self_para, <span class="keyword">this</span>, <a class="code" href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a883bb6d23fbf342404921510838cc921">LCG_PCG</a>, p_);</div><div class="line">  <span class="keywordflow">if</span> (ret &lt; 0)</div><div class="line">    cout &lt;&lt; <a class="code" href="lcg_8cpp.html#a7d76a821bc6ddd804abaf1974e5d7583">lcg_error_str</a>(ret) &lt;&lt; endl;</div><div class="line">  <span class="comment">// output solution</span></div><div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 3; i++)</div><div class="line">  {</div><div class="line">    cout &lt;&lt; m_[i] &lt;&lt; endl;</div><div class="line">  }</div><div class="line">  <span class="keywordflow">return</span>;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[])</div><div class="line">{</div><div class="line">  TESTFUNC test;</div><div class="line">  test.Routine();</div><div class="line">  <span class="keywordflow">return</span> 0;</div><div class="line">}</div></div><!-- fragment --><p>第二个例子，我们使用 <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> 求解一个随机的100*80的线性方程组的最小二乘解。其中 Ax 计算函数与监控函数均为全局函数。</p>
-<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="lcg_8h.html">lcg.h</a>&quot;</span>   </div><div class="line"><span class="preprocessor">#include &quot;ctime&quot;</span>   </div><div class="line"><span class="preprocessor">#include &quot;random&quot;</span>   </div><div class="line"><span class="preprocessor">#include &quot;iostream&quot;</span>  </div><div class="line"></div><div class="line"><span class="preprocessor">#define M 100</span></div><div class="line"><span class="preprocessor">#define N 80</span></div><div class="line"></div><div class="line"><span class="comment">//返回范围内的随机浮点值 注意调取函数之前要调用srand(time(0));</span></div><div class="line"><span class="keywordtype">double</span> random_double(<span class="keywordtype">double</span> L,<span class="keywordtype">double</span> T)</div><div class="line">{</div><div class="line">  <span class="keywordflow">return</span> (T-L)*rand()*1.0/RAND_MAX + L;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">//返回范围内的随机整数 注意调取函数之前要调用srand(time(0));</span></div><div class="line"><span class="keywordtype">int</span> random_int(<span class="keywordtype">int</span> small, <span class="keywordtype">int</span> big)</div><div class="line">{</div><div class="line">  <span class="keywordflow">return</span> (rand() % (big - small))+ small;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">// 普通二维数组做核矩阵</span></div><div class="line"><span class="keywordtype">double</span> **kernel;</div><div class="line"><span class="comment">// 中间结果数组</span></div><div class="line"><span class="keywordtype">double</span> *tmp_arr;</div><div class="line"></div><div class="line"><span class="comment">// 计算核矩阵乘向量的乘积</span></div><div class="line"><span class="keywordtype">void</span> CalAx(<span class="keywordtype">void</span>* instance, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* x, <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* prod_Ax, <span class="keyword">const</span> <span class="keywordtype">int</span> n_s)</div><div class="line">{</div><div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; M; i++)</div><div class="line">  {</div><div class="line">    tmp_arr[i] = 0.0;</div><div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; n_s; j++)</div><div class="line">    {</div><div class="line">      tmp_arr[i] += kernel[i][j] * x[j];</div><div class="line">    }</div><div class="line">  }</div><div class="line"></div><div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; n_s; j++)</div><div class="line">  {</div><div class="line">    prod_Ax[j] = 0.0;</div><div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; M; i++)</div><div class="line">    {</div><div class="line">      prod_Ax[j] += kernel[i][j] * tmp_arr[i];</div><div class="line">    }</div><div class="line">  }</div><div class="line">  <span class="keywordflow">return</span>;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">//定义共轭梯度监控函数</span></div><div class="line"><span class="keywordtype">int</span> Prog(<span class="keywordtype">void</span>* instance, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> converge, <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a>* param, <span class="keyword">const</span> <span class="keywordtype">int</span> n_s, <span class="keyword">const</span> <span class="keywordtype">int</span> k)</div><div class="line">{</div><div class="line">  std::clog &lt;&lt; <span class="stringliteral">&quot;Iteration-times: &quot;</span> &lt;&lt; k &lt;&lt; <span class="stringliteral">&quot;\tconvergence: &quot;</span> &lt;&lt; converge &lt;&lt; std::endl;</div><div class="line">  <span class="keywordflow">if</span> (converge &gt; param-&gt;<a class="code" href="structlcg__para.html#aa67ce230d9611ba0db3facda29851f56">epsilon</a>) std::clog &lt;&lt; <span class="stringliteral">&quot;\033[1A\033[K&quot;</span>;</div><div class="line">  <span class="keywordflow">return</span> 0;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[])</div><div class="line">{</div><div class="line">  kernel = <span class="keyword">new</span> <span class="keywordtype">double</span> *[M];</div><div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; M; i++)</div><div class="line">  {</div><div class="line">    kernel[i] = <span class="keyword">new</span> <span class="keywordtype">double</span> [N];</div><div class="line">  }</div><div class="line"></div><div class="line">  tmp_arr = <span class="keyword">new</span> <span class="keywordtype">double</span> [M];</div><div class="line"></div><div class="line">  srand(time(0));</div><div class="line">  <span class="comment">// 添加一些大数</span></div><div class="line">  <span class="keywordtype">int</span> tmp_id, tmp_size, tmp_val;</div><div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; M; i++)</div><div class="line">  {</div><div class="line">    tmp_size = random_int(25, 35);</div><div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; tmp_size; j++)</div><div class="line">    {</div><div class="line">      tmp_id = random_int(0, N);</div><div class="line">      tmp_val = random_double(-10, 10);</div><div class="line"></div><div class="line">      kernel[i][tmp_id] = tmp_val;</div><div class="line">    }</div><div class="line">  }</div><div class="line"></div><div class="line">  <span class="comment">// 生成一组正演解</span></div><div class="line">  <span class="keywordtype">double</span> *fm = <span class="keyword">new</span> <span class="keywordtype">double</span> [N];</div><div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; N; i++)</div><div class="line">  {</div><div class="line">    fm[i] = random_double(1, 2);</div><div class="line">  }</div><div class="line"></div><div class="line">  <span class="comment">// 计算共轭梯度B项</span></div><div class="line">  <span class="keywordtype">double</span> *B = <span class="keyword">new</span> <span class="keywordtype">double</span> [N];</div><div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; M; i++)</div><div class="line">  {</div><div class="line">    tmp_arr[i] = 0.0;</div><div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; N; j++)</div><div class="line">    {</div><div class="line">      tmp_arr[i] += kernel[i][j]*fm[j];</div><div class="line">    }</div><div class="line">  }</div><div class="line"></div><div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; N; j++)</div><div class="line">  {</div><div class="line">    B[j] = 0.0;</div><div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; M; i++)</div><div class="line">    {</div><div class="line">      B[j] += kernel[i][j]*tmp_arr[i];</div><div class="line">    }</div><div class="line">  }</div><div class="line"></div><div class="line">  <span class="comment">/********************准备工作完成************************/</span></div><div class="line">  <a class="code" href="structlcg__para.html">lcg_para</a> self_para = <a class="code" href="lcg_8cpp.html#ae709a311e61bd35843a9f4333c38ab18">lcg_default_parameters</a>();</div><div class="line">  self_para.<a class="code" href="structlcg__para.html#a945e14f1204dc4a68eacedc79600694b">max_iterations</a> = 1000;</div><div class="line">  self_para.<a class="code" href="structlcg__para.html#aa67ce230d9611ba0db3facda29851f56">epsilon</a> = 1e-10;</div><div class="line"></div><div class="line">  <span class="comment">// 声明一组解</span></div><div class="line">  <span class="keywordtype">double</span> *m = <span class="keyword">new</span> <span class="keywordtype">double</span> [N];</div><div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; N; i++)</div><div class="line">    m[i] = 0.0;</div><div class="line"></div><div class="line">  <span class="keywordtype">int</span> ret = <a class="code" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9">lcg_solver</a>(CalAx, Prog, m, B, N, &amp;self_para, NULL, <a class="code" href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">LCG_CG</a>);</div><div class="line">  <span class="keywordflow">if</span> (ret &lt; 0) std::cerr &lt;&lt; <a class="code" href="lcg_8cpp.html#a7d76a821bc6ddd804abaf1974e5d7583">lcg_error_str</a>(ret) &lt;&lt; std::endl;</div><div class="line"></div><div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; N; i++)</div><div class="line">  {</div><div class="line">    std::cout &lt;&lt; fm[i] &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; m[i] &lt;&lt; std::endl;</div><div class="line">  }</div><div class="line"></div><div class="line">  <span class="keyword">delete</span>[] kernel;</div><div class="line">  <span class="keyword">delete</span>[] tmp_arr;</div><div class="line">  <span class="keyword">delete</span>[] fm;</div><div class="line">  <span class="keyword">delete</span>[] B;</div><div class="line">  <span class="keyword">delete</span>[] m;</div><div class="line">  <span class="keywordflow">return</span> 0;</div><div class="line">}</div></div><!-- fragment --> </div></div><!-- PageDoc -->
+<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="lcg_8h.html">lcg.h</a>&quot;</span>   </div>
+<div class="line"><span class="preprocessor">#include &quot;iostream&quot;</span>   </div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">using</span> std::cout;</div>
+<div class="line"><span class="keyword">using</span> std::clog;</div>
+<div class="line"><span class="keyword">using</span> std::endl;</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">class </span>TESTFUNC</div>
+<div class="line">{</div>
+<div class="line"><span class="keyword">public</span>:</div>
+<div class="line">  TESTFUNC();</div>
+<div class="line">  ~TESTFUNC();</div>
+<div class="line">  <span class="keywordtype">void</span> Routine();</div>
+<div class="line">  <span class="keyword">static</span> <span class="keywordtype">void</span> _Ax(<span class="keywordtype">void</span>* instance, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* a, <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* b, <span class="keyword">const</span> <span class="keywordtype">int</span> num)</div>
+<div class="line">  {</div>
+<div class="line">    <span class="keywordflow">return</span> <span class="keyword">reinterpret_cast&lt;</span>TESTFUNC*<span class="keyword">&gt;</span>(instance)-&gt;Ax(a, b, num);</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordtype">void</span> Ax(<span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* a, <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* b, <span class="keyword">const</span> <span class="keywordtype">int</span> num); <span class="comment">//定义共轭梯度中Ax的算法</span></div>
+<div class="line"> </div>
+<div class="line">  <span class="keyword">static</span> <span class="keywordtype">int</span> _Progress(<span class="keywordtype">void</span>* instance, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> converge, <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a> *param, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> k)</div>
+<div class="line">  {</div>
+<div class="line">    <span class="keywordflow">return</span> <span class="keyword">reinterpret_cast&lt;</span>TESTFUNC*<span class="keyword">&gt;</span>(instance)-&gt;Progress(m, converge, param, n_size, k);</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordtype">int</span> Progress(<span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> converge, <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a> *param, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> k);</div>
+<div class="line"><span class="keyword">private</span>:</div>
+<div class="line">  <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m_;</div>
+<div class="line">  <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* b_;</div>
+<div class="line">  <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* p_;</div>
+<div class="line">  <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> kernel_[3][3];</div>
+<div class="line">};</div>
+<div class="line"> </div>
+<div class="line">TESTFUNC::TESTFUNC()</div>
+<div class="line">{</div>
+<div class="line">  <span class="comment">// 测试线性方程组</span></div>
+<div class="line">  <span class="comment">// 6.3*x1 + 3.9*x2 + 2.5*x3 = -2.37</span></div>
+<div class="line">  <span class="comment">// 3.9*x1 + 1.2*x2 + 3.1*x3 = 5.82</span></div>
+<div class="line">  <span class="comment">// 2.5*x1 + 3.1*x2 + 7.6*x3 = 5.21</span></div>
+<div class="line">  <span class="comment">// 目标解 x1=1.2 x2=-3.7 x3=1.8</span></div>
+<div class="line">  <span class="comment">// 注意根据共轭梯度法的要求 kernel是一个N阶对称阵</span></div>
+<div class="line">  kernel_[0][0] = 6.3; kernel_[0][1] = 3.9; kernel_[0][2] = 2.5;</div>
+<div class="line">  kernel_[1][0] = 3.9; kernel_[1][1] = 1.2; kernel_[1][2] = 3.1;</div>
+<div class="line">  kernel_[2][0] = 2.5; kernel_[2][1] = 3.1; kernel_[2][2] = 7.6;</div>
+<div class="line">  <span class="comment">// 初始解</span></div>
+<div class="line">  m_ = <a class="code" href="lcg_8cpp.html#ad4d1ad1663815eb1214f7683acfd1cbe">lcg_malloc</a>(3); <span class="comment">// 开辟数组空间</span></div>
+<div class="line">  m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;</div>
+<div class="line">  <span class="comment">// 拟合目标值（含有一定的噪声）</span></div>
+<div class="line">  b_ = <a class="code" href="lcg_8cpp.html#ad4d1ad1663815eb1214f7683acfd1cbe">lcg_malloc</a>(3);</div>
+<div class="line">  b_[0] = -2.3723; b_[1] = 5.8201; b_[2] = 5.2065;</div>
+<div class="line">  <span class="comment">// 测试预优矩阵 这里只是测试流程 预优矩阵值全为1 并没有什么作用</span></div>
+<div class="line">  p_ = <a class="code" href="lcg_8cpp.html#ad4d1ad1663815eb1214f7683acfd1cbe">lcg_malloc</a>(3);</div>
+<div class="line">  p_[0] = p_[1] = p_[2] = 1.0;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line">TESTFUNC::~TESTFUNC()</div>
+<div class="line">{</div>
+<div class="line">  <a class="code" href="lcg_8cpp.html#a51d9b69c6afbba37a48470b4e1db4739">lcg_free</a>(m_); <span class="comment">// 销毁数组使用的空间</span></div>
+<div class="line">  <a class="code" href="lcg_8cpp.html#a51d9b69c6afbba37a48470b4e1db4739">lcg_free</a>(b_);</div>
+<div class="line">  <a class="code" href="lcg_8cpp.html#a51d9b69c6afbba37a48470b4e1db4739">lcg_free</a>(p_);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">void</span> TESTFUNC::Ax(<span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* a, <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* b, <span class="keyword">const</span> <span class="keywordtype">int</span> num)</div>
+<div class="line">{</div>
+<div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; num; i++)</div>
+<div class="line">  {</div>
+<div class="line">    b[i] = 0.0;</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; num; j++)</div>
+<div class="line">    {</div>
+<div class="line">      b[i] += kernel_[i][j]*a[j];</div>
+<div class="line">    }</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">return</span>;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> TESTFUNC::Progress(<span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> converge, <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a> *param, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> k)</div>
+<div class="line">{</div>
+<div class="line">  clog &lt;&lt; <span class="stringliteral">&quot;Iteration-times: &quot;</span> &lt;&lt; k &lt;&lt; <span class="stringliteral">&quot;\tconvergence: &quot;</span> &lt;&lt; converge &lt;&lt; endl;</div>
+<div class="line">  <span class="keywordflow">if</span> (converge &gt; param-&gt;<a class="code" href="structlcg__para.html#aa67ce230d9611ba0db3facda29851f56">epsilon</a>) clog &lt;&lt; <span class="stringliteral">&quot;\033[1A\033[K&quot;</span>;</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">void</span> TESTFUNC::Routine()</div>
+<div class="line">{</div>
+<div class="line">  <a class="code" href="structlcg__para.html">lcg_para</a> self_para = <a class="code" href="lcg_8cpp.html#ae709a311e61bd35843a9f4333c38ab18">lcg_default_parameters</a>(); <span class="comment">// 得到一个值等于默认值的参数类型</span></div>
+<div class="line">  self_para.<a class="code" href="structlcg__para.html#a945e14f1204dc4a68eacedc79600694b">max_iterations</a> = 10;</div>
+<div class="line">  self_para.<a class="code" href="structlcg__para.html#a720fed9c894845ab2f2ee0ba7700d3a1">abs_diff</a> = <span class="keyword">true</span>;</div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">// 使用LCG_CG求解 </span></div>
+<div class="line">  <span class="keywordtype">int</span> ret = <a class="code" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9">lcg_solver</a>(_Ax, _Progress, m_, b_, 3, &amp;self_para, <span class="keyword">this</span>, <a class="code" href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">LCG_CG</a>);</div>
+<div class="line">  <span class="keywordflow">if</span> (ret &lt; 0)</div>
+<div class="line">    cout &lt;&lt; <a class="code" href="lcg_8cpp.html#a7d76a821bc6ddd804abaf1974e5d7583">lcg_error_str</a>(ret) &lt;&lt; endl;</div>
+<div class="line">  <span class="comment">// 输出解</span></div>
+<div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 3; i++)</div>
+<div class="line">  {</div>
+<div class="line">    cout &lt;&lt; m_[i] &lt;&lt; endl;</div>
+<div class="line">  }</div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">// rest m_ and solve with LCG_PCG</span></div>
+<div class="line">  m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;</div>
+<div class="line">  <span class="comment">// use lpcg to solve the linear system</span></div>
+<div class="line">  ret = <a class="code" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9">lcg_solver</a>(_Ax, _Progress, m_, b_, 3, &amp;self_para, <span class="keyword">this</span>, <a class="code" href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a883bb6d23fbf342404921510838cc921">LCG_PCG</a>, p_);</div>
+<div class="line">  <span class="keywordflow">if</span> (ret &lt; 0)</div>
+<div class="line">    cout &lt;&lt; <a class="code" href="lcg_8cpp.html#a7d76a821bc6ddd804abaf1974e5d7583">lcg_error_str</a>(ret) &lt;&lt; endl;</div>
+<div class="line">  <span class="comment">// output solution</span></div>
+<div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 3; i++)</div>
+<div class="line">  {</div>
+<div class="line">    cout &lt;&lt; m_[i] &lt;&lt; endl;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">return</span>;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[])</div>
+<div class="line">{</div>
+<div class="line">  TESTFUNC test;</div>
+<div class="line">  test.Routine();</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+</div><!-- fragment --><p>第二个例子，我们使用 <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> 求解一个随机的100*80的线性方程组的最小二乘解。其中 Ax 计算函数与监控函数均为全局函数。</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="lcg_8h.html">lcg.h</a>&quot;</span>   </div>
+<div class="line"><span class="preprocessor">#include &quot;ctime&quot;</span>   </div>
+<div class="line"><span class="preprocessor">#include &quot;random&quot;</span>   </div>
+<div class="line"><span class="preprocessor">#include &quot;iostream&quot;</span>  </div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define M 100</span></div>
+<div class="line"><span class="preprocessor">#define N 80</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">//返回范围内的随机浮点值 注意调取函数之前要调用srand(time(0));</span></div>
+<div class="line"><span class="keywordtype">double</span> random_double(<span class="keywordtype">double</span> L,<span class="keywordtype">double</span> T)</div>
+<div class="line">{</div>
+<div class="line">  <span class="keywordflow">return</span> (T-L)*rand()*1.0/RAND_MAX + L;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">//返回范围内的随机整数 注意调取函数之前要调用srand(time(0));</span></div>
+<div class="line"><span class="keywordtype">int</span> random_int(<span class="keywordtype">int</span> small, <span class="keywordtype">int</span> big)</div>
+<div class="line">{</div>
+<div class="line">  <span class="keywordflow">return</span> (rand() % (big - small))+ small;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 普通二维数组做核矩阵</span></div>
+<div class="line"><span class="keywordtype">double</span> **kernel;</div>
+<div class="line"><span class="comment">// 中间结果数组</span></div>
+<div class="line"><span class="keywordtype">double</span> *tmp_arr;</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 计算核矩阵乘向量的乘积</span></div>
+<div class="line"><span class="keywordtype">void</span> CalAx(<span class="keywordtype">void</span>* instance, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* x, <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* prod_Ax, <span class="keyword">const</span> <span class="keywordtype">int</span> n_s)</div>
+<div class="line">{</div>
+<div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; M; i++)</div>
+<div class="line">  {</div>
+<div class="line">    tmp_arr[i] = 0.0;</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; n_s; j++)</div>
+<div class="line">    {</div>
+<div class="line">      tmp_arr[i] += kernel[i][j] * x[j];</div>
+<div class="line">    }</div>
+<div class="line">  }</div>
+<div class="line"> </div>
+<div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; n_s; j++)</div>
+<div class="line">  {</div>
+<div class="line">    prod_Ax[j] = 0.0;</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; M; i++)</div>
+<div class="line">    {</div>
+<div class="line">      prod_Ax[j] += kernel[i][j] * tmp_arr[i];</div>
+<div class="line">    }</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">return</span>;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">//定义共轭梯度监控函数</span></div>
+<div class="line"><span class="keywordtype">int</span> Prog(<span class="keywordtype">void</span>* instance, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> converge, <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a>* param, <span class="keyword">const</span> <span class="keywordtype">int</span> n_s, <span class="keyword">const</span> <span class="keywordtype">int</span> k)</div>
+<div class="line">{</div>
+<div class="line">  std::clog &lt;&lt; <span class="stringliteral">&quot;Iteration-times: &quot;</span> &lt;&lt; k &lt;&lt; <span class="stringliteral">&quot;\tconvergence: &quot;</span> &lt;&lt; converge &lt;&lt; std::endl;</div>
+<div class="line">  <span class="keywordflow">if</span> (converge &gt; param-&gt;<a class="code" href="structlcg__para.html#aa67ce230d9611ba0db3facda29851f56">epsilon</a>) std::clog &lt;&lt; <span class="stringliteral">&quot;\033[1A\033[K&quot;</span>;</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span> *argv[])</div>
+<div class="line">{</div>
+<div class="line">  kernel = <span class="keyword">new</span> <span class="keywordtype">double</span> *[M];</div>
+<div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; M; i++)</div>
+<div class="line">  {</div>
+<div class="line">    kernel[i] = <span class="keyword">new</span> <span class="keywordtype">double</span> [N];</div>
+<div class="line">  }</div>
+<div class="line"> </div>
+<div class="line">  tmp_arr = <span class="keyword">new</span> <span class="keywordtype">double</span> [M];</div>
+<div class="line"> </div>
+<div class="line">  srand(time(0));</div>
+<div class="line">  <span class="comment">// 添加一些大数</span></div>
+<div class="line">  <span class="keywordtype">int</span> tmp_id, tmp_size, tmp_val;</div>
+<div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; M; i++)</div>
+<div class="line">  {</div>
+<div class="line">    tmp_size = random_int(25, 35);</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; tmp_size; j++)</div>
+<div class="line">    {</div>
+<div class="line">      tmp_id = random_int(0, N);</div>
+<div class="line">      tmp_val = random_double(-10, 10);</div>
+<div class="line"> </div>
+<div class="line">      kernel[i][tmp_id] = tmp_val;</div>
+<div class="line">    }</div>
+<div class="line">  }</div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">// 生成一组正演解</span></div>
+<div class="line">  <span class="keywordtype">double</span> *fm = <span class="keyword">new</span> <span class="keywordtype">double</span> [N];</div>
+<div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; N; i++)</div>
+<div class="line">  {</div>
+<div class="line">    fm[i] = random_double(1, 2);</div>
+<div class="line">  }</div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">// 计算共轭梯度B项</span></div>
+<div class="line">  <span class="keywordtype">double</span> *B = <span class="keyword">new</span> <span class="keywordtype">double</span> [N];</div>
+<div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; M; i++)</div>
+<div class="line">  {</div>
+<div class="line">    tmp_arr[i] = 0.0;</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; N; j++)</div>
+<div class="line">    {</div>
+<div class="line">      tmp_arr[i] += kernel[i][j]*fm[j];</div>
+<div class="line">    }</div>
+<div class="line">  }</div>
+<div class="line"> </div>
+<div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; N; j++)</div>
+<div class="line">  {</div>
+<div class="line">    B[j] = 0.0;</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; M; i++)</div>
+<div class="line">    {</div>
+<div class="line">      B[j] += kernel[i][j]*tmp_arr[i];</div>
+<div class="line">    }</div>
+<div class="line">  }</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">  /********************准备工作完成************************/</span></div>
+<div class="line">  <a class="code" href="structlcg__para.html">lcg_para</a> self_para = <a class="code" href="lcg_8cpp.html#ae709a311e61bd35843a9f4333c38ab18">lcg_default_parameters</a>();</div>
+<div class="line">  self_para.<a class="code" href="structlcg__para.html#a945e14f1204dc4a68eacedc79600694b">max_iterations</a> = 1000;</div>
+<div class="line">  self_para.<a class="code" href="structlcg__para.html#aa67ce230d9611ba0db3facda29851f56">epsilon</a> = 1e-10;</div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">// 声明一组解</span></div>
+<div class="line">  <span class="keywordtype">double</span> *m = <span class="keyword">new</span> <span class="keywordtype">double</span> [N];</div>
+<div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; N; i++)</div>
+<div class="line">    m[i] = 0.0;</div>
+<div class="line"> </div>
+<div class="line">  <span class="keywordtype">int</span> ret = <a class="code" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9">lcg_solver</a>(CalAx, Prog, m, B, N, &amp;self_para, NULL, <a class="code" href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">LCG_CG</a>);</div>
+<div class="line">  <span class="keywordflow">if</span> (ret &lt; 0) std::cerr &lt;&lt; <a class="code" href="lcg_8cpp.html#a7d76a821bc6ddd804abaf1974e5d7583">lcg_error_str</a>(ret) &lt;&lt; std::endl;</div>
+<div class="line"> </div>
+<div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; N; i++)</div>
+<div class="line">  {</div>
+<div class="line">    std::cout &lt;&lt; fm[i] &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; m[i] &lt;&lt; std::endl;</div>
+<div class="line">  }</div>
+<div class="line"> </div>
+<div class="line">  <span class="keyword">delete</span>[] kernel;</div>
+<div class="line">  <span class="keyword">delete</span>[] tmp_arr;</div>
+<div class="line">  <span class="keyword">delete</span>[] fm;</div>
+<div class="line">  <span class="keyword">delete</span>[] B;</div>
+<div class="line">  <span class="keyword">delete</span>[] m;</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+</div><!-- fragment --> </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="alcg_8cpp_html_ad4d1ad1663815eb1214f7683acfd1cbe"><div class="ttname"><a href="lcg_8cpp.html#ad4d1ad1663815eb1214f7683acfd1cbe">lcg_malloc</a></div><div class="ttdeci">lcg_float * lcg_malloc(const int n)</div><div class="ttdoc">Locate memory for a lcg_float pointer type.</div><div class="ttdef"><b>Definition:</b> lcg.cpp:79</div></div>
+<div class="ttc" id="astructlcg__para_html_a945e14f1204dc4a68eacedc79600694b"><div class="ttname"><a href="structlcg__para.html#a945e14f1204dc4a68eacedc79600694b">lcg_para::max_iterations</a></div><div class="ttdeci">int max_iterations</div><div class="ttdef"><b>Definition:</b> lcg.h:88</div></div>
+<div class="ttc" id="alcg_8cpp_html_a5d3eb4595fc2c3d6830c5c5fbe130ae9"><div class="ttname"><a href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9">lcg_solver</a></div><div class="ttdeci">int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float *m, const lcg_float *B, const int n_size, const lcg_para *param, void *instance, lcg_solver_enum solver_id, const lcg_float *P)</div><div class="ttdoc">A combined conjugate gradient solver function.</div><div class="ttdef"><b>Definition:</b> lcg.cpp:168</div></div>
+<div class="ttc" id="astructlcg__para_html"><div class="ttname"><a href="structlcg__para.html">lcg_para</a></div><div class="ttdoc">Parameters of the conjugate gradient methods.</div><div class="ttdef"><b>Definition:</b> lcg.h:83</div></div>
+<div class="ttc" id="alcg_8h_html_a9ce95cfde91c2580af819d69bdcc86b1"><div class="ttname"><a href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a></div><div class="ttdeci">lcg_solver_enum</div><div class="ttdoc">Types of method that could be recognized by the lcg_solver() function.</div><div class="ttdef"><b>Definition:</b> lcg.h:46</div></div>
+<div class="ttc" id="alcg_8cpp_html_a7d76a821bc6ddd804abaf1974e5d7583"><div class="ttname"><a href="lcg_8cpp.html#a7d76a821bc6ddd804abaf1974e5d7583">lcg_error_str</a></div><div class="ttdeci">const char * lcg_error_str(int er_index)</div><div class="ttdoc">Return a string explanation for the lcg_solver() function's return values.</div><div class="ttdef"><b>Definition:</b> lcg.cpp:98</div></div>
+<div class="ttc" id="alcg_8h_html_a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02"><div class="ttname"><a href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">LCG_CG</a></div><div class="ttdeci">@ LCG_CG</div><div class="ttdef"><b>Definition:</b> lcg.h:50</div></div>
+<div class="ttc" id="alcg_8h_html"><div class="ttname"><a href="lcg_8h.html">lcg.h</a></div></div>
+<div class="ttc" id="alcg_8cpp_html_ae709a311e61bd35843a9f4333c38ab18"><div class="ttname"><a href="lcg_8cpp.html#ae709a311e61bd35843a9f4333c38ab18">lcg_default_parameters</a></div><div class="ttdeci">lcg_para lcg_default_parameters()</div><div class="ttdoc">Return a lcg_para type instance with default values.</div><div class="ttdef"><b>Definition:</b> lcg.cpp:92</div></div>
+<div class="ttc" id="alcg_8h_html_aad8c7423a269f54e028c07441615fba6"><div class="ttname"><a href="lcg_8h.html#aad8c7423a269f54e028c07441615fba6">lcg_axfunc_ptr</a></div><div class="ttdeci">void(* lcg_axfunc_ptr)(void *instance, const lcg_float *x, lcg_float *prod_Ax, const int n_size)</div><div class="ttdoc">Callback interface for calculating the product of a N*N matrix 'A' multiplied by a vertical vector 'x...</div><div class="ttdef"><b>Definition:</b> lcg.h:148</div></div>
+<div class="ttc" id="alcg_8cpp_html_a976f01b2ab8c203b5a3bc069094509fd"><div class="ttname"><a href="lcg_8cpp.html#a976f01b2ab8c203b5a3bc069094509fd">lcg_solver_constrained</a></div><div class="ttdeci">int lcg_solver_constrained(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float *m, const lcg_float *B, const lcg_float *low, const lcg_float *hig, const int n_size, const lcg_para *param, void *instance, lcg_solver_enum solver_id)</div><div class="ttdoc">A combined conjugate gradient solver function with inequality constraints.</div><div class="ttdef"><b>Definition:</b> lcg.cpp:226</div></div>
+<div class="ttc" id="alcg_8cpp_html_a51d9b69c6afbba37a48470b4e1db4739"><div class="ttname"><a href="lcg_8cpp.html#a51d9b69c6afbba37a48470b4e1db4739">lcg_free</a></div><div class="ttdeci">void lcg_free(lcg_float *x)</div><div class="ttdoc">Destroy memory used by the lcg_float type array.</div><div class="ttdef"><b>Definition:</b> lcg.cpp:85</div></div>
+<div class="ttc" id="alcg_8h_html_a9ce95cfde91c2580af819d69bdcc86b1a883bb6d23fbf342404921510838cc921"><div class="ttname"><a href="lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a883bb6d23fbf342404921510838cc921">LCG_PCG</a></div><div class="ttdeci">@ LCG_PCG</div><div class="ttdef"><b>Definition:</b> lcg.h:54</div></div>
+<div class="ttc" id="astructlcg__para_html_aa67ce230d9611ba0db3facda29851f56"><div class="ttname"><a href="structlcg__para.html#aa67ce230d9611ba0db3facda29851f56">lcg_para::epsilon</a></div><div class="ttdeci">lcg_float epsilon</div><div class="ttdef"><b>Definition:</b> lcg.h:99</div></div>
+<div class="ttc" id="alcg_8h_html_af5153afe716c929b922ad48dda46d252"><div class="ttname"><a href="lcg_8h.html#af5153afe716c929b922ad48dda46d252">lcg_progress_ptr</a></div><div class="ttdeci">int(* lcg_progress_ptr)(void *instance, const lcg_float *m, const lcg_float converge, const lcg_para *param, const int n_size, const int k)</div><div class="ttdoc">Callback interface for monitoring the progress and terminate the iteration if necessary.</div><div class="ttdef"><b>Definition:</b> lcg.h:165</div></div>
+<div class="ttc" id="astructlcg__para_html_a720fed9c894845ab2f2ee0ba7700d3a1"><div class="ttname"><a href="structlcg__para.html#a720fed9c894845ab2f2ee0ba7700d3a1">lcg_para::abs_diff</a></div><div class="ttdeci">int abs_diff</div><div class="ttdef"><b>Definition:</b> lcg.h:107</div></div>
+<div class="ttc" id="alcg_8h_html_a5282007dc6f0c317361d25fa0eeb4a35"><div class="ttname"><a href="lcg_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a></div><div class="ttdeci">double lcg_float</div><div class="ttdoc">A simple definition of the float type we use here. Easy to change in the future. Right now it is just...</div><div class="ttdef"><b>Definition:</b> lcg.h:40</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="footer">制作者
     <a href="http://www.doxygen.org/index.html">
-    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>
 </div>
 </body>

@@ -34,7 +34,7 @@ var lcg_8cpp =
     [ "lcg_malloc", "lcg_8cpp.html#ad4d1ad1663815eb1214f7683acfd1cbe", null ],
     [ "lcg_pg", "lcg_8cpp.html#a927fd55908422a7132e30304d36ba5d8", null ],
     [ "lcg_solver", "lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9", null ],
-    [ "lcg_solver", "lcg_8cpp.html#a7591a5f664156e765533e5070a666b12", null ],
+    [ "lcg_solver_constrained", "lcg_8cpp.html#a976f01b2ab8c203b5a3bc069094509fd", null ],
     [ "lcg_spg", "lcg_8cpp.html#af2b18a78c6bc55add47bf1b1d566d7a0", null ],
     [ "lcgs", "lcg_8cpp.html#a6ffa1a438fcff05adfd40407c53914ff", null ],
     [ "lpcg", "lcg_8cpp.html#a173936ce2e80d29e520c99c9397d0d37", null ]

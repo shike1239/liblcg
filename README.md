@@ -114,14 +114,15 @@ int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 
 投影梯度算法的参数形式如下：
 ```cpp
-int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
+int lcg_solver_constrained(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
   const lcg_float* low, const lcg_float *hig, const int n_size, const lcg_para* param, 
   void* instance, lcg_solver_enum solver_id);
 ```
 
-函数接收10个参数，参数含义于无约束求解函数一致。除了：
+函数接收10个参数，参数含义与无约束求解函数一致。除了：
 1. `lcg_float* low` 可取的参数范围的底界；
-2. `lcg_float* hig` 可取的参数范围的顶界。
+2. `lcg_float* hig` 可取的参数范围的顶界；
+3. `int solver_id` 求解函数使用的求解方法，可选的类型包括 LCG_PG 与 LCG_SPG。默认类型为 LCG_PG。
 
 ## 示例
 

@@ -1,6 +1,6 @@
 var structlcg__para =
 [
-    [ "abs_diff", "structlcg__para.html#a68761ab7e1b3c94a32c17e24a3f72e37", null ],
+    [ "abs_diff", "structlcg__para.html#a720fed9c894845ab2f2ee0ba7700d3a1", null ],
     [ "beta", "structlcg__para.html#a579674af789ee65aab2bf4f606df3bdf", null ],
     [ "epsilon", "structlcg__para.html#aa67ce230d9611ba0db3facda29851f56", null ],
     [ "lambda", "structlcg__para.html#a5151a9c973c04e18210d3d6364dad224", null ],
