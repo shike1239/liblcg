@@ -62,7 +62,7 @@ enum lcg_return_enum
 	LCG_INVILAD_EPSILON, ///< The epsilon is negative.
 	LCG_INVILAD_RESTART_EPSILON, ///< The restart epsilon is negative.
 	LCG_REACHED_MAX_ITERATIONS, ///< Iteration reached maximal limit.
-	LCG_NULL_PRECONDITION_MATRIX, ///< Null precondition matrix.
+	LCG_nullptr_PRECONDITION_MATRIX, ///< Null precondition matrix.
 	LCG_NAN_VALUE, ///< Nan value.
 	LCG_INVALID_POINTER, ///< Invalid pointer.
 	LCG_INVALID_LAMBDA, ///< Invalid range for lambda.
@@ -84,8 +84,8 @@ lcg_float* lcg_malloc(const int n)
 
 void lcg_free(lcg_float* x)
 {
-	if (x != NULL) delete[] x;
-	x = NULL;
+	if (x != nullptr) delete[] x;
+	x = nullptr;
 	return;
 }
 
@@ -117,7 +117,7 @@ const char* lcg_error_str(int er_index)
 			return "The restart epsilon is negative.";
 		case LCG_REACHED_MAX_ITERATIONS:
 			return "The maximal iteration is reached.";
-		case LCG_NULL_PRECONDITION_MATRIX:
+		case LCG_nullptr_PRECONDITION_MATRIX:
 			return "The precondition matrix can't be null for a preconditioned conjugate gradient method.";
 		case LCG_NAN_VALUE:
 			return "The model values are NaN.";
@@ -146,8 +146,8 @@ const char* lcg_error_str(int er_index)
  * @param[in]  n_size      Size of the solution vector and objective vector.
  * @param      param       Parameter setup for the conjugate gradient methods.
  * @param      instance    The user data sent for the lcg_solver() function by the client. 
- * This variable is either 'this' for class member functions or 'NULL' for global functions.
- * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
+ * This variable is either 'this' for class member functions or 'nullptr' for global functions.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.
  *
  * @return     Status of the function.
  */
@@ -206,9 +206,9 @@ int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
  * @param[in]  n_size      Size of the solution vector and objective vector.
  * @param      param       Parameter setup for the conjugate gradient methods.
  * @param      instance    The user data sent for the lcg_solver() function by the client. 
- * This variable is either 'this' for class member functions or 'NULL' for global functions.
+ * This variable is either 'this' for class member functions or 'nullptr' for global functions.
  * @param      solver_id   Solver type used to solve the linear system. The default value is LCG_CGS.
- * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.
  *
  * @return     Status of the function.
  */
@@ -255,8 +255,8 @@ int lcg_solver_constrained(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* 
  * @param[in]  n_size      Size of the solution vector and objective vector.
  * @param      param       Parameter setup for the conjugate gradient methods.
  * @param      instance    The user data sent for the lcg_solver() function by the client. 
- * This variable is either 'this' for class member functions or 'NULL' for global functions.
- * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
+ * This variable is either 'this' for class member functions or 'nullptr' for global functions.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.
  *
  * @return     Status of the function.
  */
@@ -264,18 +264,18 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
 	const lcg_para* param, void* instance, const lcg_float* P)
 {
 	// set CG parameters
-	lcg_para para = (param != NULL) ? (*param) : defparam;
+	lcg_para para = (param != nullptr) ? (*param) : defparam;
 
 	//check parameters
 	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
 	if (para.max_iterations <= 0) return LCG_INVILAD_MAX_ITERATIONS;
 	if (para.epsilon <= 0.0) return LCG_INVILAD_EPSILON;
 
-	if (m == NULL) return LCG_INVALID_POINTER;
-	if (B == NULL) return LCG_INVALID_POINTER;
+	if (m == nullptr) return LCG_INVALID_POINTER;
+	if (B == nullptr) return LCG_INVALID_POINTER;
 
 	// locate memory
-	lcg_float *gk = NULL, *dk = NULL, *Adk = NULL;
+	lcg_float *gk = nullptr, *dk = nullptr, *Adk = nullptr;
 	gk = lcg_malloc(n_size);
 	dk = lcg_malloc(n_size);
 	Adk = lcg_malloc(n_size);
@@ -297,7 +297,7 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
 		gk_mod += gk[i]*gk[i];
 	}
 
-	int time;
+	int time, ret;
 	lcg_float dTAd, ak, betak, gk1_mod, gk_abs;
 	for (time = 0; time < para.max_iterations; time++)
 	{
@@ -313,15 +313,31 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
 #endif
 			}
 			gk_abs /= 1.0*n_size;
-			if (Pfp != NULL)
-				if (Pfp(instance, m, gk_abs, &para, n_size, time)) return LCG_STOP;
-			if (gk_abs <= para.epsilon) return LCG_CONVERGENCE;
+			if (Pfp != nullptr)
+			{
+				if (Pfp(instance, m, gk_abs, &para, n_size, time))
+				{
+					ret = LCG_STOP; goto func_ends;
+				}
+			}
+			if (gk_abs <= para.epsilon)
+			{
+				ret = LCG_CONVERGENCE; goto func_ends;
+			}
 		}
 		else
 		{
-			if (Pfp != NULL)
-				if (Pfp(instance, m, gk_mod/B_mod, &para, n_size, time)) return LCG_STOP;
-			if (gk_mod/B_mod <= para.epsilon) return LCG_CONVERGENCE;
+			if (Pfp != nullptr)
+			{
+				if (Pfp(instance, m, gk_mod/B_mod, &para, n_size, time))
+				{
+					ret = LCG_STOP; goto func_ends;
+				}
+			}
+			if (gk_mod/B_mod <= para.epsilon)
+			{
+				ret = LCG_CONVERGENCE; goto func_ends;
+			}
 		}
 
 		Afp(instance , dk, Adk, n_size);
@@ -342,7 +358,10 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
 
 		for (i = 0; i < n_size; i++)
 		{
-			if (m[i] != m[i]) return LCG_NAN_VALUE;
+			if (m[i] != m[i])
+			{
+				ret = LCG_NAN_VALUE; goto func_ends;
+			}
 		}
 
 		gk1_mod = 0.0;
@@ -360,9 +379,12 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
 		}
 	}
 
-	lcg_free(dk);
-	lcg_free(gk);
-	lcg_free(Adk);
+	func_ends:
+	{
+		lcg_free(dk);
+		lcg_free(gk);
+		lcg_free(Adk);
+	}
 
 	if (time == para.max_iterations)
 		return LCG_REACHED_MAX_ITERATIONS;
@@ -381,8 +403,8 @@ int lcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float*
  * @param[in]  n_size      Size of the solution vector and objective vector.
  * @param      param       Parameter setup for the conjugate gradient methods.
  * @param      instance    The user data sent for the lcg_solver() function by the client. 
- * This variable is either 'this' for class member functions or 'NULL' for global functions.
- * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
+ * This variable is either 'this' for class member functions or 'nullptr' for global functions.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.
  *
  * @return     Status of the function.
  */
@@ -390,20 +412,20 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 	const lcg_para* param, void* instance, const lcg_float* P)
 {
 	// set CG parameters
-	lcg_para para = (param != NULL) ? (*param) : defparam;
+	lcg_para para = (param != nullptr) ? (*param) : defparam;
 
 	//check parameters
 	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
 	if (para.max_iterations <= 0) return LCG_INVILAD_MAX_ITERATIONS;
 	if (para.epsilon <= 0.0) return LCG_INVILAD_EPSILON;
 
-	if (m == NULL) return LCG_INVALID_POINTER;
-	if (B == NULL) return LCG_INVALID_POINTER;
-	if (P == NULL) return LCG_NULL_PRECONDITION_MATRIX;
+	if (m == nullptr) return LCG_INVALID_POINTER;
+	if (B == nullptr) return LCG_INVALID_POINTER;
+	if (P == nullptr) return LCG_nullptr_PRECONDITION_MATRIX;
 
 	// locate memory
-	lcg_float *rk = NULL, *zk = NULL;
-	lcg_float *dk = NULL, *Adk = NULL;
+	lcg_float *rk = nullptr, *zk = nullptr;
+	lcg_float *dk = nullptr, *Adk = nullptr;
 
 	rk = lcg_malloc(n_size); zk = lcg_malloc(n_size);
 	dk = lcg_malloc(n_size); Adk = lcg_malloc(n_size);
@@ -431,7 +453,7 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 		B_mod += B[i]*B[i];
 	}
 
-	int time;
+	int time, ret;
 	lcg_float dTAd, ak, betak, zTr1, rk_mod;
 	for (time = 0; time < para.max_iterations; time++)
 	{
@@ -447,15 +469,31 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 #endif
 			}
 			rk_mod /= 1.0*n_size;
-			if (Pfp != NULL)
-				if (Pfp(instance, m, rk_mod, &para, n_size, time)) return LCG_STOP;
-			if (rk_mod <= para.epsilon) return LCG_CONVERGENCE;
+			if (Pfp != nullptr)
+			{
+				if (Pfp(instance, m, rk_mod, &para, n_size, time))
+				{
+					ret = LCG_STOP; goto func_ends;
+				}
+			}
+			if (rk_mod <= para.epsilon)
+			{
+				ret = LCG_CONVERGENCE; goto func_ends;
+			}
 		}
 		else
 		{
-			if (Pfp != NULL)
-				if (Pfp(instance, m, zTr/B_mod, &para, n_size, time)) return LCG_STOP;
-			if (zTr/B_mod <= para.epsilon) return LCG_CONVERGENCE;
+			if (Pfp != nullptr)
+			{
+				if (Pfp(instance, m, zTr/B_mod, &para, n_size, time))
+				{
+					ret = LCG_STOP; goto func_ends;
+				}
+			}
+			if (zTr/B_mod <= para.epsilon)
+			{
+				ret = LCG_CONVERGENCE; goto func_ends;
+			}
 		}
 
 		Afp(instance , dk, Adk, n_size);
@@ -477,7 +515,10 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 
 		for (i = 0; i < n_size; i++)
 		{
-			if (m[i] != m[i]) return LCG_NAN_VALUE;
+			if (m[i] != m[i])
+			{
+				ret = LCG_NAN_VALUE; goto func_ends;
+			}
 		}
 
 		zTr1 = 0.0;
@@ -495,8 +536,13 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 		}
 	}
 
-	lcg_free(rk); lcg_free(zk);
-	lcg_free(dk); lcg_free(Adk);
+	func_ends:
+	{
+		lcg_free(rk);
+		lcg_free(zk);
+		lcg_free(dk);
+		lcg_free(Adk);
+	}
 
 	if (time == para.max_iterations)
 		return LCG_REACHED_MAX_ITERATIONS;
@@ -516,8 +562,8 @@ int lpcg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
  * @param[in]  n_size      Size of the solution vector and objective vector.
  * @param      param       Parameter setup for the conjugate gradient methods.
  * @param      instance    The user data sent for the lcg_solver() function by the client. 
- * This variable is either 'this' for class member functions or 'NULL' for global functions.
- * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
+ * This variable is either 'this' for class member functions or 'nullptr' for global functions.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.
  *
  * @return     Status of the function.
  */
@@ -525,19 +571,19 @@ int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 	const lcg_para* param, void* instance, const lcg_float* P)
 {
 	// set CGS parameters
-	lcg_para para = (param != NULL) ? (*param) : defparam;
+	lcg_para para = (param != nullptr) ? (*param) : defparam;
 
 	//check parameters
 	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
 	if (para.max_iterations <= 0) return LCG_INVILAD_MAX_ITERATIONS;
 	if (para.epsilon <= 0.0) return LCG_INVILAD_EPSILON;
 
-	if (m == NULL) return LCG_INVALID_POINTER;
-	if (B == NULL) return LCG_INVALID_POINTER;
+	if (m == nullptr) return LCG_INVALID_POINTER;
+	if (B == nullptr) return LCG_INVALID_POINTER;
 
 	int i;
-	lcg_float *rk = NULL, *r0_T = NULL, *pk = NULL;
-	lcg_float *Ax = NULL, *uk = NULL,   *qk = NULL, *wk = NULL;
+	lcg_float *rk = nullptr, *r0_T = nullptr, *pk = nullptr;
+	lcg_float *Ax = nullptr, *uk = nullptr,   *qk = nullptr, *wk = nullptr;
 	rk   = lcg_malloc(n_size); r0_T = lcg_malloc(n_size);
 	pk   = lcg_malloc(n_size); Ax  = lcg_malloc(n_size);
 	uk   = lcg_malloc(n_size); qk   = lcg_malloc(n_size);
@@ -565,7 +611,7 @@ int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 		rkr0_T += rk[i]*r0_T[i];
 	}
 
-	int time;
+	int time, ret;
 	lcg_float ak, rk_abs, rkr0_T1, Apr_T, betak, rk_mod;
 	for (time = 0; time < para.max_iterations; time++)
 	{
@@ -588,15 +634,31 @@ int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 #endif
 			}
 			rk_abs /= 1.0*n_size;
-			if (Pfp != NULL)
-				if (Pfp(instance, m, rk_abs, &para, n_size, time)) return LCG_STOP;
-			if (rk_abs <= para.epsilon) return LCG_CONVERGENCE;
+			if (Pfp != nullptr)
+			{
+				if (Pfp(instance, m, rk_abs, &para, n_size, time))
+				{
+					ret = LCG_STOP; goto func_ends;
+				}
+			}
+			if (rk_abs <= para.epsilon)
+			{
+				ret = LCG_CONVERGENCE; goto func_ends;
+			}
 		}
 		else
 		{
-			if (Pfp != NULL)
-				if (Pfp(instance, m, rk_mod/B_mod, &para, n_size, time)) return LCG_STOP;
-			if (rk_mod/B_mod <= para.epsilon) return LCG_CONVERGENCE;
+			if (Pfp != nullptr)
+			{
+				if (Pfp(instance, m, rk_mod/B_mod, &para, n_size, time))
+				{
+					ret = LCG_STOP; goto func_ends;
+				}
+			}
+			if (rk_mod/B_mod <= para.epsilon)
+			{
+				ret = LCG_CONVERGENCE; goto func_ends;
+			}
 		}
 
 		Afp(instance, pk, Ax, n_size);
@@ -626,7 +688,10 @@ int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 
 		for (i = 0; i < n_size; i++)
 		{
-			if (m[i] != m[i]) return LCG_NAN_VALUE;
+			if (m[i] != m[i])
+			{
+				ret = LCG_NAN_VALUE; goto func_ends;
+			}
 		}
 
 		rkr0_T1 = 0.0;
@@ -645,10 +710,16 @@ int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
 		}
 	}
 
-	lcg_free(rk); lcg_free(r0_T);
-	lcg_free(pk); lcg_free(Ax);
-	lcg_free(uk); lcg_free(qk);
-	lcg_free(wk);
+	func_ends:
+	{
+		lcg_free(rk);
+		lcg_free(r0_T);
+		lcg_free(pk);
+		lcg_free(Ax);
+		lcg_free(uk);
+		lcg_free(qk);
+		lcg_free(wk);
+	}
 
 	if (time == para.max_iterations)
 		return LCG_REACHED_MAX_ITERATIONS;
@@ -665,8 +736,8 @@ int lcgs(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float
  * @param[in]  n_size      Size of the solution vector and objective vector.
  * @param      param       Parameter setup for the conjugate gradient methods.
  * @param      instance    The user data sent for the lcg_solver() function by the client. 
- * This variable is either 'this' for class member functions or 'NULL' for global functions.
- * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
+ * This variable is either 'this' for class member functions or 'nullptr' for global functions.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.
  *
  * @return     Status of the function.
  */
@@ -674,19 +745,19 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
 	const lcg_para* param, void* instance, const lcg_float* P)
 {
 	// set CGS parameters
-	lcg_para para = (param != NULL) ? (*param) : defparam;
+	lcg_para para = (param != nullptr) ? (*param) : defparam;
 
 	//check parameters
 	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
 	if (para.max_iterations <= 0) return LCG_INVILAD_MAX_ITERATIONS;
 	if (para.epsilon <= 0.0) return LCG_INVILAD_EPSILON;
 
-	if (m == NULL) return LCG_INVALID_POINTER;
-	if (B == NULL) return LCG_INVALID_POINTER;
+	if (m == nullptr) return LCG_INVALID_POINTER;
+	if (B == nullptr) return LCG_INVALID_POINTER;
 
 	int i;
-	lcg_float *rk = NULL, *r0_T = NULL, *pk = NULL;
-	lcg_float *Ax = NULL, *sk = NULL, *Apk = NULL;
+	lcg_float *rk = nullptr, *r0_T = nullptr, *pk = nullptr;
+	lcg_float *Ax = nullptr, *sk = nullptr, *Apk = nullptr;
 	rk = lcg_malloc(n_size); r0_T = lcg_malloc(n_size);
 	pk = lcg_malloc(n_size); Ax   = lcg_malloc(n_size);
 	sk = lcg_malloc(n_size); Apk  = lcg_malloc(n_size);
@@ -711,7 +782,7 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
 		rkr0_T += rk[i]*r0_T[i];
 	}
 
-	int time;
+	int time, ret;
 	lcg_float ak, wk, rk_abs, rkr0_T1, Apr_T, betak, Ass, AsAs, rk_mod;
 	for (time = 0; time < para.max_iterations; time++)
 	{
@@ -733,15 +804,31 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
 #endif
 			}
 			rk_abs /= 1.0*n_size;
-			if (Pfp != NULL)
-				if (Pfp(instance, m, rk_abs, &para, n_size, time)) return LCG_STOP;
-			if (rk_abs <= para.epsilon) return LCG_CONVERGENCE;
+			if (Pfp != nullptr)
+			{
+				if (Pfp(instance, m, rk_abs, &para, n_size, time))
+				{
+					ret = LCG_STOP; goto func_ends;
+				}
+			}
+			if (rk_abs <= para.epsilon)
+			{
+				ret = LCG_CONVERGENCE; goto func_ends;
+			}
 		}
 		else
 		{
-			if (Pfp != NULL)
-				if (Pfp(instance, m, rk_mod/B_mod, &para, n_size, time)) return LCG_STOP;
-			if (rk_mod/B_mod <= para.epsilon) return LCG_CONVERGENCE;
+			if (Pfp != nullptr)
+			{
+				if (Pfp(instance, m, rk_mod/B_mod, &para, n_size, time))
+				{
+					ret = LCG_STOP; goto func_ends;
+				}
+			}
+			if (rk_mod/B_mod <= para.epsilon)
+			{
+				ret = LCG_CONVERGENCE; goto func_ends;
+			}
 		}
 
 		Afp(instance, pk, Apk, n_size);
@@ -777,7 +864,10 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
 
 		for (i = 0; i < n_size; i++)
 		{
-			if (m[i] != m[i]) return LCG_NAN_VALUE;
+			if (m[i] != m[i])
+			{
+				ret = LCG_NAN_VALUE; goto func_ends;
+			}
 		}
 
 #pragma omp parallel for private (i) schedule(guided)
@@ -801,9 +891,15 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
 		}
 	}
 
-	lcg_free(rk); lcg_free(r0_T);
-	lcg_free(pk); lcg_free(Ax);
-	lcg_free(sk); lcg_free(Apk);
+	func_ends:
+	{
+		lcg_free(rk);
+		lcg_free(r0_T);
+		lcg_free(pk);
+		lcg_free(Ax);
+		lcg_free(sk);
+		lcg_free(Apk);
+	}
 
 	if (time == para.max_iterations)
 		return LCG_REACHED_MAX_ITERATIONS;
@@ -821,8 +917,8 @@ int lbicgstab(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_
  * @param[in]  n_size      Size of the solution vector and objective vector.
  * @param      param       Parameter setup for the conjugate gradient methods.
  * @param      instance    The user data sent for the lcg_solver() function by the client. 
- * This variable is either 'this' for class member functions or 'NULL' for global functions.
- * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
+ * This variable is either 'this' for class member functions or 'nullptr' for global functions.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.
  *
  * @return     Status of the function.
  */
@@ -830,7 +926,7 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 	const lcg_para* param, void* instance, const lcg_float* P)
 {
 	// set CGS parameters
-	lcg_para para = (param != NULL) ? (*param) : defparam;
+	lcg_para para = (param != nullptr) ? (*param) : defparam;
 
 	//check parameters
 	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
@@ -838,12 +934,12 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 	if (para.epsilon <= 0.0) return LCG_INVILAD_EPSILON;
 	if (para.restart_epsilon <= 0.0) return LCG_INVILAD_RESTART_EPSILON;
 
-	if (m == NULL) return LCG_INVALID_POINTER;
-	if (B == NULL) return LCG_INVALID_POINTER;
+	if (m == nullptr) return LCG_INVALID_POINTER;
+	if (B == nullptr) return LCG_INVALID_POINTER;
 
 	int i;
-	lcg_float *rk = NULL, *r0_T = NULL, *pk = NULL;
-	lcg_float *Ax = NULL, *sk = NULL,   *Apk = NULL;
+	lcg_float *rk = nullptr, *r0_T = nullptr, *pk = nullptr;
+	lcg_float *Ax = nullptr, *sk = nullptr,   *Apk = nullptr;
 	rk = lcg_malloc(n_size); r0_T = lcg_malloc(n_size);
 	pk = lcg_malloc(n_size); Ax   = lcg_malloc(n_size);
 	sk = lcg_malloc(n_size); Apk  = lcg_malloc(n_size);
@@ -868,7 +964,7 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 		rkr0_T += rk[i]*r0_T[i];
 	}
 
-	int time;
+	int time, ret;
 	lcg_float ak, wk, rk_abs, rkr0_T1, Apr_T, betak, Ass, AsAs, s_abs, rr1_abs, rk_mod;
 	for (time = 0; time < para.max_iterations; time++)
 	{
@@ -890,15 +986,31 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 #endif
 			}
 			rk_abs /= 1.0*n_size;
-			if (Pfp != NULL)
-				if (Pfp(instance, m, rk_abs, &para, n_size, time)) return LCG_STOP;
-			if (rk_abs <= para.epsilon) return LCG_CONVERGENCE;
+			if (Pfp != nullptr)
+			{
+				if (Pfp(instance, m, rk_abs, &para, n_size, time))
+				{
+					ret = LCG_STOP; goto func_ends;
+				}
+			}
+			if (rk_abs <= para.epsilon)
+			{
+				ret = LCG_CONVERGENCE; goto func_ends;
+			}
 		}
 		else
 		{
-			if (Pfp != NULL)
-				if (Pfp(instance, m, rk_mod/B_mod, &para, n_size, time)) return LCG_STOP;
-			if (rk_mod/B_mod <= para.epsilon) return LCG_CONVERGENCE;
+			if (Pfp != nullptr)
+			{
+				if (Pfp(instance, m, rk_mod/B_mod, &para, n_size, time))
+				{
+					ret = LCG_STOP; goto func_ends;
+				}
+			}
+			if (rk_mod/B_mod <= para.epsilon)
+			{
+				ret = LCG_CONVERGENCE; goto func_ends;
+			}
 		}
 
 		Afp(instance, pk, Apk, n_size);
@@ -928,17 +1040,25 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 #endif
 			}
 			s_abs /= 1.0*n_size;
-			if (Pfp != NULL)
-				if (Pfp(instance, m, s_abs, &para, n_size, time)) return LCG_STOP;
+			if (Pfp != nullptr)
+			{
+				if (Pfp(instance, m, s_abs, &para, n_size, time))
+				{
+					ret = LCG_STOP; goto func_ends;
+				}
+			}
 			if (s_abs <= para.epsilon)
 			{
 				for (i = 0; i < n_size; i++)
 				{
 					m[i] += ak*pk[i];
-
-					if (m[i] != m[i]) return LCG_NAN_VALUE;
+					if (m[i] != m[i])
+					{
+						ret = LCG_NAN_VALUE; goto func_ends;
+					}
 				}
-				return LCG_CONVERGENCE;
+				ret = LCG_CONVERGENCE;
+				goto func_ends;
 			}
 		}
 
@@ -960,7 +1080,10 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 
 		for (i = 0; i < n_size; i++)
 		{
-			if (m[i] != m[i]) return LCG_NAN_VALUE;
+			if (m[i] != m[i])
+			{
+				ret = LCG_NAN_VALUE; goto func_ends;
+			}
 		}
 
 #pragma omp parallel for private (i) schedule(guided)
@@ -1010,9 +1133,15 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 		}
 	}
 
-	lcg_free(rk); lcg_free(r0_T);
-	lcg_free(pk); lcg_free(Ax);
-	lcg_free(sk); lcg_free(Apk);
+	func_ends:
+	{
+		lcg_free(rk);
+		lcg_free(r0_T);
+		lcg_free(pk);
+		lcg_free(Ax);
+		lcg_free(sk);
+		lcg_free(Apk);
+	}
 
 	if (time == para.max_iterations)
 		return LCG_REACHED_MAX_ITERATIONS;
@@ -1031,9 +1160,9 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
  * @param[in]  n_size      Size of the solution vector and objective vector.
  * @param      param       Parameter setup for the conjugate gradient methods.
  * @param      instance    The user data sent for the lcg_solver() function by the client. 
- * This variable is either 'this' for class member functions or 'NULL' for global functions.
+ * This variable is either 'this' for class member functions or 'nullptr' for global functions.
  * @param      solver_id   Solver type used to solve the linear system. The default value is LCG_CGS.
- * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.
  *
  * @return     Status of the function.
  */
@@ -1042,7 +1171,7 @@ int lcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_flo
 	void* instance)
 {
 	// set CG parameters
-	lcg_para para = (param != NULL) ? (*param) : defparam;
+	lcg_para para = (param != nullptr) ? (*param) : defparam;
 
 	// check parameters
 	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
@@ -1050,15 +1179,15 @@ int lcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_flo
 	if (para.epsilon <= 0.0) return LCG_INVILAD_EPSILON;
 	if (para.lambda <= 0.0) return LCG_INVALID_LAMBDA;
 
-	if (m == NULL) return LCG_INVALID_POINTER;
-	if (B == NULL) return LCG_INVALID_POINTER;
-	if (low == NULL) return LCG_INVALID_POINTER;
-	if (hig == NULL) return LCG_INVALID_POINTER;
+	if (m == nullptr) return LCG_INVALID_POINTER;
+	if (B == nullptr) return LCG_INVALID_POINTER;
+	if (low == nullptr) return LCG_INVALID_POINTER;
+	if (hig == nullptr) return LCG_INVALID_POINTER;
 
 	// locate memory
-	lcg_float *gk = NULL, *Adk = NULL;
-	lcg_float *m_new = NULL, *gk_new = NULL;
-	lcg_float *sk = NULL, *yk = NULL;
+	lcg_float *gk = nullptr, *Adk = nullptr;
+	lcg_float *m_new = nullptr, *gk_new = nullptr;
+	lcg_float *sk = nullptr, *yk = nullptr;
 	gk = lcg_malloc(n_size);
 	Adk = lcg_malloc(n_size);
 	m_new = lcg_malloc(n_size);
@@ -1082,7 +1211,7 @@ int lcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_flo
 		gk[i] = Adk[i] - B[i];
 	}
 
-	int time;
+	int time, ret;
 	lcg_float alpha_k = para.lambda;
 	lcg_float p_mod, sk_mod, syk_mod;
 	for (time = 0; time < para.max_iterations; time++)
@@ -1100,9 +1229,17 @@ int lcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_flo
 		}
 		p_mod = sqrt(p_mod);
 
-		if (Pfp != NULL)
-			if (Pfp(instance, m, p_mod, &para, n_size, time)) return LCG_STOP;
-		if (p_mod <= para.epsilon) return LCG_CONVERGENCE;
+		if (Pfp != nullptr)
+		{
+			if (Pfp(instance, m, p_mod, &para, n_size, time))
+			{
+				ret = LCG_STOP; goto func_ends;
+			}
+		}
+		if (p_mod <= para.epsilon)
+		{
+			ret = LCG_CONVERGENCE; goto func_ends;
+		}
 
 		// project the model
 #pragma omp parallel for private (i) schedule(guided)
@@ -1138,12 +1275,15 @@ int lcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_flo
 		}
 	}
 
-	lcg_free(gk);
-	lcg_free(gk_new);
-	lcg_free(m_new);
-	lcg_free(sk);
-	lcg_free(yk);
-	lcg_free(Adk);
+	func_ends:
+	{
+		lcg_free(gk);
+		lcg_free(gk_new);
+		lcg_free(m_new);
+		lcg_free(sk);
+		lcg_free(yk);
+		lcg_free(Adk);
+	}
 
 	if (time == para.max_iterations)
 		return LCG_REACHED_MAX_ITERATIONS;
@@ -1162,9 +1302,9 @@ int lcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_flo
  * @param[in]  n_size      Size of the solution vector and objective vector.
  * @param      param       Parameter setup for the conjugate gradient methods.
  * @param      instance    The user data sent for the lcg_solver() function by the client. 
- * This variable is either 'this' for class member functions or 'NULL' for global functions.
+ * This variable is either 'this' for class member functions or 'nullptr' for global functions.
  * @param      solver_id   Solver type used to solve the linear system. The default value is LCG_CGS.
- * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.
+ * @param      P           Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.
  *
  * @return     Status of the function.
  */
@@ -1173,7 +1313,7 @@ int lcg_spg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_fl
 	void* instance)
 {
 	// set CG parameters
-	lcg_para para = (param != NULL) ? (*param) : defparam;
+	lcg_para para = (param != nullptr) ? (*param) : defparam;
 
 	// check parameters
 	if (n_size <= 0) return LCG_INVILAD_VARIABLE_SIZE;
@@ -1184,16 +1324,16 @@ int lcg_spg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_fl
 	if (para.beta <= 0.0 || para.beta >= 1.0) return LCG_INVALID_BETA;
 	if (para.maxi_m <= 0) return LCG_INVALID_MAXIM;
 
-	if (m == NULL) return LCG_INVALID_POINTER;
-	if (B == NULL) return LCG_INVALID_POINTER;
-	if (low == NULL) return LCG_INVALID_POINTER;
-	if (hig == NULL) return LCG_INVALID_POINTER;
+	if (m == nullptr) return LCG_INVALID_POINTER;
+	if (B == nullptr) return LCG_INVALID_POINTER;
+	if (low == nullptr) return LCG_INVALID_POINTER;
+	if (hig == nullptr) return LCG_INVALID_POINTER;
 
 	// locate memory
-	lcg_float *gk = NULL, *Adk = NULL;
-	lcg_float *m_new = NULL, *gk_new = NULL;
-	lcg_float *sk = NULL, *yk = NULL;
-	lcg_float *dk = NULL, *qk_m = NULL;
+	lcg_float *gk = nullptr, *Adk = nullptr;
+	lcg_float *m_new = nullptr, *gk_new = nullptr;
+	lcg_float *sk = nullptr, *yk = nullptr;
+	lcg_float *dk = nullptr, *qk_m = nullptr;
 	gk = lcg_malloc(n_size);
 	Adk = lcg_malloc(n_size);
 	m_new = lcg_malloc(n_size);
@@ -1232,7 +1372,7 @@ int lcg_spg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_fl
 		qk_m[i] = -1e+30;
 	}
 
-	int time;
+	int time, ret;
 	lcg_float lambda_k = para.lambda;
 	lcg_float alpha_k, maxi_qk;
 	lcg_float p_mod, alpha_mod, sk_mod, syk_mod;
@@ -1251,9 +1391,17 @@ int lcg_spg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_fl
 		}
 		p_mod = sqrt(p_mod);
 
-		if (Pfp != NULL)
-			if (Pfp(instance, m, p_mod, &para, n_size, time)) return LCG_STOP;
-		if (p_mod <= para.epsilon) return LCG_CONVERGENCE;
+		if (Pfp != nullptr)
+		{
+			if (Pfp(instance, m, p_mod, &para, n_size, time))
+			{
+				ret = LCG_STOP; goto func_ends;
+			}
+		}
+		if (p_mod <= para.epsilon)
+		{
+			ret = LCG_CONVERGENCE; goto func_ends;
+		}
 
 		// project the model
 #pragma omp parallel for private (i) schedule(guided)
@@ -1340,14 +1488,17 @@ int lcg_spg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_fl
 		}
 	}
 
-	lcg_free(gk);
-	lcg_free(gk_new);
-	lcg_free(m_new);
-	lcg_free(sk);
-	lcg_free(yk);
-	lcg_free(Adk);
-	lcg_free(dk);
-	lcg_free(qk_m);
+	func_ends:
+	{
+		lcg_free(gk);
+		lcg_free(gk_new);
+		lcg_free(m_new);
+		lcg_free(sk);
+		lcg_free(yk);
+		lcg_free(Adk);
+		lcg_free(dk);
+		lcg_free(qk_m);
+	}
 
 	if (time == para.max_iterations)
 		return LCG_REACHED_MAX_ITERATIONS;
