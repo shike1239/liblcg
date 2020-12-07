@@ -34,3 +34,4 @@
 # folder preferences and build folder
 .DS_Store
 build/
+project/
