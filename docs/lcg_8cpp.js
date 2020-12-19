@@ -17,7 +17,7 @@ var lcg_8cpp =
       [ "LCG_INVILAD_EPSILON", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a337f0c675d30489b175d2371787bbaee", null ],
       [ "LCG_INVILAD_RESTART_EPSILON", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a9d6fc5f264fc537012dd935f2bbe4b34", null ],
       [ "LCG_REACHED_MAX_ITERATIONS", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81ae5f6ce62bb4d6aba69ecce84750f0d0e", null ],
-      [ "LCG_NULL_PRECONDITION_MATRIX", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a13620b4ffef894ee83310ed42aa83eef", null ],
+      [ "LCG_nullptr_PRECONDITION_MATRIX", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81ab1dd9a00e73bbc14bfec856613a1f42d", null ],
       [ "LCG_NAN_VALUE", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a1f2ed35558627d6b93931677c40531a3", null ],
       [ "LCG_INVALID_POINTER", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a62822fc57a40064b6ddc96bac4881544", null ],
       [ "LCG_INVALID_LAMBDA", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81aa7949f9d6aec19191f5d43fcb2f9f93a", null ],

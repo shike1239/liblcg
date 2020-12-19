@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="generator" content="Doxygen 1.8.20"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Liblcg: src/lib/lcg.cpp 文件参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
@@ -37,7 +37,7 @@
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.png"
+          <img id="MSearchSelect" src="search/mag_sel.svg"
                onmouseover="return searchBox.OnSearchSelectShow()"
                onmouseout="return searchBox.OnSearchSelectHide()"
                alt=""/>
@@ -46,7 +46,7 @@
                onblur="searchBox.OnSearchFieldFocus(false)" 
                onkeyup="searchBox.OnSearchFieldChange(event)"/>
           </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.svg" alt=""/></a>
           </span>
         </div>
 </td>
@@ -55,7 +55,7 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- 制作者 Doxygen 1.8.18 -->
+<!-- 制作者 Doxygen 1.8.20 -->
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
 var searchBox = new SearchBox("searchBox", "search",false,'搜索');
@@ -146,7 +146,7 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html',''); initResizable(); }
 <br />
 &#160;&#160;<a class="el" href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a9d6fc5f264fc537012dd935f2bbe4b34">LCG_INVILAD_RESTART_EPSILON</a>, 
 <a class="el" href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81ae5f6ce62bb4d6aba69ecce84750f0d0e">LCG_REACHED_MAX_ITERATIONS</a>, 
-<a class="el" href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a13620b4ffef894ee83310ed42aa83eef">LCG_NULL_PRECONDITION_MATRIX</a>, 
+<a class="el" href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81ab1dd9a00e73bbc14bfec856613a1f42d">LCG_nullptr_PRECONDITION_MATRIX</a>, 
 <a class="el" href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a1f2ed35558627d6b93931677c40531a3">LCG_NAN_VALUE</a>, 
 <br />
 &#160;&#160;<a class="el" href="lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a62822fc57a40064b6ddc96bac4881544">LCG_INVALID_POINTER</a>, 
@@ -372,8 +372,8 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html',''); initResizable(); }
     <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'nullptr' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.</td></tr>
   </table>
   </dd>
 </dl>
@@ -404,9 +404,9 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html',''); initResizable(); }
     <tr><td class="paramdir">[in]</td><td class="paramname">hig</td><td>The higher boundary of the acceptable solution. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'nullptr' for global functions. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">solver_id</td><td>Solver type used to solve the linear system. The default value is LCG_CGS. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.</td></tr>
   </table>
   </dd>
 </dl>
@@ -449,7 +449,7 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html',''); initResizable(); }
 </td></tr>
 <tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81ae5f6ce62bb4d6aba69ecce84750f0d0e"></a>LCG_REACHED_MAX_ITERATIONS&#160;</td><td class="fielddoc"><p>Iteration reached maximal limit. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a13620b4ffef894ee83310ed42aa83eef"></a>LCG_NULL_PRECONDITION_MATRIX&#160;</td><td class="fielddoc"><p>Null precondition matrix. </p>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81ab1dd9a00e73bbc14bfec856613a1f42d"></a>LCG_nullptr_PRECONDITION_MATRIX&#160;</td><td class="fielddoc"><p>Null precondition matrix. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a1f2ed35558627d6b93931677c40531a3"></a>LCG_NAN_VALUE&#160;</td><td class="fielddoc"><p>Nan value. </p>
 </td></tr>
@@ -539,8 +539,8 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html',''); initResizable(); }
     <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'nullptr' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.</td></tr>
   </table>
   </dd>
 </dl>
@@ -619,8 +619,8 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html',''); initResizable(); }
     <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'nullptr' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.</td></tr>
   </table>
   </dd>
 </dl>
@@ -699,8 +699,8 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html',''); initResizable(); }
     <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'nullptr' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.</td></tr>
   </table>
   </dd>
 </dl>
@@ -888,9 +888,9 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html',''); initResizable(); }
     <tr><td class="paramdir">[in]</td><td class="paramname">hig</td><td>The higher boundary of the acceptable solution. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'nullptr' for global functions. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">solver_id</td><td>Solver type used to solve the linear system. The default value is LCG_CGS. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1159,9 +1159,9 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html',''); initResizable(); }
     <tr><td class="paramdir">[in]</td><td class="paramname">hig</td><td>The higher boundary of the acceptable solution. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'nullptr' for global functions. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">solver_id</td><td>Solver type used to solve the linear system. The default value is LCG_CGS. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1241,8 +1241,8 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html',''); initResizable(); }
     <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'nullptr' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1322,8 +1322,8 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html',''); initResizable(); }
     <tr><td class="paramdir"></td><td class="paramname">B</td><td>Objective vector of the linear system. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>Size of the solution vector and objective vector. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">param</td><td>Parameter setup for the conjugate gradient methods. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'NULL' for global functions. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is NULL.</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">instance</td><td>The user data sent for the <a class="el" href="lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9" title="A combined conjugate gradient solver function.">lcg_solver()</a> function by the client. This variable is either 'this' for class member functions or 'nullptr' for global functions. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">P</td><td>Precondition vector (optional expect for the LCG_PCG method). The default value is nullptr.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1337,9 +1337,7 @@ $(document).ready(function(){initNavTree('lcg_8cpp.html',''); initResizable(); }
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li><li class="navelem"><a class="el" href="lcg_8cpp.html">lcg.cpp</a></li>
-    <li class="footer">制作者
-    <a href="http://www.doxygen.org/index.html">
-    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
+    <li class="footer">制作者 <a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20 </li>
   </ul>
 </div>
 </body>

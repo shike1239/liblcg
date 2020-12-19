@@ -32,7 +32,7 @@ var searchData=
   ['lcg_5fmax_33',['lcg_max',['../lcg_8cpp.html#aec408c7e28071f5c37966fb012d0d5fb',1,'lcg.cpp']]],
   ['lcg_5fmin_34',['lcg_min',['../lcg_8cpp.html#aa123c493d8017c2db1152f34db00880d',1,'lcg.cpp']]],
   ['lcg_5fnan_5fvalue_35',['LCG_NAN_VALUE',['../lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a1f2ed35558627d6b93931677c40531a3',1,'lcg.cpp']]],
-  ['lcg_5fnull_5fprecondition_5fmatrix_36',['LCG_NULL_PRECONDITION_MATRIX',['../lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a13620b4ffef894ee83310ed42aa83eef',1,'lcg.cpp']]],
+  ['lcg_5fnullptr_5fprecondition_5fmatrix_36',['LCG_nullptr_PRECONDITION_MATRIX',['../lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81ab1dd9a00e73bbc14bfec856613a1f42d',1,'lcg.cpp']]],
   ['lcg_5fopenmp_37',['LCG_OPENMP',['../config_8h.html#a07b69821c33a2b5615aac5ef3376c7a2',1,'config.h']]],
   ['lcg_5fpara_38',['lcg_para',['../structlcg__para.html',1,'']]],
   ['lcg_5fpcg_39',['LCG_PCG',['../lcg_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a883bb6d23fbf342404921510838cc921',1,'lcg.h']]],
