@@ -73,7 +73,7 @@ int main(int argc, char const *argv[])
 
 	srand(time(0));
 	// 添加一些大数
-	int tmp_id, tmp_size
+	int tmp_id, tmp_size;
 	double tmp_val;
 	for (int i = 0; i < M; i++)
 	{
