@@ -61,12 +61,20 @@ int main(int argc, char const *argv[])
 	{
 		kernel[i] = new double [N];
 	}
-
 	tmp_arr = new double [M];
+
+	for (int i = 0; i < M; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			kernel[i][j] = random_double(-1.0, 1.0);
+		}
+	}
 
 	srand(time(0));
 	// 添加一些大数
-	int tmp_id, tmp_size, tmp_val;
+	int tmp_id, tmp_size
+	double tmp_val;
 	for (int i = 0; i < M; i++)
 	{
 		tmp_size = random_int(25, 35);
