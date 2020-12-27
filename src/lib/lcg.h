@@ -236,7 +236,7 @@ int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
  *
  * @return     Status of the function.
  */
-int lcg_solver_constrained(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
+int clcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
 	const lcg_float* low, const lcg_float *hig, const int n_size, const lcg_para* param, 
 	void* instance, lcg_solver_enum solver_id = LCG_PG);
 

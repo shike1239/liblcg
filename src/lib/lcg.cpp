@@ -124,13 +124,13 @@ const char* lcg_error_str(int er_index)
 		case LCG_INVALID_POINTER:
 			return "Invalid pointer.";
 		case LCG_INVALID_LAMBDA:
-			return "Invalid range for lambda.";
+			return "Invalid value for lambda.";
 		case LCG_INVALID_SIGMA:
-			return "Invalid range for sigma.";
+			return "Invalid value for sigma.";
 		case LCG_INVALID_BETA:
-			return "Invalid range for beta.";
+			return "Invalid value for beta.";
 		case LCG_INVALID_MAXIM:
-			return "Invalid range for maxi_m.";
+			return "Invalid value for maxi_m.";
 		default:
 			return "Unknown error.";
 	}
@@ -215,15 +215,15 @@ int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 typedef int (*lcg_solver_ptr2)(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
 	const lcg_float* low, const lcg_float* hig, const int n_size, const lcg_para* param, void* instance);
 
-int lcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
+int clcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
 	const lcg_float* low, const lcg_float* hig, const int n_size, const lcg_para* param, 
 	void* instance);
 
-int lcg_spg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
+int clcg_spg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
 	const lcg_float* low, const lcg_float* hig, const int n_size, const lcg_para* param, 
 	void* instance);
 
-int lcg_solver_constrained(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
+int clcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
 	const lcg_float* low, const lcg_float *hig, const int n_size, const lcg_para* param, 
 	void* instance, lcg_solver_enum solver_id)
 {
@@ -231,13 +231,13 @@ int lcg_solver_constrained(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* 
 	switch (solver_id)
 	{
 		case LCG_PG:
-			cg_solver = lcg_pg;
+			cg_solver = clcg_pg;
 			break;
 		case LCG_SPG:
-			cg_solver = lcg_spg;
+			cg_solver = clcg_spg;
 			break;
 		default:
-			cg_solver = lcg_pg;
+			cg_solver = clcg_pg;
 			break;
 	}
 
@@ -1166,7 +1166,7 @@ int lbicgstab2(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
  *
  * @return     Status of the function.
  */
-int lcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
+int clcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
 	const lcg_float* low, const lcg_float* hig, const int n_size, const lcg_para* param, 
 	void* instance)
 {
@@ -1308,7 +1308,7 @@ int lcg_pg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_flo
  *
  * @return     Status of the function.
  */
-int lcg_spg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
+int clcg_spg(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
 	const lcg_float* low, const lcg_float* hig, const int n_size, const lcg_para* param, 
 	void* instance)
 {
