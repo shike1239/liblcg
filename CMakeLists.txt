@@ -1,19 +1,25 @@
 cmake_minimum_required(VERSION 3.15.2)
 
 # 设置工程名称和语言
-#project(LIBLCG LANGUAGES CXX)
 project(LIBLCG)
 
-# 设置库版本号
-set(VERSION_MAJOR 1)
-set(VERSION_MINOR 6)
-set(VERSION_PATCH 0)
+if (UNIX AND NOT APPLE)
+    message(STATUS "platform: unix")
+elseif (WIN32)
+    message(STATUS "platform: windows")
+    set(CMAKE_C_COMPILER gcc)
+	set(CMAKE_CXX_COMPILER g++)
+	set(CMAKE_INSTALL_PREFIX "D:\\Library")
+elseif (APPLE)
+    message(STATUS "platform: mac os")
+    # 设置安装地址（通过homebrew安装时需要注释掉）
+	set(CMAKE_INSTALL_PREFIX "/usr/local")
+else ()
+    message(STATUS "platform: other")
+endif ()
 
 # 添加源文件地址
 add_subdirectory(src/)
-
-# 设置安装地址（通过homebrew安装时需要注释掉）
-set(CMAKE_INSTALL_PREFIX /usr/local)
 
 # 添加编译选项
 option(LCG_FABS "use lcg's fabs() function" ON)
@@ -23,6 +29,11 @@ configure_file(
 	"${PROJECT_SOURCE_DIR}/config.h.in"
 	"${PROJECT_SOURCE_DIR}/src/lib/config.h"
 	)
+
+# 设置库版本号
+set(VERSION_MAJOR 1)
+set(VERSION_MINOR 6)
+set(VERSION_PATCH 0)
 
 # 构建一个 CPack 安装包
 include (InstallRequiredSystemLibraries)

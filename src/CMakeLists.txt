@@ -30,14 +30,21 @@ if (OpenMP_CXX_FOUND)
 	message("-- OpenMP Found.")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OpenMP_SHARED_LINKER_FLAGS}")
 	target_link_libraries(lcg PUBLIC OpenMP::OpenMP_CXX)
 	target_link_libraries(lcg_static OpenMP::OpenMP_CXX)
 endif()
 
 # 库的安装命令
-install(TARGETS lcg lcg_static
+if(WIN32)
+	install(TARGETS lcg DESTINATION lib)
+	install(TARGETS lcg_static DESTINATION lib)
+else()
+	install(TARGETS lcg lcg_static
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib)
+endif()
+
 # 头文件安装命令
 install(FILES lib/lcg.h DESTINATION include)
 
@@ -45,7 +52,7 @@ install(FILES lib/lcg.h DESTINATION include)
 macro(add_sample name file)
 	# 添加可执行文件 命令行
 	add_executable(${name} sample/${file}.cpp)
-	# 为安装文件添加动态库的搜索地址
+	# 为安装文件添加动态库的搜索地址 在Windows下并没有什么用 直接忽略
 	set_target_properties(${name} PROPERTIES INSTALL_RPATH "/usr/local/lib")
 	# 链接动态库
 	target_link_libraries(${name} PUBLIC lcg)
