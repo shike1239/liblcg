@@ -37,16 +37,17 @@ endif()
 
 # 库的安装命令
 if(WIN32)
-	install(TARGETS lcg DESTINATION lib)
-	install(TARGETS lcg_static DESTINATION lib)
+	install(TARGETS lcg DESTINATION liblcg)
+	install(TARGETS lcg_static DESTINATION liblcg)
+	# 头文件安装命令
+	install(FILES lib/lcg.h DESTINATION liblcg)
 else()
 	install(TARGETS lcg lcg_static
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib)
+	# 头文件安装命令
+	install(FILES lib/lcg.h DESTINATION include)
 endif()
-
-# 头文件安装命令
-install(FILES lib/lcg.h DESTINATION include)
 
 # 例子的编译方法
 macro(add_sample name file)
@@ -56,6 +57,10 @@ macro(add_sample name file)
 	set_target_properties(${name} PROPERTIES INSTALL_RPATH "/usr/local/lib")
 	# 链接动态库
 	target_link_libraries(${name} PUBLIC lcg)
+	# 安装Windows例子程序
+	if(WIN32)
+		install(TARGETS ${name} DESTINATION liblcg)
+	endif()
 endmacro()
 
 add_sample(lcg_sample sample)
