@@ -3,28 +3,21 @@ cmake_minimum_required(VERSION 3.15.2)
 # 设置工程名称和语言
 project(LIBLCG)
 
-if (UNIX AND NOT APPLE)
-    message(STATUS "platform: unix")
-    # 设置安装地址（通过homebrew安装时需要注释掉）
+if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
+	message(STATUS "Platform: " ${CMAKE_HOST_SYSTEM_NAME})
 	set(CMAKE_INSTALL_PREFIX "/usr/local")
-elseif (WIN32)
-    message(STATUS "platform: windows")
-    set(CMAKE_C_COMPILER gcc)
+elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
+	message(STATUS "Platform: " ${CMAKE_HOST_SYSTEM_NAME})
+	set(CMAKE_INSTALL_PREFIX "/usr/local")
+elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
+	message(STATUS "Platform: " ${CMAKE_HOST_SYSTEM_NAME})
+	set(CMAKE_C_COMPILER gcc)
 	set(CMAKE_CXX_COMPILER g++)
 	set(CMAKE_INSTALL_PREFIX "D:\\Library")
-elseif (APPLE)
-    message(STATUS "platform: mac os")
-    # 设置安装地址（通过homebrew安装时需要注释掉）
+else()
+	message(STATUS "Platform: " ${CMAKE_HOST_SYSTEM_NAME})
 	set(CMAKE_INSTALL_PREFIX "/usr/local")
-elseif (LINUX)
-    message(STATUS "platform: linux")
-    # 设置安装地址（通过homebrew安装时需要注释掉）
-	set(CMAKE_INSTALL_PREFIX "/usr/local")
-else ()
-    message(STATUS "platform: other")
-    # 设置安装地址（通过homebrew安装时需要注释掉）
-	set(CMAKE_INSTALL_PREFIX "/usr/local")
-endif ()
+endif()
 
 # 添加源文件地址
 add_subdirectory(src/)
