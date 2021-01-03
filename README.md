@@ -16,10 +16,12 @@ Ax = B
 
 ## 安装
 
-算法库默认使用 CMake 编译工具进行汇编，并在不同平台生成相应的 Makefile。默认的编译器为 GNU 编译器。
+算法库使用 CMake 工具进行汇编，可在不同操作平台生成相应的Makefile或工程文件。
 
 算法库目前有两个可用的编译选项，分别为 LCG_FABS 和 LCG_OPENMP，默认值均为 ON。其中 LCG_FABS 表示是否使用算法库自带的绝对值计算方法。若此值为 OFF 则会使用标准的（cmath）绝对值计算方法。
-LCG_OPENMP 为是否使用 OpenMP 对算法进行加速。若此值为 OFF 则表示不使用OpenMP。用户可以使用以下方式进行条件编译：
+LCG_OPENMP 为是否使用 OpenMP 对算法进行加速。若此值为 OFF 则表示不使用OpenMP。如需使用OpenMP则需安装相应的依赖库，目前主流操作系统均已内置。
+
+用户可以使用-D命令参数进行条件编译：
 
 ```shell
 cmake .. -DLCG_FABS=OFF -DLCG_OPENMP=ON
@@ -27,7 +29,7 @@ cmake .. -DLCG_FABS=OFF -DLCG_OPENMP=ON
 
 ### Linux 与 MacOS
 
-默认的安装路径为 /usr/local，头文件与动态库分别安装于 include 与 lib 文件夹。具体的编译与安装步骤如下：
+默认的安装路径为 /usr/local。头文件与动态库分别安装于 include 与 lib 文件夹。具体的编译与安装步骤如下：
 
 1. 下载安装CMake软件；
 2. 下载安装GCC编译器（通常系统已内置）；
@@ -38,6 +40,8 @@ mkdir build && cd build && cmake .. && make install
 ```
 
 ### Windows
+
+#### MinGW 和 GCC
 
 Windows系统不包含GNU编译环境，用户需自行下载并配置。方法如下：
 
@@ -50,7 +54,23 @@ Windows系统不包含GNU编译环境，用户需自行下载并配置。方法�
 mkdir build && cd build && cmake .. -G "MinGW Makefiles" && make install
 ```
 
-默认的安装路径为 D:\\Library。头文件、动态库与可执行文件均安装于liblcg文件夹。 除上述方式，用户也可在VS环境下自行构建工程文件并编译使用动态库。此时你需要拷贝的文件为 src/lib 文件夹下的所有文件。
+默认的安装路径为 D:\\Library。头文件与动态库分别安装于 include 与 lib 文件夹。
+**注意：**用户需要添加头文件与动态库地址到计算机的环境变量中。 
+
+#### Visual Studio
+
+用户可使用CMake工具构建VS工程文件并编译使用动态库。方法如下：
+
+1. 下载安装 Visual Studio 软件；
+2. 在源文件路径内使用如下命令生成VS工程文件：
+
+```shell
+mkdir build && cd build && cmake .. -G "Visual Studio 16 2019"
+```
+
+_注：如需生成其他版本的VS工程文件，请使用-G命令查看相应的识别码。_
+
+3. 使用 Visual Studio 打开.sln工程文件并编译动态库。
 
 ## 数据类型
 
