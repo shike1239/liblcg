@@ -23,17 +23,6 @@ message(STATUS "Install prefix: " ${CMAKE_INSTALL_PREFIX})
 # 添加源文件地址
 add_subdirectory(src/)
 
-# 添加编译选项
-option(LCG_FABS "use lcg's fabs() function" ON)
-option(LCG_OPENMP "use openmp" ON)
-message(STATUS "Use library's fabs(): " ${LCG_FABS})
-message(STATUS "Use OpenMP: " ${LCG_OPENMP})
-# 加入一个头文件配置，让cmake对源码进行操作
-configure_file(
-	"${PROJECT_SOURCE_DIR}/config.h.in"
-	"${PROJECT_SOURCE_DIR}/src/lib/config.h"
-	)
-
 # 设置库版本号
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 6)

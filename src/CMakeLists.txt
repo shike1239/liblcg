@@ -24,15 +24,28 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 # 设置编译选项
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11 -O2")
 
-# 添加openmp的编译命令 设置编译选项
-find_package(OpenMP REQUIRED)
-if (OpenMP_CXX_FOUND)
-	message("-- OpenMP Found.")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
-	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OpenMP_SHARED_LINKER_FLAGS}")
-	target_link_libraries(lcg PUBLIC OpenMP::OpenMP_CXX)
-	target_link_libraries(lcg_static OpenMP::OpenMP_CXX)
+# 添加编译选项
+option(LCG_FABS "use lcg's fabs() function" ON)
+option(LCG_OPENMP "use openmp" ON)
+message(STATUS "Use library's fabs(): " ${LCG_FABS})
+message(STATUS "Use OpenMP: " ${LCG_OPENMP})
+# 加入一个头文件配置，让cmake对源码进行操作
+configure_file(
+	"${PROJECT_SOURCE_DIR}/config.h.in"
+	"${PROJECT_SOURCE_DIR}/src/lib/config.h"
+	)
+
+if(LCG_OPENMP)
+	# 添加openmp的编译命令 设置编译选项
+	find_package(OpenMP REQUIRED)
+	if (OpenMP_CXX_FOUND)
+		message(STATUS "OpenMP Found.")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+		set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OpenMP_SHARED_LINKER_FLAGS}")
+		target_link_libraries(lcg PUBLIC OpenMP::OpenMP_CXX)
+		target_link_libraries(lcg_static OpenMP::OpenMP_CXX)
+	endif()
 endif()
 
 # 库的安装命令
