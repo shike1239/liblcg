@@ -79,7 +79,11 @@ void TESTFUNC::Ax(const lcg_float* a, lcg_float* b, const int num)
 int TESTFUNC::Progress(const lcg_float* m, const lcg_float converge, const lcg_para *param, const int n_size, const int k)
 {
 	clog << "Iteration-times: " << k << "\tconvergence: " << converge << endl;
+#ifdef __linux__
 	if (converge > param->epsilon) clog << "\033[1A\033[K";
+#elif defined __APPLE__
+	if (converge > param->epsilon) clog << "\033[1A\033[K";
+#endif
 	return 0;
 }
 

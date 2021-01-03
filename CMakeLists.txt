@@ -5,6 +5,8 @@ project(LIBLCG)
 
 if (UNIX AND NOT APPLE)
     message(STATUS "platform: unix")
+    # 设置安装地址（通过homebrew安装时需要注释掉）
+	set(CMAKE_INSTALL_PREFIX "/usr/local")
 elseif (WIN32)
     message(STATUS "platform: windows")
     set(CMAKE_C_COMPILER gcc)
@@ -14,8 +16,14 @@ elseif (APPLE)
     message(STATUS "platform: mac os")
     # 设置安装地址（通过homebrew安装时需要注释掉）
 	set(CMAKE_INSTALL_PREFIX "/usr/local")
+elseif (LINUX)
+    message(STATUS "platform: linux")
+    # 设置安装地址（通过homebrew安装时需要注释掉）
+	set(CMAKE_INSTALL_PREFIX "/usr/local")
 else ()
     message(STATUS "platform: other")
+    # 设置安装地址（通过homebrew安装时需要注释掉）
+	set(CMAKE_INSTALL_PREFIX "/usr/local")
 endif ()
 
 # 添加源文件地址

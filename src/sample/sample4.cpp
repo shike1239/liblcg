@@ -50,7 +50,11 @@ void CalAx(void* instance, const lcg_float* x, lcg_float* prod_Ax, const int n_s
 int Prog(void* instance, const lcg_float* m, const lcg_float converge, const lcg_para* param, const int n_s, const int k)
 {
 	std::clog << "Iteration-times: " << k << "\tconvergence: " << converge << std::endl;
+#ifdef __linux__
 	if (converge > param->epsilon) std::clog << "\033[1A\033[K";
+#elif defined __APPLE__
+	if (converge > param->epsilon) std::clog << "\033[1A\033[K";
+#endif
 	return 0;
 }
 
