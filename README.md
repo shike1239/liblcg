@@ -6,25 +6,17 @@ _浙江大学地球科学学院·地球物理研究所_
 
 ## 简介
 
-liblcg 是一个简单、高效的 C++ 线性共轭梯度算法库，其中包含了一般形式的共轭梯度算法、预优共轭梯度算法、共轭梯度平方算法、双稳共轭梯度算法、BB步共轭梯度投影法与SPG共轭梯度投影法。可用于求解如下形式的线性方程组：
+liblcg 是一个独立的、高效的 C++ 线性共轭梯度算法库。包含了实数域的共轭梯度算法、预优共轭梯度算法、共轭梯度平方算法、双稳共轭梯度算法、BB步共轭梯度投影法与SPG共轭梯度投影法。可用于求解如下形式的线性方程组：
 
 ```
 Ax = B
 ```
 
-其中，A 是一个 N 阶的方阵、x 为 N\*1 的待求解的模型向量，B 为 N\*1 的需拟合的目标向量。共轭梯度法广泛应用于无约束与约束的线性最优化问题，拥有优良的收敛与计算效率。其中，共轭梯度法与预优共轭梯度法可用于求解A为对称形式的线性方程组，而共轭梯度平方法与双稳共轭梯度法可用于求解A为非对称形式的线性方程组。同时，两种投影梯度法可用于求解带不等式约束的线性最优化问题。
+其中，A 是一个 N 阶的方阵、x 为 N\*1 大小的待求解的模型向量，B 为 N\*1 大小的需拟合的目标向量。共轭梯度法广泛应用于无约束与约束的线性最优化问题，拥有优良的收敛与计算效率。其中，共轭梯度法与预优共轭梯度法可用于求解A为对称形式的线性方程组，而共轭梯度平方法与双稳共轭梯度法可用于求解A为非对称形式的线性方程组。同时，两种投影梯度法可用于求解带不等式约束的线性最优化问题。
 
 ## 安装
 
-算法库默认使用 Cmake 编译工具进行编译，可在不同平台生成相应的可执行或工程文件。请用户自行下载安装 Cmake 软件后按如下方法进行编译。此方法适用于 MacOS 或 Linux 系统 （默认的编译器为 G++，用户可在 CMakeLists.txt 中自行修改编译器与安装地址），Windows 用户请使用 VS studio 等编译工具新建项目并拷贝 src/lib 文件夹下所有文件至新项目并编译动态库。
-
-```shell
-mkdir build
-cd build
-cmake ..
-make
-make install
-```
+算法库默认使用 CMake 编译工具进行汇编，并在不同平台生成相应的 Makefile。默认的编译器为 GNU 编译器。
 
 算法库目前有两个可用的编译选项，分别为 LCG_FABS 和 LCG_OPENMP，默认值均为 ON。其中 LCG_FABS 表示是否使用算法库自带的绝对值计算方法。若此值为 OFF 则会使用标准的（cmath）绝对值计算方法。
 LCG_OPENMP 为是否使用 OpenMP 对算法进行加速。若此值为 OFF 则表示不使用OpenMP。用户可以使用以下方式进行条件编译：
@@ -33,7 +25,32 @@ LCG_OPENMP 为是否使用 OpenMP 对算法进行加速。若此值为 OFF 则�
 cmake .. -DLCG_FABS=OFF -DLCG_OPENMP=ON
 ```
 
-用户也可以将算法库文件直接拷贝至自己的工程目录中编译使用。此时你需要拷贝的文件包含 src/lib 文件夹下的所有文件。
+### Linux 与 MacOS
+
+默认的安装路径为 /usr/local，头文件与动态库分别安装于 include 与 lib 文件夹。具体的编译与安装步骤如下：
+
+1. 下载安装CMake软件；
+2. 下载安装GCC编译器（通常系统已内置）；
+3. 在源文件路径内使用如下命令进行编译与安装：
+
+```shell
+mkdir build && cd build && cmake .. && make install
+```
+
+### Windows
+
+Windows系统不包含GNU编译环境，用户需自行下载并配置。方法如下：
+
+1. 下载MinGW安装文件，并选择gcc、pthreads与make相关软件包安装；
+2. 下载安装CMake软件；
+3. 添加CMake与MinGW可执行文件路径至Windows环境变量；
+4. 在源文件路径内使用如下命令进行编译与安装：
+
+```shell
+mkdir build && cd build && cmake .. -G "MinGW Makefiles" && make install
+```
+
+默认的安装路径为 D:\\Library。头文件、动态库与可执行文件均安装于liblcg文件夹。 除上述方式，用户也可在VS环境下自行构建工程文件并编译使用动态库。此时你需要拷贝的文件为 src/lib 文件夹下的所有文件。
 
 ## 数据类型
 
@@ -123,269 +140,3 @@ int lcg_solver_constrained(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* 
 1. `lcg_float* low` 可取的参数范围的底界；
 2. `lcg_float* hig` 可取的参数范围的顶界；
 3. `int solver_id` 求解函数使用的求解方法，可选的类型包括 LCG_PG 与 LCG_SPG。默认类型为 LCG_PG。
-
-## 示例
-
-以下为一个简单的例子。我们使用 lcg_solver() 求解一个3\*3的对称形式的线性方程组。其中 Ax 计算函数与监控函数均为类的成员函数。
-
-```cpp
-#include "lcg.h"   
-#include "iostream"   
-
-using std::cout;
-using std::clog;
-using std::endl;
-
-class TESTFUNC
-{
-public:
-  TESTFUNC();
-  ~TESTFUNC();
-  void Routine();
-  /**
-   * 因为类的成员函数指针不能直接被调用，所以我们在这里定义一个静态的中转函数来辅助Ax函数的调用
-   * 这里我们利用reinterpret_cast将_Ax的指针转换到Ax上，需要注意的是成员函数的指针只能通过
-   * 实例对象进行调用，因此需要void* instance变量。
-  */
-  static void _Ax(void* instance, const lcg_float* a, lcg_float* b, const int num)
-  {
-    return reinterpret_cast<TESTFUNC*>(instance)->Ax(a, b, num);
-  }
-  void Ax(const lcg_float* a, lcg_float* b, const int num); //定义共轭梯度中Ax的算法
-
-  static int _Progress(void* instance, const lcg_float* m, const lcg_float converge, const lcg_para *param, const int n_size, const int k)
-  {
-    return reinterpret_cast<TESTFUNC*>(instance)->Progress(m, converge, param, n_size, k);
-  }
-  int Progress(const lcg_float* m, const lcg_float converge, const lcg_para *param, const int n_size, const int k);
-private:
-  lcg_float* m_;
-  lcg_float* b_;
-  lcg_float* p_;
-  lcg_float kernel_[3][3];
-};
-
-TESTFUNC::TESTFUNC()
-{
-  // 测试线性方程组
-  // 6.3*x1 + 3.9*x2 + 2.5*x3 = -2.37
-  // 3.9*x1 + 1.2*x2 + 3.1*x3 = 5.82
-  // 2.5*x1 + 3.1*x2 + 7.6*x3 = 5.21
-  // 目标解 x1=1.2 x2=-3.7 x3=1.8
-  // 注意根据共轭梯度法的要求 kernel是一个N阶对称阵
-  kernel_[0][0] = 6.3; kernel_[0][1] = 3.9; kernel_[0][2] = 2.5;
-  kernel_[1][0] = 3.9; kernel_[1][1] = 1.2; kernel_[1][2] = 3.1;
-  kernel_[2][0] = 2.5; kernel_[2][1] = 3.1; kernel_[2][2] = 7.6;
-  // 初始解
-  m_ = lcg_malloc(3); // 开辟数组空间
-  m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;
-  // 拟合目标值（含有一定的噪声）
-  b_ = lcg_malloc(3);
-  b_[0] = -2.3723; b_[1] = 5.8201; b_[2] = 5.2065;
-  // 测试预优矩阵 这里只是测试流程 预优矩阵值全为1 并没有什么作用
-  p_ = lcg_malloc(3);
-  p_[0] = p_[1] = p_[2] = 1.0;
-}
-
-TESTFUNC::~TESTFUNC()
-{
-  lcg_free(m_); // 销毁数组使用的空间
-  lcg_free(b_);
-  lcg_free(p_);
-}
-
-void TESTFUNC::Ax(const lcg_float* a, lcg_float* b, const int num)
-{
-  for (int i = 0; i < num; i++)
-  {
-    b[i] = 0.0;
-    for (int j = 0; j < num; j++)
-    {
-      b[i] += kernel_[i][j]*a[j];
-    }
-  }
-  return;
-}
-
-int TESTFUNC::Progress(const lcg_float* m, const lcg_float converge, const lcg_para *param, const int n_size, const int k)
-{
-  clog << "Iteration-times: " << k << "\tconvergence: " << converge << endl;
-  if (converge > param->epsilon) clog << "\033[1A\033[K";
-  return 0;
-}
-
-void TESTFUNC::Routine()
-{
-  lcg_para self_para = lcg_default_parameters(); // 得到一个值等于默认值的参数类型
-  self_para.max_iterations = 10;
-  self_para.abs_diff = true;
-
-  // 使用LCG_CG求解 
-  int ret = lcg_solver(_Ax, _Progress, m_, b_, 3, &self_para, this, LCG_CG);
-  if (ret < 0)
-    cout << lcg_error_str(ret) << endl;
-  // 输出解
-  for (int i = 0; i < 3; i++)
-  {
-    cout << m_[i] << endl;
-  }
-
-  // rest m_ and solve with LCG_PCG
-  m_[0] = 0.0; m_[1] = 0.0; m_[2] = 0.0;
-  // use lpcg to solve the linear system
-  ret = lcg_solver(_Ax, _Progress, m_, b_, 3, &self_para, this, LCG_PCG, p_);
-  if (ret < 0)
-    cout << lcg_error_str(ret) << endl;
-  // output solution
-  for (int i = 0; i < 3; i++)
-  {
-    cout << m_[i] << endl;
-  }
-  return;
-}
-
-int main(int argc, char const *argv[])
-{
-  TESTFUNC test;
-  test.Routine();
-  return 0;
-}
-```
-
-第二个例子，我们使用 lcg_solver() 求解一个随机的100\*80的线性方程组的最小二乘解。其中 Ax 计算函数与监控函数均为全局函数。
-
-```cpp
-#include "lcg.h"   
-#include "ctime"   
-#include "random"   
-#include "iostream"  
-
-#define M 100
-#define N 80
-
-//返回范围内的随机浮点值 注意调取函数之前要调用srand(time(0));
-double random_double(double L,double T)
-{
-  return (T-L)*rand()*1.0/RAND_MAX + L;
-}
-
-//返回范围内的随机整数 注意调取函数之前要调用srand(time(0));
-int random_int(int small, int big)
-{
-  return (rand() % (big - small))+ small;
-}
-
-// 普通二维数组做核矩阵
-double **kernel;
-// 中间结果数组
-double *tmp_arr;
-
-// 计算核矩阵乘向量的乘积
-void CalAx(void* instance, const lcg_float* x, lcg_float* prod_Ax, const int n_s)
-{
-  for (int i = 0; i < M; i++)
-  {
-    tmp_arr[i] = 0.0;
-    for (int j = 0; j < n_s; j++)
-    {
-      tmp_arr[i] += kernel[i][j] * x[j];
-    }
-  }
-
-  for (int j = 0; j < n_s; j++)
-  {
-    prod_Ax[j] = 0.0;
-    for (int i = 0; i < M; i++)
-    {
-      prod_Ax[j] += kernel[i][j] * tmp_arr[i];
-    }
-  }
-  return;
-}
-
-//定义共轭梯度监控函数
-int Prog(void* instance, const lcg_float* m, const lcg_float converge, const lcg_para* param, const int n_s, const int k)
-{
-  std::clog << "Iteration-times: " << k << "\tconvergence: " << converge << std::endl;
-  if (converge > param->epsilon) std::clog << "\033[1A\033[K";
-  return 0;
-}
-
-int main(int argc, char const *argv[])
-{
-  kernel = new double *[M];
-  for (int i = 0; i < M; i++)
-  {
-    kernel[i] = new double [N];
-  }
-
-  tmp_arr = new double [M];
-
-  srand(time(0));
-  // 添加一些大数
-  int tmp_id, tmp_size, tmp_val;
-  for (int i = 0; i < M; i++)
-  {
-    tmp_size = random_int(25, 35);
-    for (int j = 0; j < tmp_size; j++)
-    {
-      tmp_id = random_int(0, N);
-      tmp_val = random_double(-10, 10);
-
-      kernel[i][tmp_id] = tmp_val;
-    }
-  }
-
-  // 生成一组正演解
-  double *fm = new double [N];
-  for (int i = 0; i < N; i++)
-  {
-    fm[i] = random_double(1, 2);
-  }
-
-  // 计算共轭梯度B项
-  double *B = new double [N];
-  for (int i = 0; i < M; i++)
-  {
-    tmp_arr[i] = 0.0;
-    for (int j = 0; j < N; j++)
-    {
-      tmp_arr[i] += kernel[i][j]*fm[j];
-    }
-  }
-
-  for (int j = 0; j < N; j++)
-  {
-    B[j] = 0.0;
-    for (int i = 0; i < M; i++)
-    {
-      B[j] += kernel[i][j]*tmp_arr[i];
-    }
-  }
-
-  /********************准备工作完成************************/
-  lcg_para self_para = lcg_default_parameters();
-  self_para.max_iterations = 1000;
-  self_para.epsilon = 1e-10;
-
-  // 声明一组解
-  double *m = new double [N];
-  for (int i = 0; i < N; i++)
-    m[i] = 0.0;
-
-  int ret = lcg_solver(CalAx, Prog, m, B, N, &self_para, NULL, LCG_CG);
-  if (ret < 0) std::cerr << lcg_error_str(ret) << std::endl;
-
-  for (int i = 0; i < N; i++)
-  {
-    std::cout << fm[i] << " " << m[i] << std::endl;
-  }
-
-  delete[] kernel;
-  delete[] tmp_arr;
-  delete[] fm;
-  delete[] B;
-  delete[] m;
-  return 0;
-}
-```
