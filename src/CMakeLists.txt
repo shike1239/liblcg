@@ -1,10 +1,6 @@
 # 设定源文件文件夹
 aux_source_directory(lib/ LCGLIB_SRC)
 
-# 以下部分为例子程序的编译
-# 设置可执行文件的输出地址
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-
 # 以下部分为库的编译
 # 注意目标名必须唯一 所以不能直接生成相同名称的动态库与静态库
 # 注意此处不必为目标名称添加lib前缀和相应后缀，cmake会自行添加
@@ -59,6 +55,10 @@ else()
 endif()
 # 头文件安装命令
 install(FILES lib/lcg.h DESTINATION include)
+
+# 以下部分为例子程序的编译
+# 设置可执行文件的输出地址
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 # 例子的编译方法
 macro(add_sample name file)
