@@ -25,6 +25,9 @@ var lcg_8cpp =
       [ "LCG_INVALID_BETA", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81af31d49d816004939ae08e12441c50fd2", null ],
       [ "LCG_INVALID_MAXIM", "lcg_8cpp.html#ad643ef582f994ef247d3e040811feb81a776c14ddb174249eeaa71b184b366151", null ]
     ] ],
+    [ "clcg_pg", "lcg_8cpp.html#aa3e9e17acd37c8b5f9ceb89af3a160fc", null ],
+    [ "clcg_solver", "lcg_8cpp.html#a3f5d952c1de72bb77a5f3dfdfe2cb349", null ],
+    [ "clcg_spg", "lcg_8cpp.html#a41751b5532289c80de994ef88d4ed71d", null ],
     [ "lbicgstab", "lcg_8cpp.html#ad7dc41a2a07b05c813f9f6fac3e1ab5e", null ],
     [ "lbicgstab2", "lcg_8cpp.html#acd865c9b36b2157a59ca6873e9f708c3", null ],
     [ "lcg", "lcg_8cpp.html#af763a8276748cccc9affc39faaeb29ce", null ],
@@ -32,10 +35,7 @@ var lcg_8cpp =
     [ "lcg_error_str", "lcg_8cpp.html#a7d76a821bc6ddd804abaf1974e5d7583", null ],
     [ "lcg_free", "lcg_8cpp.html#a51d9b69c6afbba37a48470b4e1db4739", null ],
     [ "lcg_malloc", "lcg_8cpp.html#ad4d1ad1663815eb1214f7683acfd1cbe", null ],
-    [ "lcg_pg", "lcg_8cpp.html#a927fd55908422a7132e30304d36ba5d8", null ],
     [ "lcg_solver", "lcg_8cpp.html#a5d3eb4595fc2c3d6830c5c5fbe130ae9", null ],
-    [ "lcg_solver_constrained", "lcg_8cpp.html#a976f01b2ab8c203b5a3bc069094509fd", null ],
-    [ "lcg_spg", "lcg_8cpp.html#af2b18a78c6bc55add47bf1b1d566d7a0", null ],
     [ "lcgs", "lcg_8cpp.html#a6ffa1a438fcff05adfd40407c53914ff", null ],
     [ "lpcg", "lcg_8cpp.html#a173936ce2e80d29e520c99c9397d0d37", null ]
 ];
