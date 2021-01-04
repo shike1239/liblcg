@@ -89,9 +89,9 @@ _注：如需生成其他版本的VS工程文件，请使用-G命令查看相应
 
 ### 回调函数
 
-#### 自定义Ax计算函数
+#### 正演计算函数接口
 
-通常我们在使用共轭梯度法求解线性方程组Ax=B时A的维度可能会很大，直接储存A将消耗大量的内存空间，因此一般并不直接计算并储存A而是在需要的时候计算Ax的乘积。因此用户在使用liblcg时需要定义Ax的计算函数。Ax计算函数的形式必须满足算法库定义的一般形式：
+通常我们在使用共轭梯度法求解线性方程组Ax=B时A的维度可能会很大，直接储存A将消耗大量的内存空间，因此一般并不直接计算并储存A而是在需要的时候计算Ax的乘积。因此用户在使用liblcg时需要定义Ax的正演计算函数。该函数的声明必须满足算法库定义的一般形式：
 
 ```cpp
 typedef void (*lcg_axfunc_ptr)(void* instance, const lcg_float* x, lcg_float* prod_Ax, const int n_size);
@@ -99,30 +99,34 @@ typedef void (*lcg_axfunc_ptr)(void* instance, const lcg_float* x, lcg_float* pr
 
 函数需定义4个参数，分别为：
 
-1. `void *instance` 传入的实例对象（无需使用）；
-2. `const lcg_float *x` Ax计算中的x数组的指针；
-3. `lcg_float *prod_Ax` Ax的乘积；
-4. `const int n_size` 矩阵的大小。
+1. `void *instance` 传入的实例对象（正演函数为类的成员函数时等于this，否则为空）；
+2. `const lcg_float *x` x数组的指针；
+3. `lcg_float *prod_Ax` Ax乘积数组的指针；
+4. `const int n_size` 矩阵的大小（A的大小为n_size\*n_size，x与Ax的大小为n_size\*1）。
 
-#### 自定义进程监控函数
+函数的返回值为空。此函数负责计算Ax的乘积，结算结果保存在Ax数组内。此函数在lcg_solver()与clcg_solver()函数内调用并由求解函数负责开辟与销毁Ax数组，用户无需自行操作。
 
-用户可用下面的模版创建函数来显示共轭梯度迭代中的参数，并可以在适当的情况下停止迭代的进程。具体地，当监控函数的返回值非0时迭代进程便会终止。
+#### 监控函数接口
+
+用户可使用下面的函数模版自定义监控函数以显示求解迭代过程，并可以在适当的情况下停止迭代进程。
 
 ```cpp
 typedef int (*lcg_progress_ptr)(void* instance, const lcg_float* m, const lcg_float converge, const lcg_para* param, const int n_size, const int k);
 ```
 
-函数需定义6个参数（你不需要全部使用它们），分别为：
-1. `void* instance` 传入的实例对象（无需使用）；
+函数模版定义了6个参数，分别为：
+1. `void* instance` 传入的实例对象（监控函数为类的成员函数时等于this，否则为空）；
 2. `const lcg_float* m` 当前迭代的模型参数数组；
 3. `const lcg_float converge` 当前迭代的目标值；
 4. `const lcg_para* param` 当前迭代过程使用的参数；
 5. `const int n_size` 模型数组的大小；
 6. `const int k` 当前迭代的次数。
 
+函数的返回值为0时迭代继续，否则迭代终止。此函数参数类型均为常量型，是迭代过程中暴露的变量值。求解过程中每迭代一次即在lcg_solver()与clcg_solver()函数内调用一次。用户可使用需要的变量监控或显示迭代过程。
+
 ## 求解函数
 
-用户在定义 Ax 计算函数与监控函数后即可调用求解函数 lcg_solver() 对线性方程组进行求解，同时提供初始解x与共轭梯度的B项（即拟合的对象）。如果使用预优方法还需要提供预优矩阵P项。目前可用的求解方法如下：
+用户在定义 正演计算函数与监控函数后即可调用求解函数 lcg_solver() 或 clcg_solver() 对线性方程组进行求解，同时提供初始解x与共轭梯度的B项（即拟合的对象）。如果使用预优方法还需要提供预优矩阵P项。目前可用的求解方法如下：
 
 1. LCG_CG：共轭梯度算法；
 2. LCG_PCG：预优共轭梯度算法；
@@ -139,21 +143,19 @@ int lcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg
 ```
 
 函数接收9个参数，分别为：
-1. `lcg_axfunc_ptr Afp` 计算 Ax 的回调函数；
+1. `lcg_axfunc_ptr Afp` 正演计算的回调函数；
 2. `lcg_progress_ptr Pfp` 监控迭代过程的回调函数（非必须，无需监控时使用 NULL 参数即可）；
-3. `lcg_float* m` 模型参数数组，解得线性方程组的解也为这个数组；
+3. `lcg_float* m` 模型参数数组，迭代取得的解也保存与此数组；
 4. `const lcg_float* B` Ax = B 中的 B 项；
 5. `const int n_size` 模型参数数组的大小；
-6. `const lcg_para* param` 此次迭代使用的参数，此参数为 NULL 即使用默认参数；
+6. `const lcg_para* param` 迭代使用的参数，此参数为 NULL 即使用默认参数；
 7. `void* instance` 传入的实例对象, 此函数在类中使用即为类的 this 指针, 在普通函数中使用时即为 NULL；
 8. `int solver_id` 求解函数使用的求解方法，即上文中 LCG_CG 至 LCG_BICGSTAB2 五种方法，默认的求解方法为 LCG_CGS；
 9. `const lcg_float* P` 预优矩阵，一般是一个N阶的对角阵，这里直接用一个一维数组表示。此参数只在求解方法为 LCG_PCG 时是必须的，其他情况下是一个默认值为 NULL 的参数。
 
 投影梯度算法的参数形式如下：
 ```cpp
-int lcg_solver_constrained(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, 
-  const lcg_float* low, const lcg_float *hig, const int n_size, const lcg_para* param, 
-  void* instance, lcg_solver_enum solver_id);
+int clcg_solver(lcg_axfunc_ptr Afp, lcg_progress_ptr Pfp, lcg_float* m, const lcg_float* B, const lcg_float* low, const lcg_float *hig, const int n_size, const lcg_para* param, void* instance, lcg_solver_enum solver_id);
 ```
 
 函数接收10个参数，参数含义与无约束求解函数一致。除了：
